@@ -1,0 +1,87 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+   <servlet>
+    <servlet-name>ODataServlet</servlet-name>
+    <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
+ 
+    <init-param>
+      <param-name>javax.ws.rs.Application</param-name>
+      <param-value>org.apache.olingo.odata2.core.rest.app.ODataApplication</param-value>
+    </init-param>
+ 
+    <init-param>
+      <param-name>org.apache.olingo.odata2.service.factory</param-name>
+      <param-value>com.o2m.livraria.servlet.ODataFactory</param-value>
+    </init-param>
+ 
+    <load-on-startup>1</load-on-startup>
+  </servlet>  
+  <servlet>
+  	<servlet-name>AddCategoria</servlet-name>
+  	<display-name>AddCategoria</display-name>
+  	<description></description>
+  	<servlet-class>com.o2m.livraria.servlet.AddCategoria</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>DeleteCategoria</servlet-name>
+  	<display-name>DeleteCategoria</display-name>
+  	<description></description>
+  	<servlet-class>com.o2m.livraria.servlet.DeleteCategoria</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>UpdateCategoria</servlet-name>
+  	<display-name>UpdateCategoria</display-name>
+  	<description></description>
+  	<servlet-class>com.o2m.livraria.servlet.UpdateCategoria</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>AddLivro</servlet-name>
+  	<display-name>AddLivro</display-name>
+  	<description></description>
+  	<servlet-class>com.o2m.livraria.servlet.AddLivro</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>UpdateLivro</servlet-name>
+  	<display-name>UpdateLivro</display-name>
+  	<description></description>
+  	<servlet-class>com.o2m.livraria.servlet.UpdateLivro</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>DeleteLivro</servlet-name>
+  	<display-name>DeleteLivro</display-name>
+  	<description></description>
+  	<servlet-class>com.o2m.livraria.servlet.DeleteLivro</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ODataServlet</servlet-name>
+    <url-pattern>/odata.svc/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>AddCategoria</servlet-name>
+  	<url-pattern>/AddCategoria</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>DeleteCategoria</servlet-name>
+  	<url-pattern>/DeleteCategoria</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>UpdateCategoria</servlet-name>
+  	<url-pattern>/UpdateCategoria</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>AddLivro</servlet-name>
+  	<url-pattern>/AddLivro</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>UpdateLivro</servlet-name>
+  	<url-pattern>/UpdateLivro</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>DeleteLivro</servlet-name>
+  	<url-pattern>/DeleteLivro</url-pattern>
+  </servlet-mapping>
+</web-app>
