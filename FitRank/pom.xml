@@ -7,6 +7,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>FitRank Maven Webapp</name>
 	<url>http://maven.apache.org</url>
+	<properties>
+		<javax.persistence.version>1.0.2</javax.persistence.version>
+		<eclipselink.version>2.6.0-M3</eclipselink.version>
+		<mysql.version>5.1.34</mysql.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -44,7 +49,23 @@
 		<!-- <artifactId>hibernate-core</artifactId> -->
 		<!-- <version>3.6.1.Final</version> -->
 		<!-- </dependency> -->
-
+		
+		<!-- PERSISTENCE -->
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>${javax.persistence.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>${eclipselink.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>FitRank</finalName>

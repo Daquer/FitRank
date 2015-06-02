@@ -1,5 +1,7 @@
 package br.com.fitrank.service;
 
+import java.sql.SQLException;
+
 import br.com.fitrank.modelo.Usuario;
 import br.com.fitrank.persistencia.UsuarioDAO;
 
@@ -36,8 +38,17 @@ public Usuario persisteUsuarioServico(User usuarioFacebook){
 	   usuario.setDataNascimento(usuarioFacebook.getBirthday());
 	
 	UsuarioDAO persiste = new UsuarioDAO();
-    return persiste.persisteUsuario(usuario);
+    //return persiste.persisteUsuario(usuario);
+	
+	try {
+		persiste.insert(usuario);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     
+	return usuario;
+	
 }
 
 }

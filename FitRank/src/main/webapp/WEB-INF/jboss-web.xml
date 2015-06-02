@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-web>
+	<context-root>/livraria</context-root>
+	<!-- <security-domain>VisionErp</security-domain>
+	<context-root>/odata-server</context-root>
+	<valve>
+		<class-name>org.apache.catalina.authenticator.SingleSignOn</class-name>
+	</valve> -->
+</jboss-web>

@@ -1,7 +1,12 @@
 package br.com.fitrank.persistencia;
 
+import br.com.fitrank.modelo.Fitness;
 
-public class FitnessDAO {
+public class FitnessDAO extends GenericDAO<Fitness>{
+	
+	public FitnessDAO() {
+		super(Fitness.class);
+	}
 	
 //	private final EntityManager em;
 //
