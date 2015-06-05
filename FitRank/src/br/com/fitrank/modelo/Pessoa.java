@@ -1,6 +1,6 @@
 package br.com.fitrank.modelo;
 
-/** Entity(name="aplicativo")
+/** Entity(name="pessoa")
  *
  */
 public class Pessoa {
