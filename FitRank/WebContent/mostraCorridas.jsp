@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List" %>
-<%@ page import="br.com.fitrank.modelo.PostFitness" %>
+<%@ page import="br.com.fitrank.modelo.PostFitnessFB" %>
 <%@ page import="java.util.ArrayList" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -11,8 +11,8 @@
 <title>Corridas</title>
 </head>
 <body>
-<% 
-String token = (String) request.getAttribute("token");
+<%
+	String token = (String) request.getAttribute("token");
 
 String courseUrl = (String) request.getAttribute("courseUrl");
 String appName = (String) request.getAttribute("appName");
@@ -47,7 +47,7 @@ String updatedTime = (String) request.getAttribute("updatedTime");
 String withTags = (String) request.getAttribute("withTags");
 String noFeedStory = (String) request.getAttribute("noFeedStory");
 
-List<PostFitness> postsFit = (ArrayList<PostFitness>) request.getAttribute("runs");
+List<PostFitnessFB> postsFit = (ArrayList<PostFitnessFB>) request.getAttribute("runs");
 
 String jsoupExtraction = (String) request.getAttribute("jsoupExtraction");
 
@@ -58,7 +58,7 @@ if(postsFit !=null) {
 } 
 // String oRunString = (String) request.getAttribute("oRunString");
 
-// 
+//
 %>
 
 <%-- Run object String: <br /><br /><%=oRunString%><br /><br /> --%>

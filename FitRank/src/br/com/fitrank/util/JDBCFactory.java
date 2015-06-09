@@ -21,7 +21,7 @@ public class JDBCFactory {
 			Class.forName("com.mysql.jdbc.Driver"); 
 			
 			return DriverManager.getConnection(
-					"jdbc:mysql://localhost/fitrank", "root", "");
+					"jdbc:mysql://eic.cefet-rj.br", "fitrank", "fitrank2015!");
 
 		} catch (SQLException | ClassNotFoundException e) {
 

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import br.com.fitrank.modelo.PostFitness;
+import br.com.fitrank.modelo.PostFitnessFB;
 
 import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
@@ -64,7 +64,7 @@ public class RecuperaFitness extends HttpServlet {
 
 
 	private void getSingleRun(HttpServletRequest request, FacebookClient facebookClient, String idRun) {
-		PostFitness run = facebookClient.fetchObject(idRun, PostFitness.class);
+		PostFitnessFB run = facebookClient.fetchObject(idRun, PostFitnessFB.class);
 		
 		setRunAttributesGraphApi(request, run);
 	}
@@ -72,10 +72,10 @@ public class RecuperaFitness extends HttpServlet {
 
 	private void setRuns(FacebookClient facebookClient,
 			HttpServletRequest request) {
-		Connection<PostFitness> runsConnection = facebookClient.fetchConnection(request.getParameter("id") + "/fitness.runs", PostFitness.class, Parameter.with("limit", "5"));
-		List<PostFitness> postsFit = new ArrayList<PostFitness>();
+		Connection<PostFitnessFB> runsConnection = facebookClient.fetchConnection(request.getParameter("id") + "/fitness.runs", PostFitnessFB.class, Parameter.with("limit", "5"));
+		List<PostFitnessFB> postsFit = new ArrayList<PostFitnessFB>();
 		
-		for(PostFitness postFit : runsConnection.getData()) {
+		for(PostFitnessFB postFit : runsConnection.getData()) {
 			postsFit.add(postFit);
 		}
 		
@@ -84,7 +84,7 @@ public class RecuperaFitness extends HttpServlet {
 
 	private void setRunAttributesJsoup(FacebookClient facebookClient, HttpServletRequest request) {
 		// TODO Auto-generated method stub
-    	PostFitness run = facebookClient.fetchObject(request.getParameter("id"), PostFitness.class);
+    	PostFitnessFB run = facebookClient.fetchObject(request.getParameter("id"), PostFitnessFB.class);
 //    	PostFitness run = runsConnection.getData().get(0);
     	
     	String appName = run.getApplication().getName();
@@ -163,7 +163,7 @@ public class RecuperaFitness extends HttpServlet {
 	}
 
 
-	private void setRunAttributesGraphApi(HttpServletRequest request, PostFitness run) {
+	private void setRunAttributesGraphApi(HttpServletRequest request, PostFitnessFB run) {
 		
 		request.setAttribute("oRunString", run.toString());
 		request.setAttribute("courseUrl", run.getDataCourse().getCourse().getUrl());
