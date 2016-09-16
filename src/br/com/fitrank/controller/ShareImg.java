@@ -35,20 +35,25 @@ public class ShareImg extends HttpServlet {
 		
 		ImagemRanking imagemRanking = imagemRankingServico.leRanking(Integer.valueOf(imgId));
 		
-		try {
-			blob = new SerialBlob(imagemRanking.getImagem());
-//			blob = new SerialBlob(b);
-			int blobLength = (int) blob.length(); 
-			blobAsBytes = blob.getBytes(1, blobLength);
+		response.setContentType("image/png");
+		
+		if (imagemRanking.getImagem() != null){
+			try {
+				
+					blob = new SerialBlob(imagemRanking.getImagem());
+	//			blob = new SerialBlob(b);
+					int blobLength = (int) blob.length(); 
+					blobAsBytes = blob.getBytes(1, blobLength);
+				
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
+			BufferedImage image = createImageFromBytes(blobAsBytes);
+			ImageIO.write(image, "png", response.getOutputStream());
 		}
 		
-		BufferedImage image = createImageFromBytes(blobAsBytes);
-		
-		response.setContentType("image/png");
-		ImageIO.write(image, "png", response.getOutputStream());
 	    response.getOutputStream().close();
 		
 	}

@@ -60,7 +60,7 @@ public class PostFitnessDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("adicionaPostFitness | " + e.getMessage());
 
 		} finally {
 
@@ -124,7 +124,7 @@ public class PostFitnessDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog( "adicionaListaPostFitness | " + e.getMessage());
 			isSucess = false;
 			
 		} finally {
@@ -181,7 +181,7 @@ public class PostFitnessDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("atualizaPostFitness | " + e.getMessage());
 	
 		} finally {
 	
@@ -242,7 +242,7 @@ public class PostFitnessDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("lePostFitnessPorIdPessoa | " + e.getMessage());
 	
 		} finally {
 	
@@ -304,7 +304,7 @@ public class PostFitnessDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leModalidadeComMaisAtividades | " + e.getMessage());
 	
 		} finally {
 	
@@ -347,7 +347,7 @@ public class PostFitnessDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("obtemDataPostMaisRecente | " + e.getMessage());
 	
 		} finally {
 	

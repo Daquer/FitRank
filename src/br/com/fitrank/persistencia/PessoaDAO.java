@@ -30,7 +30,7 @@ public class PessoaDAO {
 		String insertTableSQL = "INSERT INTO pessoa ("
 				+ "id_usuario, "
 				+ "data_cadastro, "
-				+ "nome,"
+				+ "nome, "
 				+ "data_ultimo_login, "
 				+ "data_ultima_atualizacao_runs, "
 				+ "data_ultima_atualizacao_walks, "
@@ -64,7 +64,7 @@ public class PessoaDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("adicionaPessoa" + e.getMessage() + "Id pessoa: " + pessoa.getId_usuario());
 
 		} finally {
 
@@ -124,7 +124,7 @@ public class PessoaDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("atualizaPessoa | " + e.getMessage() + " ID PESSOA: " + pessoa.getId_usuario() + " Nome:" + pessoa.getNome());
 	
 		} finally {
 	
@@ -185,7 +185,7 @@ public class PessoaDAO {
 			
 		} catch (SQLException e) {
 			 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("lePessoa | " + e.getMessage());
  
 		} finally {
  
@@ -222,7 +222,7 @@ public class PessoaDAO {
 			return true;
 		} catch (SQLException e) {
  
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("removePessoaFromId | " + e.getMessage() + "id pessoa: " + userId);
 			return false;
 		} finally {
  

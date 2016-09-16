@@ -46,7 +46,10 @@ public class AmizadeDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog( "adicionaAmizade | " + e.getMessage() +
+							  "id pessoa : " + amizade.getId_pessoa() + 
+							  "id_amigo : " + amizade.getId_amigo()
+							  );
 
 		} finally {
 
@@ -87,7 +90,7 @@ public class AmizadeDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("atualizaAmizade | " +e.getMessage());
 
 		} finally {
 
@@ -138,7 +141,7 @@ public class AmizadeDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("listaAmizades | " + e.getMessage());
 
 		} finally {
 
@@ -191,7 +194,7 @@ public class AmizadeDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leAmizade | " + e.getMessage());
 			
 		} finally {
 

@@ -4,6 +4,7 @@ public class Course {
 	
 	private String id_course;
 	private float  distancia;
+	private String id_pessoa;
 	private float  calorias;
 	private float  ritmo;
 	private String id_post;
@@ -19,6 +20,12 @@ public class Course {
 	}
 	public void setDistancia(float distancia) {
 		this.distancia = distancia;
+	}
+	public String getId_pessoa() {
+		return id_pessoa;
+	}
+	public void setId_pessoa(String id_pessoa) {
+		this.id_pessoa = id_pessoa;
 	}
 	public float getCalorias() {
 		return calorias;

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import br.com.fitrank.modelo.Course;
 import br.com.fitrank.util.JDBCFactory;
@@ -48,7 +49,7 @@ public class CourseDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("adicionaCourse | " + e.getMessage());
 
 		} finally {
 
@@ -94,7 +95,7 @@ public class CourseDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("atualizaCourse |" +  e.getMessage());
 
 		} finally {
 
@@ -147,7 +148,7 @@ public class CourseDAO {
 			}
 		} catch (SQLException e) {
 			 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leCourse | " + e.getMessage());
 	
 		} finally {
 	
@@ -162,5 +163,58 @@ public class CourseDAO {
 		}
 		
 		return course;
+	}
+
+	public boolean adicionaListaIdsCourseServico(ArrayList<Course> listaCourses) throws SQLException {
+		
+		Connection dbConnection = null;
+		PreparedStatement preparedStatement = null;
+		boolean isSucess = true;
+		
+		String insertTableSQL = "INSERT INTO course ("
+				+ "id_course, "
+				+ "id_pessoa, "
+				+ "id_post " 
+				+ ") VALUES (?, ?, ?)";
+
+		
+		for (int aux = 0; aux < (listaCourses.size() - 1); aux++) {
+			insertTableSQL +=  ", (?, ?, ?)";			
+		}	
+		
+		try {
+			dbConnection = conexao;
+			preparedStatement = dbConnection.prepareStatement(insertTableSQL);
+			
+			int i = 0;
+			
+			for (Course course : listaCourses) {
+			
+				preparedStatement.setString(++i, course.getId_course());
+				preparedStatement.setString(++i, course.getId_pessoa());
+				preparedStatement.setString(++i, course.getId_post());
+				
+			}
+			// execute insert SQL statement
+			preparedStatement.executeUpdate();
+
+		} catch (SQLException e) {
+
+			Logger.insertLog("adicionaListaIdsCourseServico | " + e.getMessage());
+			isSucess = false;
+			
+		} finally {
+
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+
+			if (dbConnection != null) {
+				dbConnection.close();
+			}
+
+		}
+		
+		return isSucess;
 	}
 }

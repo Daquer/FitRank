@@ -31,12 +31,13 @@ public class JDBCFactory {
 			// load a properties file
 			prop.load(input);
 			
-			
-//			return DriverManager.getConnection(
-//					prop.getProperty("dbconnection"), prop.getProperty("dbuser"), prop.getProperty("dbpassword") );
+			ConstantesFitRank.app_secret = prop.getProperty("app_secret");
 			
 			return DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/fitrank", prop.getProperty("dbuser"), prop.getProperty("dbpassword") );
+					prop.getProperty("dbconnection"), prop.getProperty("dbuser"), prop.getProperty("dbpassword") );
+			
+//			return DriverManager.getConnection(
+//					"jdbc:mysql://localhost:3306/fitrank", prop.getProperty("dbuser"), prop.getProperty("dbpassword") );
 			
 //			return DriverManager.getConnection(
 //					"jdbc:mysql://10.1.1.186:8101/fitrank", prop.getProperty("dbuser"), prop.getProperty("dbpassword") );

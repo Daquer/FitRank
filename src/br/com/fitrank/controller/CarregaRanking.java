@@ -15,16 +15,18 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.fitrank.modelo.Amizade;
 import br.com.fitrank.modelo.Aplicativo;
 import br.com.fitrank.modelo.Configuracao;
+import br.com.fitrank.modelo.Course;
 import br.com.fitrank.modelo.Pessoa;
 import br.com.fitrank.modelo.PostFitness;
 import br.com.fitrank.modelo.Ranking;
 import br.com.fitrank.modelo.RankingPessoa;
 import br.com.fitrank.modelo.apresentacao.RankingPessoaTela;
-import br.com.fitrank.modelo.fb.Course.Course;
+import br.com.fitrank.modelo.fb.Course.CourseFB;
 import br.com.fitrank.modelo.fb.PostFitness.PostFitnessFB;
 import br.com.fitrank.service.AmizadeServico;
 import br.com.fitrank.service.AplicativoServico;
 import br.com.fitrank.service.ConfiguracaoServico;
+import br.com.fitrank.service.CourseServico;
 import br.com.fitrank.service.PessoaServico;
 import br.com.fitrank.service.PostFitnessServico;
 import br.com.fitrank.service.RankingPessoaServico;
@@ -67,6 +69,8 @@ public class CarregaRanking extends HttpServlet {
 	RankingPessoaServico rankingPessoaServico = new RankingPessoaServico();
 	
 	RankingServico rankingServico = new RankingServico();
+	
+	CourseServico courseServico = new CourseServico();
 	
 	String modalidade = null;
 	String modo = null;  
@@ -257,7 +261,8 @@ public class CarregaRanking extends HttpServlet {
 				User facebookUser = facebookClient.fetchObject(amizade.getId_amigo(), User.class);
 				handleUltimaAtividade(modalidade, facebookClient, facebookUser, ConstantesFitRank.CHAR_NAO);
 			} catch (FacebookGraphException e) {
-				pessoaServico.removePessoaFromIdServico(amizade.getId_amigo());
+				Logger.insertLog(e.getMessage());
+//				pessoaServico.removePessoaFromIdServico(amizade.getId_amigo());
 			}
 		}
 	}
@@ -276,16 +281,23 @@ public class CarregaRanking extends HttpServlet {
 		verificaAplicativos(listaFitConnection);
 		
 		ArrayList<PostFitness> postsFit = new ArrayList<PostFitness>();
-
+		ArrayList<Course> listCourses = new ArrayList<Course>();
+		
 		for (PostFitnessFB postFit : listaFitConnection.getData()) {
 			// Adiciona aplicativo à Lista
 			PostFitness postFitness = new PostFitness();
+			Course course = new Course();
+			
 			postFitness.setId_publicacao(postFit.getId());
 			postFitness.setId_pessoa(facebookUser.getId());
 			postFitness.setId_app(postFit.getApplication().getId());
 			postFitness.setData_publicacao(DateConversor.DateToString(postFit.getPublishTime()));
 			postFitness.setUrl(postFit.getDataCourse().getCourse().getUrl());
 			postFitness.setModalidade(modalidade);
+			
+			course.setId_course(postFit.getDataCourse().getCourse().getId());
+			course.setId_pessoa(facebookUser.getId());
+			course.setId_post(postFit.getId());
 			
 			try {
 
@@ -307,12 +319,12 @@ public class CarregaRanking extends HttpServlet {
 					postsFit.add(postFitness);
 					break;
 				case ConstantesFitRank.ID_APP_ENDOMONDO:
-					postFitness.setDistancia_percorrida(PostFitnessUtil.getNikeDistance(postFit.getDataCourse().getCourse().getTitle()));
+					postFitness.setDistancia_percorrida(PostFitnessUtil.getEndomondoDistance(postFit.getDataCourse().getCourse().getTitle()));
 					postFitness.setDuracao(PostFitnessUtil.getDuration(postFit.getStartTime(), postFit.getEndTime()));
 					postsFit.add(postFitness);
 					break;
 				case ConstantesFitRank.ID_APP_STRAVA:
-					br.com.fitrank.modelo.Course postCourse = new br.com.fitrank.modelo.Course();
+					Course postCourse = new Course();
 					postFitness.setCourse(postCourse);
 //					id_post = 1205140629498083 			NAO FUNCIONA --> 1203506176328195 RUNS
 //					id_course = 536405739817852
@@ -328,7 +340,8 @@ public class CarregaRanking extends HttpServlet {
 			} catch (NumberFormatException e) {
 				continue;
 			}
-
+			
+			listCourses.add(course);
 		}
 		
 //		Connection<Course> listaCourseStrava = facebookClient.fetchConnection("fitness.course/?ids=" + ids.toString(), Course.class);
@@ -360,7 +373,8 @@ public class CarregaRanking extends HttpServlet {
 		
 		for(int i=0; i< postsFit.size(); i++){
 			if(ConstantesFitRank.ID_APP_STRAVA.equals(postsFit.get(i).getId_app())){
-				Course courseStrava = facebookClient.fetchObject(postsFit.get(i).getCourse().getId_course(),Course.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
+				CourseFB courseStrava = facebookClient.fetchObject(postsFit.get(i).getCourse().getId_course(),
+						CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
 				postsFit.get(i).setDistancia_percorrida(PostFitnessUtil.getStravaCourseDistance(courseStrava.getData().getDistance().getValue()));
 				postsFit.get(i).setDuracao(PostFitnessUtil.getStravaCourseDuration(courseStrava.getData().getDuration().getValue()));
 			}
@@ -368,7 +382,9 @@ public class CarregaRanking extends HttpServlet {
 		
 		Pessoa pessoa = pessoaServico.lePessoaServico(facebookUser);
 		
-		postFitnessServico.adicionaListaPostFitnessServico(postsFit);
+		if ( postsFit.size() != 0 && postFitnessServico.adicionaListaPostFitnessServico(postsFit) ) {
+			courseServico.adicionaListaIdsCourseServico(listCourses);
+		}
 
 		switch (modalidade) {
 		case ConstantesFitRank.MODALIDADE_CAMINHADA:

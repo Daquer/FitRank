@@ -2,7 +2,7 @@ package br.com.fitrank.modelo.fb.Course;
 
 import com.restfb.Facebook;
 
-public class Course{
+public class CourseFB{
 	@Facebook("created_time")
 	private String created_time;
 	

@@ -48,4 +48,7 @@ public final class ConstantesFitRank {
 	public static final int LIMITE_MAX_RECUPERA_FB = 99999;
 	
 	public static final float MILHA_EM_KM = 1.60934F;
+	
+	//Constantes que devem ser iniciadas com o valor do arquivo .properties | Valores são modificados na classe JDBCFactory
+	public static String app_secret = "";
 }
