@@ -124,9 +124,10 @@ public class CarregaRanking extends HttpServlet {
 		
 		configuracaoRanking = configuracaoServico.adicionaConfiguracao(configuracaoRanking);
 		
-		if(configuracaoRanking.getIdConfiguracao() != ConstantesFitRank.INT_RESULTADO_INVALIDO){
 		
-			Ranking ranking = new Ranking();
+		Ranking ranking = new Ranking();
+		if(configuracaoRanking.getIdConfiguracao() != ConstantesFitRank.INT_RESULTADO_INVALIDO){
+			
 			ranking.setId_configuracao(configuracaoRanking.getIdConfiguracao());
 			ranking = rankingServico.adicionaRanking(ranking);
 			
@@ -143,7 +144,7 @@ public class CarregaRanking extends HttpServlet {
     		rankingPessoa.setPessoa( pessoaServico.lePessoaPorIdServico( rankingPessoa.getId_pessoa() ) );
 		}
     	
-    	List<RankingPessoaTela> listaRankingPessoaTela = obtemListaAplicativosTela(listRankingPessoas, configuracaoRanking);
+    	List<RankingPessoaTela> listaRankingPessoaTela = obtemListaAplicativosTela(listRankingPessoas, configuracaoRanking, ranking);
     	postFitnessServico = new PostFitnessServico();
     	String dataPostMaisRecente = postFitnessServico.obtemDataPostMaisRecente(facebookUser.getId());
 
@@ -186,12 +187,12 @@ public class CarregaRanking extends HttpServlet {
     	
     }
     
-    private List<RankingPessoaTela> obtemListaAplicativosTela(List<RankingPessoa> listaRankingPessoa, Configuracao configuracaoRanking) {
+    private List<RankingPessoaTela> obtemListaAplicativosTela(List<RankingPessoa> listaRankingPessoa, Configuracao configuracaoRanking, Ranking ranking) {
     	List<RankingPessoaTela> listaRankingPessoaTela = new ArrayList<RankingPessoaTela>();
     	AplicativoServico aplicativoServico = new AplicativoServico();
 		for (RankingPessoa rankingPessoa : listaRankingPessoa) {
 			RankingPessoaTela rankingPessoaTela = new RankingPessoaTela(rankingPessoa);
-			rankingPessoaTela.setListaAplicativosTela(aplicativoServico.listaAplicativosUsuarioNoRanking(configuracaoRanking, rankingPessoaTela));
+			rankingPessoaTela.setListaAplicativosTela(aplicativoServico.listaAplicativosUsuarioNoRanking(configuracaoRanking, rankingPessoaTela, ranking));
 			listaRankingPessoaTela.add(rankingPessoaTela);
 		}
 		return listaRankingPessoaTela;

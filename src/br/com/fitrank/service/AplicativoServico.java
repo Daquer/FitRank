@@ -6,6 +6,7 @@ import java.util.List;
 
 import br.com.fitrank.modelo.Aplicativo;
 import br.com.fitrank.modelo.Configuracao;
+import br.com.fitrank.modelo.Ranking;
 import br.com.fitrank.modelo.apresentacao.AplicativoTela;
 import br.com.fitrank.modelo.apresentacao.RankingPessoaTela;
 import br.com.fitrank.persistencia.AplicativoDAO;
@@ -68,11 +69,11 @@ public class AplicativoServico {
 		}
 	}
 	
-	public List<AplicativoTela> listaAplicativosUsuarioNoRanking(Configuracao configuracao, RankingPessoaTela rankingPessoaTela) {
+	public List<AplicativoTela> listaAplicativosUsuarioNoRanking(Configuracao configuracao, RankingPessoaTela rankingPessoaTela, Ranking ranking) {
 		this.aplicativoDAO = new AplicativoDAO();
 		
 	    try {
-			return aplicativoDAO.listaAplicativosUsuarioNoRanking(configuracao, rankingPessoaTela);
+			return aplicativoDAO.listaAplicativosUsuarioNoRanking(configuracao, rankingPessoaTela, ranking);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

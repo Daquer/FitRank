@@ -71,6 +71,11 @@ public class DateConversor {
 		return FORMATTER.format(gc.getTime());
 	}
 	
+	public static String getPreviousYearStringFromStringDate(String date){
+		gc = convertDateToGregorian(StringToDate(date));
+		gc.add(Calendar.YEAR, -1);
+		return FORMATTER.format(gc.getTime());
+	}
 	
 	public static String getPreviousMonthString(){
 		gc = new GregorianCalendar();
@@ -78,8 +83,20 @@ public class DateConversor {
 		return FORMATTER.format(gc.getTime());
 	}
 	
+	public static String getPreviousMonthStringFromStringDate(String date){
+		gc = convertDateToGregorian(StringToDate(date));
+		gc.add(Calendar.MONTH, -1);
+		return FORMATTER.format(gc.getTime());
+	}
+	
 	public static String getPreviousWeekString(){
 		gc = new GregorianCalendar();
+		gc.add(Calendar.WEEK_OF_YEAR, -1);
+		return FORMATTER.format(gc.getTime());
+	}
+	
+	public static String getPreviousWeekStringFromStringDate(String date){
+		gc = convertDateToGregorian(StringToDate(date));
 		gc.add(Calendar.WEEK_OF_YEAR, -1);
 		return FORMATTER.format(gc.getTime());
 	}

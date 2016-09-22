@@ -81,7 +81,7 @@ public class VerRanking extends HttpServlet {
 		request.setAttribute("periodo", periodo);
 		
 		if(isAjax.equals("S")) {	
-			List<RankingPessoaTela> listaRankingPessoaTela = obtemListaAplicativosTela(listRankingPessoas, configuracao);
+			List<RankingPessoaTela> listaRankingPessoaTela = obtemListaAplicativosTela(listRankingPessoas, configuracao, ranking);
 	    	postFitnessServico = new PostFitnessServico();
 	    	
 			String json = com.cedarsoftware.util.io.JsonWriter.objectToJson(listaRankingPessoaTela);
@@ -128,12 +128,12 @@ public class VerRanking extends HttpServlet {
 		inicia(request, response);
 	}
 	
-	private List<RankingPessoaTela> obtemListaAplicativosTela(List<RankingPessoa> listaRankingPessoa, Configuracao configuracaoRanking) {
+	private List<RankingPessoaTela> obtemListaAplicativosTela(List<RankingPessoa> listaRankingPessoa, Configuracao configuracaoRanking, Ranking ranking) {
     	List<RankingPessoaTela> listaRankingPessoaTela = new ArrayList<RankingPessoaTela>();
     	AplicativoServico aplicativoServico = new AplicativoServico();
 		for (RankingPessoa rankingPessoa : listaRankingPessoa) {
 			RankingPessoaTela rankingPessoaTela = new RankingPessoaTela(rankingPessoa);
-			rankingPessoaTela.setListaAplicativosTela(aplicativoServico.listaAplicativosUsuarioNoRanking(configuracaoRanking, rankingPessoaTela));
+			rankingPessoaTela.setListaAplicativosTela(aplicativoServico.listaAplicativosUsuarioNoRanking(configuracaoRanking, rankingPessoaTela, ranking));
 			listaRankingPessoaTela.add(rankingPessoaTela);
 		}
 		return listaRankingPessoaTela;

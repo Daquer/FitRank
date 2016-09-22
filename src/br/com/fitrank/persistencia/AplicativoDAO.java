@@ -10,6 +10,7 @@ import java.util.List;
 
 import br.com.fitrank.modelo.Aplicativo;
 import br.com.fitrank.modelo.Configuracao;
+import br.com.fitrank.modelo.Ranking;
 import br.com.fitrank.modelo.apresentacao.AplicativoTela;
 import br.com.fitrank.modelo.apresentacao.RankingPessoaTela;
 import br.com.fitrank.util.ConstantesFitRank;
@@ -275,7 +276,7 @@ public class AplicativoDAO {
 		return aplicativosReturn;
 	}
 	
-	public List<AplicativoTela> listaAplicativosUsuarioNoRanking(Configuracao configuracao, RankingPessoaTela rankingPessoaTela) throws SQLException {
+	public List<AplicativoTela> listaAplicativosUsuarioNoRanking(Configuracao configuracao, RankingPessoaTela rankingPessoaTela, Ranking ranking) throws SQLException {
 		
 		Connection dbConnection = null;
 		PreparedStatement preparedStatement = null;
@@ -287,13 +288,13 @@ public class AplicativoDAO {
 			dataInicial = DateConversor.DateToString(new Date());
 			
 		} else if(ConstantesFitRank.SEMANA.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial =  DateConversor.getPreviousWeekString();
+			dataInicial =  DateConversor.getPreviousWeekStringFromStringDate(ranking.getData_ranking());
 			
 		} else if(ConstantesFitRank.MES.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial = DateConversor.getPreviousMonthString();
+			dataInicial =  DateConversor.getPreviousMonthStringFromStringDate(ranking.getData_ranking());
 			
 		} else if(ConstantesFitRank.ANO.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial = DateConversor.getPreviousYearString();
+			dataInicial = DateConversor.getPreviousYearStringFromStringDate(ranking.getData_ranking());
 		}
 	
 		//Nao foi possivel utilizar parametros do preparedStatement nesta consulta!!!
@@ -312,7 +313,7 @@ public class AplicativoDAO {
 		if(!ConstantesFitRank.SEMPRE.equalsIgnoreCase(configuracao.getIntervaloData())){
 			selectTableSQL  +=	"   AND (str_to_date(pf.data_publicacao, '%d/%m/%Y')  												\n"
 							+	"                    BETWEEN str_to_date('"+dataInicial+"', '%d/%m/%Y') 							\n"
-			  				+	"                        AND str_to_date('"+DateConversor.DateToString(new Date())+"', '%d/%m/%Y'))	\n";
+			  				+	"                        AND str_to_date('"+ranking.getData_ranking()+"', '%d/%m/%Y'))	\n";
 		}
 			selectTableSQL  +=	"GROUP BY pf.id_app											\n";
 	
