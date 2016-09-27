@@ -518,7 +518,7 @@
 					
    					//Posição no Ranking, imagem de perfil e nome de perfil
    					rankingLine.append("<td class='colocacao'></td>");
-   					rankingLine.append("<td class='profileImg'><a><img align='middle' ></a></td>");
+   					rankingLine.append("<td class='profileImg'><a><img class='perfil' align='middle' ></a></td>");
    					
    					rankingLine.append("<td class='profileName'><a><span></span></a></td>");
    					
