@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.fitrank.modelo.Course;
+import br.com.fitrank.modelo.PostFitness;
 import br.com.fitrank.util.JDBCFactory;
 import br.com.fitrank.util.Logger;
 
@@ -165,7 +167,7 @@ public class CourseDAO {
 		return course;
 	}
 
-	public boolean adicionaListaIdsCourseServico(ArrayList<Course> listaCourses) throws SQLException {
+	public boolean adicionaListaIdsCourse(ArrayList<Course> listaCourses) throws SQLException {
 		
 		Connection dbConnection = null;
 		PreparedStatement preparedStatement = null;
@@ -200,7 +202,7 @@ public class CourseDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog("adicionaListaIdsCourseServico | " + e.getMessage());
+			Logger.insertLog("adicionaListaIdsCourse | " + e.getMessage());
 			isSucess = false;
 			
 		} finally {
@@ -216,5 +218,52 @@ public class CourseDAO {
 		}
 		
 		return isSucess;
+	}
+	
+	public List<Course> leCoursePorIdPessoa(String idPessoa) throws SQLException {
+		
+		Connection dbConnection = null;
+		PreparedStatement preparedStatement = null;
+		List<Course> listaPostFitness = new ArrayList<Course>();
+	
+		String selectTableSQL = "select "
+				+ "id_course, "
+				+ "id_post, "
+				+ "id_pessoa "
+				+ "from course "
+				+ "where id_pessoa = ?";
+				
+		try {
+			dbConnection = conexao;
+			preparedStatement = dbConnection.prepareStatement(selectTableSQL);
+			preparedStatement.setString(1, idPessoa);
+			
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			while ( rs.next() ) {
+				Course course = new Course();
+				course.setId_course(rs.getString("id_course"));
+				course.setId_post(rs.getString("id_post"));
+				course.setId_pessoa(rs.getString("id_pessoa"));
+				
+				listaPostFitness.add(course);
+			}
+	
+		} catch (SQLException e) {
+	
+			Logger.insertLog("leCoursePorIdPessoa | " + e.getMessage());
+	
+		} finally {
+	
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+	
+			if (dbConnection != null) {
+				dbConnection.close();
+			}
+	
+		}
+		return listaPostFitness;
 	}
 }

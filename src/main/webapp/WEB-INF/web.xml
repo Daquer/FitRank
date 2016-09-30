@@ -39,14 +39,6 @@
     <url-pattern>/Main</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>CarregaEscolhaRanking</servlet-name>
-    <servlet-class>br.com.fitrank.controller.CarregaEscolhaRanking</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>CarregaEscolhaRanking</servlet-name>
-    <url-pattern>/CarregaEscolhaRanking</url-pattern>
-  </servlet-mapping>
-  <servlet>
     <servlet-name>SalvaConfiguracao</servlet-name>
     <servlet-class>br.com.fitrank.controller.SalvaConfiguracao</servlet-class>
   </servlet>

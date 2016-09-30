@@ -47,8 +47,8 @@ public class AmizadeDAO {
 		} catch (SQLException e) {
 
 			Logger.insertLog( "adicionaAmizade | " + e.getMessage() +
-							  "id pessoa : " + amizade.getId_pessoa() + 
-							  "id_amigo : " + amizade.getId_amigo()
+							  " id pessoa : " + amizade.getId_pessoa() + 
+							  " id_amigo : " + amizade.getId_amigo()
 							  );
 
 		} finally {
