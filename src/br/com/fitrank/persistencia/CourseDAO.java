@@ -220,6 +220,60 @@ public class CourseDAO {
 		return isSucess;
 	}
 	
+	public boolean atualizaListaCourses(List<Course> listaCourses)
+			throws SQLException {
+
+		Connection dbConnection = null;
+		PreparedStatement preparedStatement = null;
+		boolean isSucess = true;
+		
+		String updateTableSQL = "update course set "
+				+ "distancia = ? "
+				+ "calorias = ? "
+				+ "where id_course = ?;";
+		
+		for (int aux = 0; aux < (listaCourses.size() - 1); aux++) {
+			updateTableSQL += "update course set "
+				+ "distancia = ? "
+				+ "calorias = ? "
+				+ "where id_course = ?;";
+		}	
+		
+		try {
+			dbConnection = conexao;
+			preparedStatement = dbConnection.prepareStatement(updateTableSQL);
+			
+			int i = 0;
+
+			
+			for (Course course : listaCourses) {
+				preparedStatement.setFloat(++i, course.getDistancia());
+				preparedStatement.setFloat(++i, course.getCalorias());
+				preparedStatement.setString(++i, course.getId_course());
+			}
+			// execute insert SQL stetement
+			preparedStatement.executeUpdate();
+
+		} catch (SQLException e) {
+
+			Logger.insertLog("atualizaListaCourses |" +  e.getMessage());
+			isSucess = false;
+			
+		} finally {
+
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+
+			if (dbConnection != null) {
+				dbConnection.close();
+			}
+
+		}
+
+		return isSucess;
+	}
+	
 	public List<Course> leCoursePorIdPessoa(String idPessoa) throws SQLException {
 		
 		Connection dbConnection = null;
