@@ -31,6 +31,7 @@ public final class ConstantesFitRank {
 	public static final String ID_APP_STRAVA = "284597785309";
 	
 	public static final String ID_APP_RUNTASTIC_MOUNTAIN_BIKE = "402248583177025";
+	public static final String ID_APP_RUNTASTIC_ROAD_BIKE = "475072582538239";
 	
 	public static final String ID_APP_FITRANK = "749336888463283";
 	

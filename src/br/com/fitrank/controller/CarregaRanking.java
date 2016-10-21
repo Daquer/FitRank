@@ -316,6 +316,7 @@ public class CarregaRanking extends HttpServlet {
 					break;
 				case ConstantesFitRank.ID_APP_RUNTASTIC:
 				case ConstantesFitRank.ID_APP_RUNTASTIC_MOUNTAIN_BIKE:
+				case ConstantesFitRank.ID_APP_RUNTASTIC_ROAD_BIKE:
 					postFitness.setDistancia_percorrida(PostFitnessUtil.getRuntasticDistance(postFit.getDataCourse().getCourse().getTitle()));
 					postFitness.setDuracao(PostFitnessUtil.getRuntasticDuration(postFit.getDataCourse().getCourse().getTitle()));
 					postsFit.add(postFitness);
@@ -331,12 +332,8 @@ public class CarregaRanking extends HttpServlet {
 					postsFit.add(postFitness);
 					break;
 				case ConstantesFitRank.ID_APP_STRAVA:
-					
+					//Dados de distancia percorida e duração são preenchidos a partir do /course do FB.  
 					postFitness.setCourse(course);
-//					id_post = 1205140629498083 			NAO FUNCIONA --> 1203506176328195 RUNS
-//					id_course = 536405739817852
-					postFitness.setDistancia_percorrida(PostFitnessUtil.getRunKeeperDistance(postFit.getDataCourse().getCourse().getTitle()));
-					postFitness.setDuracao(PostFitnessUtil.getRunKeeperDuration(postFit.getDataCourse().getCourse().getTitle()));
 					postsFit.add(postFitness);
 					break;
 				default:

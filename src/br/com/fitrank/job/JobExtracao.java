@@ -36,7 +36,7 @@ public class JobExtracao implements Job {
 		    PessoaServico pessoaServico = new PessoaServico();
 		    List<Pessoa> pessoas = new ArrayList<Pessoa>();
 		    List<Course> coursesPessoa = new ArrayList<Course>();
-		    List<String> coursesRequest = new ArrayList<String>();
+		    ArrayList<Course> coursesDB = new ArrayList<Course>();
 		    
 	//	    input = getClass().getClassLoader().getResourceAsStream("config.properties");
 	//	   
@@ -92,14 +92,15 @@ public class JobExtracao implements Job {
 				    	for( int j = 0; j < jsonCoursesArray.length(); j++){
 				    		Logger.insertLog("j--> " + j);
 				    		JsonObject jsonCourse = (JsonObject) jsonCoursesArray.get(j);
+				    		Double distanceValueDbl = 0.0;
+				    		Integer distanceValueInt = 0;
+				    		Integer calories = 0;
+//				    		Double pace = 0.0; 
 				    		
 				    		try{
 					    		JsonObject data = (JsonObject) jsonCourse.get("data");
 					    		
 					    		JsonObject distance = (JsonObject) data.get("distance");
-					    		
-					    		Integer distanceValueInt = 0;
-					    		Double distanceValueDbl = 0.0;
 					    		
 					    		try{
 					    			distanceValueDbl = (Double) distance.get("value");
@@ -107,20 +108,29 @@ public class JobExtracao implements Job {
 					    			distanceValueInt = (Integer) distance.get("value");
 					    		}
 					    		
-					    		Integer calories = (Integer) data.get("calories");
+					    		calories = (Integer) data.get("calories");
 					    		
-					    		Double pace = (Double) data.get("pace");
+//					    		pace = (Double) data.get("pace");
 					    		
 				    		} catch (JsonException e) {// Exceção lançada normalmente para os casos onde uma das chaves não existe 
 				    			//Do nothing
+				    		} finally {
+				    			if (distanceValueDbl != 0.0) { 
+				    				coursesPessoa.get(i).setDistancia(Float.parseFloat(distanceValueDbl.toString()));
+				    			} else {
+				    				coursesPessoa.get(i).setDistancia(Float.parseFloat(distanceValueInt.toString()));
+				    			}
+				    			
+				    			coursesPessoa.get(i).setCalorias(calories);
+				    			
+				    			coursesDB.add(coursesPessoa.get(i));
 				    		}
-				    		
 	//			    		JsonObject duration = (JsonObject) data.get("duration");
 	//			    		Integer durationValue = (Integer) duration.get("value");
 				    		
 				    	}
 				    	
-				    	String jsonCoursesStr = jsonCourses.toString();
+//				    	String jsonCoursesStr = jsonCourses.toString();
 				    	
 				    	courseLimit += 50;
 				    	coursesStr = "";
@@ -132,12 +142,10 @@ public class JobExtracao implements Job {
 		    	
 		    }
 		    
-//		    courseServico.atualizaListaCourses
-		    
-		    
+		    courseServico.atualizaListaCourses(coursesDB);
 		    
 	//	    postFitnessServico.lePostFitnessPorIdPessoa(idPessoa);
-		    
+
 		    Logger.insertLog("---------------------------------------Job finalizado---------------------------------------");
 		} catch(Exception e) {
 			Logger.insertLog(e.getMessage());

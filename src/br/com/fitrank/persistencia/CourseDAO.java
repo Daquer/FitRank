@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.fitrank.modelo.Course;
-import br.com.fitrank.modelo.PostFitness;
 import br.com.fitrank.util.JDBCFactory;
 import br.com.fitrank.util.Logger;
 
@@ -30,7 +29,6 @@ public class CourseDAO {
 				+ "id_course, "
 				+ "distancia, "
 				+ "calorias, "
-				+ "ritmo, "
 				+ "id_post"
 				+ ") VALUES (?, ?, ?, ?, ?)";
 				
@@ -43,7 +41,6 @@ public class CourseDAO {
 			preparedStatement.setString(++i, course.getId_course());
 			preparedStatement.setFloat(++i, course.getDistancia());
 			preparedStatement.setFloat(++i, course.getCalorias());
-			preparedStatement.setFloat(++i, course.getRitmo()); 
 			preparedStatement.setString(++i, course.getId_post());
 
 			// execute insert SQL stetement
@@ -76,7 +73,6 @@ public class CourseDAO {
 		String updateTableSQL = "update course set "
 				+ "distancia = ? "
 				+ "calorias = ?, "
-				+ "ritmo = ?, "
 				+ "id_post = ? "
 				+ "where id_course = ?";
 
@@ -88,7 +84,6 @@ public class CourseDAO {
 			
 			preparedStatement.setFloat(++i, course.getDistancia());
 			preparedStatement.setFloat(++i, course.getCalorias());
-			preparedStatement.setFloat(++i, course.getRitmo()); 
 			preparedStatement.setString(++i, course.getId_post());
 			preparedStatement.setString(++i, course.getId_course());
 
@@ -123,7 +118,6 @@ public class CourseDAO {
 				+ "id_course,"
 				+ "distancia, "
 				+ "calorias, "
-				+ "ritmo, "
 				+ "id_post, "
 				+ "FROM course "
 				+ "WHERE id_course = ?";
@@ -144,7 +138,6 @@ public class CourseDAO {
 				course.setId_course(rs.getString("id_course"));
 				course.setDistancia(rs.getFloat("distancia"));
 				course.setCalorias(rs.getFloat("calorias"));
-				course.setRitmo(rs.getFloat("ritmo"));
 				course.setId_post(rs.getString("id_post"));
 
 			}
