@@ -11,7 +11,6 @@ import br.com.fitrank.modelo.Course;
 import br.com.fitrank.modelo.Pessoa;
 import br.com.fitrank.service.CourseServico;
 import br.com.fitrank.service.PessoaServico;
-import br.com.fitrank.service.PostFitnessServico;
 import br.com.fitrank.util.ConstantesFitRank;
 import br.com.fitrank.util.Logger;
 
@@ -25,13 +24,12 @@ import com.restfb.json.JsonObject;
 
 public class JobExtracao implements Job {
 
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	public void execute(JobExecutionContext arg0) throws JobExecutionException, NullPointerException {
 		try {
 			Logger.insertLog("---------------------------------------Job iniciado---------------------------------------");
 			
 	//		InputStream input = null;
 	//	    Properties prop = new Properties();
-		    PostFitnessServico postFitnessServico = new PostFitnessServico();
 		    CourseServico courseServico = new CourseServico();
 		    PessoaServico pessoaServico = new PessoaServico();
 		    List<Pessoa> pessoas = new ArrayList<Pessoa>();
@@ -59,7 +57,7 @@ public class JobExtracao implements Job {
 		    	JsonObject picture = facebookClient.fetchObject(pessoa.getId_usuario() + "/picture", JsonObject.class, Parameter.with("type", "normal"), Parameter.with("redirect", "false"));
 		    	String url = picture.getJsonObject("data").getString("url");
 		    
-		    	if (!pessoa.getUrl_foto().equals(url)) {
+		    	if (pessoa.getUrl_foto() == null || !pessoa.getUrl_foto().equals(url)) {
 		    		pessoa.setUrl_foto(url);
 		    	
 		    		pessoaServico.atualizaPessoaServico(pessoa, false);
@@ -81,26 +79,28 @@ public class JobExtracao implements Job {
 		    		} else {
 		    			coursesStr += "," + course.getId_course();
 		    		} 
-
+		    		
 		    		Logger.insertLog("i--> " + i + " id--> " + course.getId_course());
 		    	
 		    		if (i == courseLimit - 1 || i == coursesPessoa.size() - 1){
 				    	JsonObject jsonCourses = facebookClient.fetchObject("fitness.course", JsonObject.class, Parameter.with("ids", coursesStr));
-				    	
+				    	jsonCourses.remove("fitness.course");
 				    	JsonArray jsonCoursesArray = jsonCourses.toJsonArray(jsonCourses.names());
 				    	
 				    	for( int j = 0; j < jsonCoursesArray.length(); j++){
 				    		Logger.insertLog("j--> " + j);
-				    		JsonObject jsonCourse = (JsonObject) jsonCoursesArray.get(j);
+				    		JsonObject jsonCourse = jsonCoursesArray.getJsonObject(j);
 				    		Double distanceValueDbl = 0.0;
 				    		Integer distanceValueInt = 0;
 				    		Integer calories = 0;
 //				    		Double pace = 0.0; 
-				    		
+				    		String courseId = "";
 				    		try{
-					    		JsonObject data = (JsonObject) jsonCourse.get("data");
+				    			courseId = jsonCourse.getString("id"); 
+				    			
+					    		JsonObject data = jsonCourse.getJsonObject("data");
 					    		
-					    		JsonObject distance = (JsonObject) data.get("distance");
+					    		JsonObject distance = data.getJsonObject("distance");
 					    		
 					    		try{
 					    			distanceValueDbl = (Double) distance.get("value");
@@ -108,43 +108,40 @@ public class JobExtracao implements Job {
 					    			distanceValueInt = (Integer) distance.get("value");
 					    		}
 					    		
-					    		calories = (Integer) data.get("calories");
+					    		calories = data.getInt("calories");
 					    		
 //					    		pace = (Double) data.get("pace");
 					    		
 				    		} catch (JsonException e) {// Exceção lançada normalmente para os casos onde uma das chaves não existe 
 				    			//Do nothing
 				    		} finally {
+				    			Course courseDB = new Course();
+				    			
+				    			courseDB.setId_course(courseId);
+				    			
 				    			if (distanceValueDbl != 0.0) { 
-				    				coursesPessoa.get(i).setDistancia(Float.parseFloat(distanceValueDbl.toString()));
+				    				courseDB.setDistancia(Float.parseFloat(distanceValueDbl.toString()));
 				    			} else {
-				    				coursesPessoa.get(i).setDistancia(Float.parseFloat(distanceValueInt.toString()));
+				    				courseDB.setDistancia(Float.parseFloat(distanceValueInt.toString()));
 				    			}
 				    			
-				    			coursesPessoa.get(i).setCalorias(calories);
+				    			courseDB.setCalorias(calories);
 				    			
-				    			coursesDB.add(coursesPessoa.get(i));
+				    			coursesDB.add(courseDB);
 				    		}
-	//			    		JsonObject duration = (JsonObject) data.get("duration");
-	//			    		Integer durationValue = (Integer) duration.get("value");
 				    		
 				    	}
-				    	
-//				    	String jsonCoursesStr = jsonCourses.toString();
 				    	
 				    	courseLimit += 50;
 				    	coursesStr = "";
 		    		}
 		    	}
-	//	    	List<CourseFB>
 		    	
 	//	    	JsonObject jsonCourses = facebookClient.fetchObjects(coursesRequest, JsonObject.class);
 		    	
 		    }
 		    
 		    courseServico.atualizaListaCourses(coursesDB);
-		    
-	//	    postFitnessServico.lePostFitnessPorIdPessoa(idPessoa);
 
 		    Logger.insertLog("---------------------------------------Job finalizado---------------------------------------");
 		} catch(Exception e) {

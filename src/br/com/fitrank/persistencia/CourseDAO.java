@@ -221,15 +221,15 @@ public class CourseDAO {
 		boolean isSucess = true;
 		
 		String updateTableSQL = "update course set "
-				+ "distancia = ? "
+				+ "distancia = ?, "
 				+ "calorias = ? "
 				+ "where id_course = ?;";
 		
-		for (int aux = 0; aux < (listaCourses.size() - 1); aux++) {
+		for (int aux = 0; aux < (listaCourses.size() - 1); aux++) {	
 			updateTableSQL += "update course set "
-				+ "distancia = ? "
-				+ "calorias = ? "
-				+ "where id_course = ?;";
+					+ "distancia = ?, "
+					+ "calorias = ? "
+					+ "where id_course = ?;";
 		}	
 		
 		try {
@@ -246,7 +246,7 @@ public class CourseDAO {
 			}
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
-
+			
 		} catch (SQLException e) {
 
 			Logger.insertLog("atualizaListaCourses |" +  e.getMessage());
