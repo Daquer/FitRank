@@ -8,6 +8,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import br.com.fitrank.modelo.Course;
+import br.com.fitrank.modelo.Localizacao;
 import br.com.fitrank.modelo.Pessoa;
 import br.com.fitrank.service.CourseServico;
 import br.com.fitrank.service.PessoaServico;
@@ -35,6 +36,7 @@ public class JobExtracao implements Job {
 		    List<Pessoa> pessoas = new ArrayList<Pessoa>();
 		    List<Course> coursesPessoa = new ArrayList<Course>();
 		    ArrayList<Course> coursesDB = new ArrayList<Course>();
+		    ArrayList<Localizacao> localizacoesDB = new ArrayList<Localizacao>();
 		    
 	//	    input = getClass().getClassLoader().getResourceAsStream("config.properties");
 	//	   
@@ -93,12 +95,16 @@ public class JobExtracao implements Job {
 				    		Double distanceValueDbl = 0.0;
 				    		Integer distanceValueInt = 0;
 				    		Integer calories = 0;
+				    		Double latitude = 0.0;
+				    		Double longitude = 0.0;
+				    		int altitude = 0;
+				    		JsonObject data = new JsonObject();
 //				    		Double pace = 0.0; 
 				    		String courseId = "";
 				    		try{
 				    			courseId = jsonCourse.getString("id"); 
 				    			
-					    		JsonObject data = jsonCourse.getJsonObject("data");
+				    			data = jsonCourse.getJsonObject("data");
 					    		
 					    		JsonObject distance = data.getJsonObject("distance");
 					    		
@@ -110,7 +116,7 @@ public class JobExtracao implements Job {
 					    		
 					    		calories = data.getInt("calories");
 					    		
-//					    		pace = (Double) data.get("pace");
+					    		
 					    		
 				    		} catch (JsonException e) {// Exceção lançada normalmente para os casos onde uma das chaves não existe 
 				    			//Do nothing
@@ -128,6 +134,38 @@ public class JobExtracao implements Job {
 				    			courseDB.setCalorias(calories);
 				    			
 				    			coursesDB.add(courseDB);
+
+				    			// Localizacao
+				    			try{
+					    			JsonArray jsonMetrics = data.getJsonArray("metrics");
+						    		
+						    		for(int k = 0; k < jsonMetrics.length(); k++) {
+						    			JsonObject metric = jsonMetrics.getJsonObject(k);
+						    			
+						    			try{
+							    			JsonObject location = metric.getJsonObject("location");
+							    			
+							    			latitude =  location.getDouble("latitude");
+							    			longitude = location.getDouble("longitude");
+							    			altitude = location.getInt("altitude");
+						    			
+						    			} catch(JsonException e){
+							    			//Do nothing
+						    			} finally {
+							    			Localizacao localizacaoDB = new Localizacao();
+							    			localizacaoDB.setLatitude(latitude);
+							    			localizacaoDB.setLongitude(longitude);
+							    			localizacaoDB.setAltitude(altitude);
+							    			localizacaoDB.setId_course(courseId);
+//							    			localizacaoDB.setRitmo(pace);
+							    			
+							    			localizacoesDB.add(localizacaoDB);
+						    			}
+						    		}
+				    			} catch(JsonException e){
+				    				//do nothing
+				    			}
+					    		
 				    		}
 				    		
 				    	}
@@ -136,12 +174,12 @@ public class JobExtracao implements Job {
 				    	coursesStr = "";
 		    		}
 		    	}
-		    	
-	//	    	JsonObject jsonCourses = facebookClient.fetchObjects(coursesRequest, JsonObject.class);
-		    	
+//		    	JsonObject jsonCourses = facebookClient.fetchObjects(coursesRequest, JsonObject.class);
 		    }
 		    
 		    courseServico.atualizaListaCourses(coursesDB);
+		    
+//		    LocalizacaoServico.atualizaLista();
 
 		    Logger.insertLog("---------------------------------------Job finalizado---------------------------------------");
 		} catch(Exception e) {
