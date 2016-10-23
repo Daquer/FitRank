@@ -170,12 +170,12 @@ public class LocalizacaoDAO {
 		ArrayList<Localizacao> localizacoes = new ArrayList<Localizacao>(); 
 				
 		String selectTableSQL = "select "
-				+ "id_localizacao, "
 				+ "latitude, "
 				+ "longitude, "
 				+ "altitude, "
 				+ "ritmo, "
 				+ "id_course "
+//				+ "id_localizacao, "
 				+ "FROM localizacao "
 				+ "where id_course IN (?";
 				
@@ -202,10 +202,10 @@ public class LocalizacaoDAO {
 				
 				localizacao.setLatitude(rs.getDouble("latitude"));
 				localizacao.setLongitude(rs.getDouble("longitude"));
-				localizacao.setRitmo(rs.getDouble("ritmo"));
 				localizacao.setAltitude(rs.getDouble("altitude"));
+				localizacao.setRitmo(rs.getDouble("ritmo"));
 				localizacao.setId_course(rs.getString("id_course"));
-				localizacao.setId_localizacao(rs.getInt("id_localizacao"));
+//				localizacao.setId_localizacao(rs.getInt("id_localizacao"));
 				
 				localizacoes.add(localizacao);
 			}

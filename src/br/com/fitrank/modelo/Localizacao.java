@@ -1,8 +1,7 @@
 package br.com.fitrank.modelo;
 //TODO Verificar classe no banco, classe de modelo e UML
-public class Localizacao {
+public class Localizacao implements Comparable<Object> {
 
-	
 	private double  latitude;
 	private double 	longitude;
 	private double  altitude;
@@ -48,5 +47,30 @@ public class Localizacao {
 		this.id_localizacao = id_localizacao;
 	}	
 	
+	@Override
+	public int compareTo(Object o) {
+		if(o != null && o instanceof Localizacao){
+			Localizacao localizacao = (Localizacao) o;
+			
+			if(localizacao.id_course.equals(this.id_course) && localizacao.latitude == this.latitude && localizacao.longitude == this.longitude && localizacao.altitude == this.altitude && localizacao.ritmo == this.ritmo){
+				return 0;
+			}
+		}
+		
+		return 1;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o != null && o instanceof Localizacao){
+			Localizacao localizacao = (Localizacao) o;
+			
+			if(localizacao.id_course.equals(this.id_course) && localizacao.latitude == this.latitude && localizacao.longitude == this.longitude && localizacao.altitude == this.altitude && localizacao.ritmo == this.ritmo){
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
 

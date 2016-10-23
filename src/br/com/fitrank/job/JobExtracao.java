@@ -11,6 +11,7 @@ import org.quartz.JobExecutionException;
 import br.com.fitrank.modelo.Course;
 import br.com.fitrank.modelo.Localizacao;
 import br.com.fitrank.modelo.Pessoa;
+import br.com.fitrank.modelo.PostFitness;
 import br.com.fitrank.service.CourseServico;
 import br.com.fitrank.service.LocalizacaoServico;
 import br.com.fitrank.service.PessoaServico;
@@ -38,7 +39,9 @@ public class JobExtracao implements Job {
 		    LocalizacaoServico localizacaoServico = new LocalizacaoServico();
 		    List<Pessoa> pessoas = new ArrayList<Pessoa>();
 		    List<Course> coursesPessoa = new ArrayList<Course>();
-		    List<Localizacao> localizacoesNaoInserir = new ArrayList<Localizacao>();
+		    List<Localizacao> localizacoesPessoa = new ArrayList<Localizacao>();
+		    ArrayList<Localizacao> localizacoesSalvasNoBanco = new ArrayList<Localizacao>();
+		    ArrayList<Localizacao> localizacoesNaoInserir = new ArrayList<Localizacao>();
 		    ArrayList<Course> coursesDB = new ArrayList<Course>();
 		    ArrayList<Localizacao> localizacoesDB = new ArrayList<Localizacao>();
 		    
@@ -71,7 +74,8 @@ public class JobExtracao implements Job {
 		    	
 		    	//Courses
 		    	coursesPessoa = courseServico.leCoursePorIdPessoa(pessoa.getId_usuario());
-		    	localizacoesNaoInserir = localizacaoServico.leLocalizacoesPorIdsCourse(coursesPessoa);
+		    	localizacoesSalvasNoBanco.addAll( (ArrayList<Localizacao>) localizacaoServico.leLocalizacoesPorIdsCourse(coursesPessoa));
+//		    	localizacoesNaoInserir.addAll(localizacoesPessoa); 
 		    	
 		    	String coursesStr = "";
 		    	int courseLimit = 50;
@@ -190,6 +194,13 @@ public class JobExtracao implements Job {
 		    
 		    courseServico.atualizaListaCourses(coursesDB);
 		    
+		    for (Localizacao localizacao : localizacoesDB) {
+				for (Localizacao localizacaoSalvaNoBanco : localizacoesSalvasNoBanco) {
+					if(localizacao.equals(localizacaoSalvaNoBanco)) { 
+						localizacoesNaoInserir.add(localizacao);
+					}
+				}
+			}
 		    for (Localizacao localizacaoNaoInserir : localizacoesNaoInserir) {
 		    	localizacoesDB.remove(localizacaoNaoInserir);
 			}

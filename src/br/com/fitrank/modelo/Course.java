@@ -1,6 +1,6 @@
 package br.com.fitrank.modelo;
 
-public class Course {
+public class Course implements Comparable<Object> {
 	
 	private String id_course;
 	private float  distancia;
@@ -37,6 +37,32 @@ public class Course {
 	}
 	public void setId_post(String id_post) {
 		this.id_post = id_post;
+	}
+	
+	@Override
+	public int compareTo(Object o) {
+		if(o != null && o instanceof Course){
+			Course course = (Course) o;
+			
+			if(course.id_course.equals(this.id_course)){
+				return 0;
+			}
+		}
+		
+		return 1;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o != null && o instanceof Course){
+			Course course = (Course) o;
+			
+			if(course.id_course.equals(this.id_course)){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 }
