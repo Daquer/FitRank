@@ -6,6 +6,7 @@ public class Localizacao {
 	private double  latitude;
 	private double 	longitude;
 	private double  altitude;
+	private double  ritmo;
 	private String  id_course;
 	private int 	id_localizacao;
 	
@@ -34,6 +35,12 @@ public class Localizacao {
 	public void setAltitude(double altitude) {
 		this.altitude = altitude;
 	}
+	public double getRitmo() {
+		return ritmo;
+	}
+	public void setRitmo(double ritmo) {
+		this.ritmo = ritmo;
+	}
 	public int getId_localizacao() {
 		return id_localizacao;
 	}
@@ -42,3 +49,4 @@ public class Localizacao {
 	}	
 	
 }
+

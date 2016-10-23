@@ -1,6 +1,7 @@
 package br.com.fitrank.job;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.quartz.Job;
@@ -11,6 +12,7 @@ import br.com.fitrank.modelo.Course;
 import br.com.fitrank.modelo.Localizacao;
 import br.com.fitrank.modelo.Pessoa;
 import br.com.fitrank.service.CourseServico;
+import br.com.fitrank.service.LocalizacaoServico;
 import br.com.fitrank.service.PessoaServico;
 import br.com.fitrank.util.ConstantesFitRank;
 import br.com.fitrank.util.Logger;
@@ -33,8 +35,10 @@ public class JobExtracao implements Job {
 	//	    Properties prop = new Properties();
 		    CourseServico courseServico = new CourseServico();
 		    PessoaServico pessoaServico = new PessoaServico();
+		    LocalizacaoServico localizacaoServico = new LocalizacaoServico();
 		    List<Pessoa> pessoas = new ArrayList<Pessoa>();
 		    List<Course> coursesPessoa = new ArrayList<Course>();
+		    List<Localizacao> localizacoesNaoInserir = new ArrayList<Localizacao>();
 		    ArrayList<Course> coursesDB = new ArrayList<Course>();
 		    ArrayList<Localizacao> localizacoesDB = new ArrayList<Localizacao>();
 		    
@@ -67,6 +71,7 @@ public class JobExtracao implements Job {
 		    	
 		    	//Courses
 		    	coursesPessoa = courseServico.leCoursePorIdPessoa(pessoa.getId_usuario());
+		    	localizacoesNaoInserir = localizacaoServico.leLocalizacoesPorIdsCourse(coursesPessoa);
 		    	
 		    	String coursesStr = "";
 		    	int courseLimit = 50;
@@ -99,8 +104,9 @@ public class JobExtracao implements Job {
 				    		Double longitude = 0.0;
 				    		int altitude = 0;
 				    		JsonObject data = new JsonObject();
-//				    		Double pace = 0.0; 
+				    		Double ritmo = 0.0; 
 				    		String courseId = "";
+				    		
 				    		try{
 				    			courseId = jsonCourse.getString("id"); 
 				    			
@@ -138,9 +144,10 @@ public class JobExtracao implements Job {
 				    			// Localizacao
 				    			try{
 					    			JsonArray jsonMetrics = data.getJsonArray("metrics");
-						    		
+					    			
 						    		for(int k = 0; k < jsonMetrics.length(); k++) {
 						    			JsonObject metric = jsonMetrics.getJsonObject(k);
+						    			
 						    			
 						    			try{
 							    			JsonObject location = metric.getJsonObject("location");
@@ -148,6 +155,10 @@ public class JobExtracao implements Job {
 							    			latitude =  location.getDouble("latitude");
 							    			longitude = location.getDouble("longitude");
 							    			altitude = location.getInt("altitude");
+							    			
+							    			JsonObject pace = location.getJsonObject("pace");
+							    			
+							    			ritmo = pace.getDouble("value");
 						    			
 						    			} catch(JsonException e){
 							    			//Do nothing
@@ -157,7 +168,7 @@ public class JobExtracao implements Job {
 							    			localizacaoDB.setLongitude(longitude);
 							    			localizacaoDB.setAltitude(altitude);
 							    			localizacaoDB.setId_course(courseId);
-//							    			localizacaoDB.setRitmo(pace);
+							    			localizacaoDB.setRitmo(ritmo);
 							    			
 							    			localizacoesDB.add(localizacaoDB);
 						    			}
@@ -179,7 +190,11 @@ public class JobExtracao implements Job {
 		    
 		    courseServico.atualizaListaCourses(coursesDB);
 		    
-//		    LocalizacaoServico.atualizaLista();
+		    for (Localizacao localizacaoNaoInserir : localizacoesNaoInserir) {
+		    	localizacoesDB.remove(localizacaoNaoInserir);
+			}
+		    
+		    localizacaoServico.adicionaLocalizacoes(localizacoesDB);
 
 		    Logger.insertLog("---------------------------------------Job finalizado---------------------------------------");
 		} catch(Exception e) {
