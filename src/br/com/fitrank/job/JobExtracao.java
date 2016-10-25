@@ -1,7 +1,6 @@
 package br.com.fitrank.job;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.quartz.Job;
@@ -11,7 +10,6 @@ import org.quartz.JobExecutionException;
 import br.com.fitrank.modelo.Course;
 import br.com.fitrank.modelo.Localizacao;
 import br.com.fitrank.modelo.Pessoa;
-import br.com.fitrank.modelo.PostFitness;
 import br.com.fitrank.service.CourseServico;
 import br.com.fitrank.service.LocalizacaoServico;
 import br.com.fitrank.service.PessoaServico;
@@ -39,7 +37,7 @@ public class JobExtracao implements Job {
 		    LocalizacaoServico localizacaoServico = new LocalizacaoServico();
 		    List<Pessoa> pessoas = new ArrayList<Pessoa>();
 		    List<Course> coursesPessoa = new ArrayList<Course>();
-		    List<Localizacao> localizacoesPessoa = new ArrayList<Localizacao>();
+//		    List<Localizacao> localizacoesPessoa = new ArrayList<Localizacao>();
 		    ArrayList<Localizacao> localizacoesSalvasNoBanco = new ArrayList<Localizacao>();
 		    ArrayList<Localizacao> localizacoesNaoInserir = new ArrayList<Localizacao>();
 		    ArrayList<Course> coursesDB = new ArrayList<Course>();
@@ -80,7 +78,7 @@ public class JobExtracao implements Job {
 		    	String coursesStr = "";
 		    	int courseLimit = 50;
 		    	
-		    	Logger.insertLog("size--> " + coursesPessoa.size());
+		    	
 		    	for ( int i = 0; i < coursesPessoa.size(); i++) {
 		    		Course course = coursesPessoa.get(i);
 		    		
@@ -89,9 +87,7 @@ public class JobExtracao implements Job {
 		    			coursesStr = course.getId_course();
 		    		} else {
 		    			coursesStr += "," + course.getId_course();
-		    		} 
-		    		
-		    		Logger.insertLog("i--> " + i + " id--> " + course.getId_course());
+		    		}
 		    	
 		    		if (i == courseLimit - 1 || i == coursesPessoa.size() - 1){
 				    	JsonObject jsonCourses = facebookClient.fetchObject("fitness.course", JsonObject.class, Parameter.with("ids", coursesStr));
@@ -99,7 +95,6 @@ public class JobExtracao implements Job {
 				    	JsonArray jsonCoursesArray = jsonCourses.toJsonArray(jsonCourses.names());
 				    	
 				    	for( int j = 0; j < jsonCoursesArray.length(); j++){
-				    		Logger.insertLog("j--> " + j);
 				    		JsonObject jsonCourse = jsonCoursesArray.getJsonObject(j);
 				    		Double distanceValueDbl = 0.0;
 				    		Integer distanceValueInt = 0;
@@ -126,10 +121,8 @@ public class JobExtracao implements Job {
 					    		
 					    		calories = data.getInt("calories");
 					    		
-					    		
-					    		
 				    		} catch (JsonException e) {// Exceção lançada normalmente para os casos onde uma das chaves não existe 
-				    			//Do nothing
+//				    			Logger.insertLog("ID course => " + courseId + " " + e.getMessage());
 				    		} finally {
 				    			Course courseDB = new Course();
 				    			
@@ -143,6 +136,9 @@ public class JobExtracao implements Job {
 				    			
 				    			courseDB.setCalorias(calories);
 				    			
+//				    			courseDB.setJson(jsonCourse.toString().replace("\"","\\\""));
+				    			courseDB.setJson(jsonCourse.toString());
+				    			
 				    			coursesDB.add(courseDB);
 
 				    			// Localizacao
@@ -152,20 +148,22 @@ public class JobExtracao implements Job {
 						    		for(int k = 0; k < jsonMetrics.length(); k++) {
 						    			JsonObject metric = jsonMetrics.getJsonObject(k);
 						    			
-						    			
 						    			try{
 							    			JsonObject location = metric.getJsonObject("location");
 							    			
 							    			latitude =  location.getDouble("latitude");
 							    			longitude = location.getDouble("longitude");
-							    			altitude = location.getInt("altitude");
+
+							    			if(location.has("altitude")){
+							    				altitude = location.getInt("altitude");
+							    			}
 							    			
 							    			JsonObject pace = location.getJsonObject("pace");
 							    			
 							    			ritmo = pace.getDouble("value");
 						    			
 						    			} catch(JsonException e){
-							    			//Do nothing
+//						    				Logger.insertLog("ID course => " + courseId + " " + e.getMessage());
 						    			} finally {
 							    			Localizacao localizacaoDB = new Localizacao();
 							    			localizacaoDB.setLatitude(latitude);
@@ -178,7 +176,7 @@ public class JobExtracao implements Job {
 						    			}
 						    		}
 				    			} catch(JsonException e){
-				    				//do nothing
+//				    				Logger.insertLog("ID course => " + courseId + " " + e.getMessage());
 				    			}
 					    		
 				    		}
@@ -192,7 +190,9 @@ public class JobExtracao implements Job {
 //		    	JsonObject jsonCourses = facebookClient.fetchObjects(coursesRequest, JsonObject.class);
 		    }
 		    
-		    courseServico.atualizaListaCourses(coursesDB);
+		    if (!coursesDB.isEmpty()) {
+		    	courseServico.atualizaListaCourses(coursesDB);
+		    }
 		    
 		    for (Localizacao localizacao : localizacoesDB) {
 				for (Localizacao localizacaoSalvaNoBanco : localizacoesSalvasNoBanco) {
@@ -205,11 +205,14 @@ public class JobExtracao implements Job {
 		    	localizacoesDB.remove(localizacaoNaoInserir);
 			}
 		    
-		    localizacaoServico.adicionaLocalizacoes(localizacoesDB);
-
+		    if (!localizacoesDB.isEmpty()) {
+		    	localizacaoServico.adicionaLocalizacoes(localizacoesDB);
+		    }
+		    
 		    Logger.insertLog("---------------------------------------Job finalizado---------------------------------------");
 		} catch(Exception e) {
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("General Job Exception" + e.getMessage());
+			
 	    }
 	}
 }

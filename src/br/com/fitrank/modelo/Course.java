@@ -7,6 +7,7 @@ public class Course implements Comparable<Object> {
 	private String id_pessoa;
 	private float  calorias;
 	private String id_post;
+	private String 	json;
 	
 	public String getId_course() {
 		return id_course;
@@ -37,6 +38,14 @@ public class Course implements Comparable<Object> {
 	}
 	public void setId_post(String id_post) {
 		this.id_post = id_post;
+	}
+	
+	public String getJson() {
+		return json;
+	}
+
+	public void setJson(String json) {
+		this.json = json;
 	}
 	
 	@Override
