@@ -3,6 +3,8 @@ package br.com.fitrank.job;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -25,7 +27,7 @@ import com.restfb.json.JsonException;
 import com.restfb.json.JsonObject;
 
 public class JobExtracao implements Job {
-
+	@PostConstruct
 	public void execute(JobExecutionContext arg0) throws JobExecutionException, NullPointerException {
 		try {
 			Logger.insertLog("---------------------------------------Job iniciado---------------------------------------");

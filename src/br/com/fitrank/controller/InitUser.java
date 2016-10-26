@@ -22,7 +22,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.FacebookClient.AccessToken;
 import com.restfb.Parameter;
-import com.restfb.exception.FacebookOAuthException;
+import com.restfb.exception.FacebookNetworkException;
 import com.restfb.json.JsonObject;
 import com.restfb.types.User;
 
@@ -47,87 +47,93 @@ public class InitUser extends HttpServlet {
 	   
 	   prop.load(input);
 	   
-	   AccessToken accessToken = new DefaultFacebookClient().obtainExtendedAccessToken(ConstantesFitRank.ID_APP_FITRANK,
-			   prop.getProperty("app_secret"), request.getParameter("token"));
-	   
-	   String token = accessToken.getAccessToken();
-	   
-	   FacebookClient facebookClient = new DefaultFacebookClient(token);
-	   
-	   User facebookUser = facebookClient.fetchObject("me", User.class);;
-	   
-	   Connection<User> friendsFB = facebookClient.fetchConnection("me/friends", User.class, Parameter.with("fields", "name, id"));
-	   
-	   JsonObject picture = facebookClient.fetchObject("me/picture", JsonObject.class, Parameter.with("type", "normal"), Parameter.with("redirect", "false"));
-    
-	   Pessoa pessoa = new Pessoa();
-	   
-	   if(facebookUser.getId()!=null && !facebookUser.getId().equals("")){
-		   pessoa.setId_usuario(facebookUser.getId());
-	   }
-		
-	   if(facebookUser.getFirstName()!=null){
-		   pessoa.setNome(facebookUser.getName());
-	   }
-	   
-	   if(facebookUser.getGender()!=null){
-		   if(facebookUser.getGender().equalsIgnoreCase(ConstantesFitRank.FACEBOOK_FEMALE_GENDER)){
-			   pessoa.setGenero(ConstantesFitRank.SEXO_FEMININO);
-		   } else if(facebookUser.getGender().equalsIgnoreCase(ConstantesFitRank.FACEBOOK_MALE_GENDER)){
-			   pessoa.setGenero(ConstantesFitRank.SEXO_MASCULINO);
+	   try{
+		   AccessToken accessToken = new DefaultFacebookClient().obtainExtendedAccessToken(ConstantesFitRank.ID_APP_FITRANK,
+				   prop.getProperty("app_secret"), request.getParameter("token"));
+		   
+		   String token = accessToken.getAccessToken();
+		   
+		   FacebookClient facebookClient = new DefaultFacebookClient(token);
+		   
+		   User facebookUser = facebookClient.fetchObject("me", User.class);;
+		   
+		   Connection<User> friendsFB = facebookClient.fetchConnection("me/friends", User.class, Parameter.with("fields", "name, id"));
+		   
+		   JsonObject picture = facebookClient.fetchObject("me/picture", JsonObject.class, Parameter.with("type", "normal"), Parameter.with("redirect", "false"));
+		   
+		   
+		   Pessoa pessoa = new Pessoa();
+		   
+		   if(facebookUser.getId()!=null && !facebookUser.getId().equals("")){
+			   pessoa.setId_usuario(facebookUser.getId());
 		   }
-	   }
-	   
-	   if(facebookUser.getBirthdayAsDate()!=null){
-		   pessoa.setData_nascimento(facebookUser.getBirthdayAsDate());
-	   }
-	   
-	   if( picture.getJsonObject("data").getString("url") != null){
-		   pessoa.setUrl_foto( picture.getJsonObject("data").getString("url") );
-	   }
-	   
-	   Pessoa usuarioExistente = pessoaServico.lePessoaServico(facebookUser);
-	   
-	   if (usuarioExistente == null ) {
-		   pessoa = pessoaServico.adicionaPessoaServico(pessoa);
-	   } else {
-		   
-		   pessoa.setData_ultima_atualizacao_runs(usuarioExistente.getData_ultima_atualizacao_runs());
-		   pessoa.setData_ultima_atualizacao_walks(usuarioExistente.getData_ultima_atualizacao_walks());
-		   pessoa.setData_ultima_atualizacao_bikes(usuarioExistente.getData_ultima_atualizacao_bikes());
-		   pessoa.setRank_anual(usuarioExistente.getRank_anual());
-		   pessoa = pessoaServico.atualizaPessoaServico(pessoa, true);
-	   }
-	   	
-	   for ( User friendFB : friendsFB.getData()) {
-		   
-		  atualizaAmizadeUsuario(facebookUser, friendFB);
-		 
-	   }
-	   
-	   Configuracao configuracao = null;
-		configuracao = configuracaoServico
-				.leConfiguracaoFavorita(facebookUser.getId());
-		
-		//Caso o usuário tenha um favorito cadastrado ou seja o primeiro login
-		if (configuracao != null && configuracao.isFavorito() ) {
 			
-			request.setAttribute("modalidade", configuracao.getModalidade());
-			request.setAttribute("modo", configuracao.getModo());
-			request.setAttribute("periodo", configuracao.getIntervaloData());
-
-		} else {
-			request.setAttribute("modalidade", ConstantesFitRank.MODALIDADE_PADRAO);
-			request.setAttribute("modo", ConstantesFitRank.MODO_PADRAO);
-			request.setAttribute("periodo", ConstantesFitRank.PERIODO_PADRAO);
-		}
-	   
-	   request.setAttribute("token", token);
-	   
-	   RequestDispatcher rd = request.getRequestDispatcher("/ranking.jsp");  
-	   rd.forward(request,response);  
-	   
+		   if(facebookUser.getFirstName()!=null){
+			   pessoa.setNome(facebookUser.getName());
+		   }
+		   
+		   if(facebookUser.getGender()!=null){
+			   if(facebookUser.getGender().equalsIgnoreCase(ConstantesFitRank.FACEBOOK_FEMALE_GENDER)){
+				   pessoa.setGenero(ConstantesFitRank.SEXO_FEMININO);
+			   } else if(facebookUser.getGender().equalsIgnoreCase(ConstantesFitRank.FACEBOOK_MALE_GENDER)){
+				   pessoa.setGenero(ConstantesFitRank.SEXO_MASCULINO);
+			   }
+		   }
+		   
+		   if(facebookUser.getBirthdayAsDate()!=null){
+			   pessoa.setData_nascimento(facebookUser.getBirthdayAsDate());
+		   }
+		   
+		   if( picture.getJsonObject("data").getString("url") != null){
+			   pessoa.setUrl_foto( picture.getJsonObject("data").getString("url") );
+		   }
+		   
+		   Pessoa usuarioExistente = pessoaServico.lePessoaServico(facebookUser);
+		   
+		   if (usuarioExistente == null ) {
+			   pessoa = pessoaServico.adicionaPessoaServico(pessoa);
+		   } else {
+			   
+			   pessoa.setData_ultima_atualizacao_runs(usuarioExistente.getData_ultima_atualizacao_runs());
+			   pessoa.setData_ultima_atualizacao_walks(usuarioExistente.getData_ultima_atualizacao_walks());
+			   pessoa.setData_ultima_atualizacao_bikes(usuarioExistente.getData_ultima_atualizacao_bikes());
+			   pessoa.setRank_anual(usuarioExistente.getRank_anual());
+			   pessoa = pessoaServico.atualizaPessoaServico(pessoa, true);
+		   }
+		   	
+		   for ( User friendFB : friendsFB.getData()) {
+			   
+			  atualizaAmizadeUsuario(facebookUser, friendFB);
+			 
+		   }
+		   
+		   Configuracao configuracao = null;
+			configuracao = configuracaoServico
+					.leConfiguracaoFavorita(facebookUser.getId());
+			
+			//Caso o usuário tenha um favorito cadastrado ou seja o primeiro login
+			if (configuracao != null && configuracao.isFavorito() ) {
+				
+				request.setAttribute("modalidade", configuracao.getModalidade());
+				request.setAttribute("modo", configuracao.getModo());
+				request.setAttribute("periodo", configuracao.getIntervaloData());
 	
+			} else {
+				request.setAttribute("modalidade", ConstantesFitRank.MODALIDADE_PADRAO);
+				request.setAttribute("modo", ConstantesFitRank.MODO_PADRAO);
+				request.setAttribute("periodo", ConstantesFitRank.PERIODO_PADRAO);
+			}
+		   
+		   request.setAttribute("token", token);
+		   
+		   RequestDispatcher rd = request.getRequestDispatcher("/ranking.jsp");  
+		   rd.forward(request,response);  
+	   
+	   } catch(Exception e) {
+		   request.setAttribute("errorDescription", e.getMessage());
+		   RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");  
+		   rd.forward(request,response);  
+	   }
    }
 
 	private void atualizaAmizadeUsuario(User facebookUser, User friendFB) {

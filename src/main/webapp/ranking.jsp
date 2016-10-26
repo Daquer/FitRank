@@ -25,7 +25,14 @@
 		<meta property="og:description" content="Junte-se a <%= (String) request.getAttribute("geradorRank") %> neste jogo junto com seus amigos em busca de uma melhor qualidade de vida." />
 		<meta name="theme-color" content="#6f3d94" />
 		<title>Ranking - <%= (String) request.getAttribute("geradorRank") == null ?  "" : (String) request.getAttribute("geradorRank")%></title>
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+		<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+		<link rel="manifest" href="/manifest.json">
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+		<meta name="apple-mobile-web-app-title" content="FitRank">
+		<meta name="application-name" content="FitRank">
+		<meta name="theme-color" content="#ffffff">
 		<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
 		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 		<script src="http://connect.facebook.net/pt_BR/all.js"></script>
@@ -139,6 +146,9 @@
 	 	          
 // // 				introJs().start();
 // 			}
+			function showError(msg) {
+				$('.error').text(msg).css("display", "").fadeIn(400).delay(3000).fadeOut(400);
+			}
 			
 			function ajaxRanking() {
 					   		
@@ -159,7 +169,6 @@
 		   				
 		   				json = JSON.parse(data.responseText);
 		   				
-		//				   				json = JSON.parse(jqXHR.getResponseHeader('json'));
 					   	ultimaPublicacao = data.getResponseHeader('dataPostMaisRecente');
 					   	
 						$("<span class='capsula descOpcaoConfig' style='font-size: 16px;' title='Última Atividade: " + ultimaPublicacao +"'></span>").text("Última Atividade: " + ultimaPublicacao).appendTo(".Recarregar.atividades");
@@ -177,10 +186,15 @@
 			
 			$(document).ready(function(){
 // 				startTutorial();
+				
 			    $(document).ajaxStart(function () {
 			        $("#loading").show();
 			    }).ajaxStop(function () {
 			        $("#loading").hide();
+			    }).ajaxError(function (e, data) {
+			    	if (data.getResponseHeader('msg')){
+		   				showError(data.getResponseHeader('msg'));
+	   				}
 			    });
 			    
 			    if (verRanking) {
@@ -926,7 +940,9 @@
 
 	<body>
 		<div class="wrapper">
-			<div class="preheader"></div>
+			<div class="preheader">
+				<div class='error' style='display:none;'></div>
+			</div>
 			<div class="content">
 				<div class="headerContent rankingHeader">
 					<div class="siteHeader" data-step="1" data-intro="ola">
@@ -961,7 +977,6 @@
 						</div>
 					</div>
 					</div>
-					    
 					<div class="footer"></div>
 				</div>
 				<div class="ranks">

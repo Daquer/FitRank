@@ -195,7 +195,8 @@ public class CourseDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog("adicionaListaIdsCourse | " + e.getMessage());
+			Logger.insertLog("adicionaListaIdsCourse | " + e.getMessage() + "\n"+
+							 preparedStatement.toString());
 			isSucess = false;
 			
 		} finally {

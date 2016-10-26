@@ -41,6 +41,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.exception.FacebookGraphException;
+import com.restfb.exception.FacebookNetworkException;
 import com.restfb.types.User;
 
 /**
@@ -101,90 +102,93 @@ public class CarregaRanking extends HttpServlet {
     	String atualizarTudo = request.getParameter("config") == null ? "" : (String) request.getParameter("config");
     	String isAjax = request.getParameter("ajax") == null ? "" : (String) request.getParameter("ajax");
     	String token = request.getAttribute("token") == null ? (String) request.getParameter("token") : (String) request.getAttribute("token");
-    	
-    	FacebookClient facebookClient = new DefaultFacebookClient(token);
-    	User facebookUser = facebookClient.fetchObject("me", User.class);
-    	
-    	//Atualizações feitas em toda e qualquer chamada de ranking
-		Date ultimaAtualizacao = handleUltimaAtividade(modalidade, facebookClient, facebookUser, atualizarTudo);
-		if (ultimaAtualizacao != null) {
-			
-			atualizaCorridasAmigos(facebookUser.getId(), modalidade, facebookClient, request);
-		}
-		
-		Configuracao configuracaoRanking = new Configuracao();
-    	configuracaoRanking.setIdPessoa(facebookUser.getId());
-    	configuracaoRanking.setModalidade(modalidade);
-		configuracaoRanking.setIntervaloData(periodo);
-		configuracaoRanking.setFavorito(false);
-		configuracaoRanking.setPadraoModalidade(false);
-		configuracaoRanking.setModo(modo);
-		
-		listRankingPessoas = rankingPessoaServico.geraRanking(configuracaoRanking);
-		
-		configuracaoRanking = configuracaoServico.adicionaConfiguracao(configuracaoRanking);
-		
-		
-		Ranking ranking = new Ranking();
-		if(configuracaoRanking.getIdConfiguracao() != ConstantesFitRank.INT_RESULTADO_INVALIDO){
-			
-			ranking.setId_configuracao(configuracaoRanking.getIdConfiguracao());
-			ranking = rankingServico.adicionaRanking(ranking);
-			
-			if(ranking.getId_ranking() != ConstantesFitRank.INT_RESULTADO_INVALIDO){
-				rankingPessoaServico.gravaRankingPessoa(listRankingPessoas, ranking.getId_ranking());
-			}
-		}
-		
-		//Recupera as configurações de pessoa, inclusive foto.
-    	for (RankingPessoa rankingPessoa : listRankingPessoas) {
-    		
-    		PessoaServico pessoaServico = new PessoaServico();
-    		
-    		rankingPessoa.setPessoa( pessoaServico.lePessoaPorIdServico( rankingPessoa.getId_pessoa() ) );
-		}
-    	
-    	List<RankingPessoaTela> listaRankingPessoaTela = obtemListaAplicativosTela(listRankingPessoas, configuracaoRanking, ranking);
-    	postFitnessServico = new PostFitnessServico();
-    	String dataPostMaisRecente = postFitnessServico.obtemDataPostMaisRecente(facebookUser.getId());
-
-		request.setAttribute("token", token);
-		
-		Date horaFim = new Date();
-		Logger.insertLog("\n\nTempo de processamento CarregaRanking: " + (horainicio.getTime() - horaFim.getTime())/1000 + " segundos.\n");
-
-		
-    	request.setAttribute("modalidade", modalidade);
-		request.setAttribute("modo", modo);
-		request.setAttribute("periodo", periodo);
-		request.setAttribute("listaRanking", listaRankingPessoaTela);
-//		request.setAttribute("dataPostMaisRecente", dataPostMaisRecente);
-		response.addHeader("dataPostMaisRecente", dataPostMaisRecente);
-//		request.setAttribute("token", (String) request.getParameter("token"));
-		
-		String json = com.cedarsoftware.util.io.JsonWriter.objectToJson(listaRankingPessoaTela);
-		
-		if(isAjax.equals("S")){
-			
-			if (ConstantesFitRank.CHAR_SIM.equals(atualizarTudo)) {
-				response.addHeader("msg", "Atividades recarregadas com sucesso.");
+    	try {    		
+	    	FacebookClient facebookClient = new DefaultFacebookClient(token);
+	    	User facebookUser = facebookClient.fetchObject("me", User.class);
+	    	
+	    	//Atualizações feitas em toda e qualquer chamada de ranking
+			Date ultimaAtualizacao = handleUltimaAtividade(modalidade, facebookClient, facebookUser, atualizarTudo);
+			if (ultimaAtualizacao != null) {
+				
+				atualizaCorridasAmigos(facebookUser.getId(), modalidade, facebookClient, request);
 			}
 			
-			response.setContentType("text/html;charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			out.println(json);
-			out.close();
-		} else {
-//			response.addHeader("json", json);
+			Configuracao configuracaoRanking = new Configuracao();
+	    	configuracaoRanking.setIdPessoa(facebookUser.getId());
+	    	configuracaoRanking.setModalidade(modalidade);
+			configuracaoRanking.setIntervaloData(periodo);
+			configuracaoRanking.setFavorito(false);
+			configuracaoRanking.setPadraoModalidade(false);
+			configuracaoRanking.setModo(modo);
 			
-			rd = request.getRequestDispatcher("ranking.jsp");
+			listRankingPessoas = rankingPessoaServico.geraRanking(configuracaoRanking);
 			
-			rd.forward(request, response);
+			configuracaoRanking = configuracaoServico.adicionaConfiguracao(configuracaoRanking);
+			
+			
+			Ranking ranking = new Ranking();
+			if(configuracaoRanking.getIdConfiguracao() != ConstantesFitRank.INT_RESULTADO_INVALIDO){
+				
+				ranking.setId_configuracao(configuracaoRanking.getIdConfiguracao());
+				ranking = rankingServico.adicionaRanking(ranking);
+				
+				if(ranking.getId_ranking() != ConstantesFitRank.INT_RESULTADO_INVALIDO){
+					rankingPessoaServico.gravaRankingPessoa(listRankingPessoas, ranking.getId_ranking());
+				}
+			}
+			
+			//Recupera as configurações de pessoa, inclusive foto.
+	    	for (RankingPessoa rankingPessoa : listRankingPessoas) {
+	    		
+	    		PessoaServico pessoaServico = new PessoaServico();
+	    		
+	    		rankingPessoa.setPessoa( pessoaServico.lePessoaPorIdServico( rankingPessoa.getId_pessoa() ) );
+			}
+	    	
+	    	List<RankingPessoaTela> listaRankingPessoaTela = obtemListaAplicativosTela(listRankingPessoas, configuracaoRanking, ranking);
+	    	postFitnessServico = new PostFitnessServico();
+	    	String dataPostMaisRecente = postFitnessServico.obtemDataPostMaisRecente(facebookUser.getId());
+	
+			request.setAttribute("token", token);
+			
+			Date horaFim = new Date();
+			Logger.insertLog("\n\nTempo de processamento CarregaRanking: " + (horainicio.getTime() - horaFim.getTime())/1000 + " segundos.\n");
+			
+	    	request.setAttribute("modalidade", modalidade);
+			request.setAttribute("modo", modo);
+			request.setAttribute("periodo", periodo);
+			request.setAttribute("listaRanking", listaRankingPessoaTela);
+			response.addHeader("dataPostMaisRecente", dataPostMaisRecente);
+			
+			String json = com.cedarsoftware.util.io.JsonWriter.objectToJson(listaRankingPessoaTela);
+			
+			if(isAjax.equals("S")){
+				
+				if (ConstantesFitRank.CHAR_SIM.equals(atualizarTudo)) {
+					response.addHeader("msg", "Atividades recarregadas com sucesso.");
+				}
+				
+				response.setContentType("text/html;charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println(json);
+				out.close();
+			} else {
+				rd = request.getRequestDispatcher("ranking.jsp");
+				
+				rd.forward(request, response);
+			}
+			
+	    }catch(Exception e) {
+	    	if(isAjax.equals("S")){
+				response.addHeader("msg", e.getMessage());
+				response.setContentType("text/html;charset=UTF-8");
+				response.setStatus(500);
+	    	} else {
+	    		request.setAttribute("errorDescription", e.getMessage());
+	    		rd = request.getRequestDispatcher("/index.jsp");  
+	    		rd.forward(request,response);
+	    	}
 		}
-		
-		
-		
-    	
     }
     
     private List<RankingPessoaTela> obtemListaAplicativosTela(List<RankingPessoa> listaRankingPessoa, Configuracao configuracaoRanking, Ranking ranking) {
@@ -263,7 +267,6 @@ public class CarregaRanking extends HttpServlet {
 				handleUltimaAtividade(modalidade, facebookClient, facebookUser, ConstantesFitRank.CHAR_NAO);
 			} catch (FacebookGraphException e) {
 				Logger.insertLog(e.getMessage());
-//				pessoaServico.removePessoaFromIdServico(amizade.getId_amigo());
 			}
 		}
 	}
@@ -296,8 +299,6 @@ public class CarregaRanking extends HttpServlet {
 			course.setId_post(postFit.getId());
 			
 			listCourses.add(course);
-			
-//			postFitness.setCourse(course);
 			
 			postFitness.setId_publicacao(postFit.getId());
 			postFitness.setId_pessoa(facebookUser.getId());
@@ -346,21 +347,6 @@ public class CarregaRanking extends HttpServlet {
 			
 			
 		}
-		
-//		Connection<Course> listaCourseStrava = facebookClient.fetchConnection("fitness.course/?ids=" + ids.toString(), Course.class);
-//		AccessToken appAccessToken = new DefaultFacebookClient().obtainAppAccessToken(ConstantesFitRank.ID_APP_FITRANK, "6597ab02634e5f72ca8def8b6ce4654b");
-		
-		
-//		for(Course courseStrava : listaCourseStrava){
-//			// Adiciona aplicativo à Lista
-//			PostFitness postFitness = new PostFitness();
-//			postFitness.setId_publicacao(courseStrava.getId());
-//			postFitness.setId_pessoa(facebookUser.getId());
-//			postFitness.setId_app(ConstantesFitRank.ID_APP_STRAVA);
-//			postFitness.setData_publicacao(DateConversor.DateToString(courseStrava.getCreated_time())); "2016-05-17T21:13:10+0000"
-//			postFitness.setUrl(postFit.getDataCourse().getCourse().getUrl());
-//			postFitness.setModalidade(modalidade);
-//		}
 		
 		for (PostFitness postFitness : postsFit) {
 			for (PostFitness postSalvoNoBanco : postsSalvosNoBanco) {

@@ -21,7 +21,6 @@ import br.com.fitrank.service.PessoaServico;
 import br.com.fitrank.service.PostFitnessServico;
 import br.com.fitrank.service.RankingPessoaServico;
 import br.com.fitrank.service.RankingServico;
-import br.com.fitrank.util.ConstantesFitRank;
 
 /**
  * Servlet implementation class VerRanking
@@ -96,26 +95,6 @@ public class VerRanking extends HttpServlet {
     		rd.forward(request, response);
     	}
     	
-    }
-    
-    private String definePeriodo(String periodo) {
-		switch(periodo) {
-			case ConstantesFitRank.DIA:
-				//Dia
-				return "0";
-			case ConstantesFitRank.SEMANA:
-				//Semana
-				return "1";
-			case ConstantesFitRank.MES:
-				//Mes
-				return "2";
-			case ConstantesFitRank.ANO:
-				//Ano
-				return "3";
-			default:
-				return periodo;
-		}
-		
     }
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
