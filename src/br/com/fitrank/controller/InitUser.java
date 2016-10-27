@@ -22,7 +22,6 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.FacebookClient.AccessToken;
 import com.restfb.Parameter;
-import com.restfb.exception.FacebookNetworkException;
 import com.restfb.json.JsonObject;
 import com.restfb.types.User;
 

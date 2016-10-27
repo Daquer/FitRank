@@ -27,32 +27,10 @@ public class PostFitnessServico {
 	public boolean adicionaListaPostFitnessServico(ArrayList<PostFitness> listaPostFitness) {
 		
 		this.postFitnessDAO = new PostFitnessDAO();
-//		int postInserido = 0;
-//		int errosInsercao = 0;
-//		int totalInserts = 0;
-//		
-//		for (PostFitness postFitness : listaPostFitness) {
-//		    try {
-//		    	totalInserts++;
-//	    		if(postFitnessDAO.adicionaListaPostFitness(postFitness)) {
-//	    			postInserido++;
-//	    		} else {
-//	    			errosInsercao++;
-//	    		}
-//			} catch (SQLException e) {
-//				errosInsercao++;
-//			}
-//		}
-//		Logger.insertLog("\n\nPosts inseridos:    " + postInserido);
-//		Logger.insertLog("Erros de insercao:  " + errosInsercao);
-//		Logger.insertLog("Total de insercoes: " + totalInserts);
-//		
-//		return postInserido > 0;
 		
 		try {
 			return postFitnessDAO.adicionaListaPostFitness(listaPostFitness);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}

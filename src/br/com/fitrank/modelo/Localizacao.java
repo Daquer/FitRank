@@ -1,5 +1,5 @@
 package br.com.fitrank.modelo;
-//TODO Verificar classe no banco, classe de modelo e UML
+
 public class Localizacao implements Comparable<Object> {
 
 	private double  latitude;
