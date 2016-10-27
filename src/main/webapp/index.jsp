@@ -20,8 +20,8 @@
 <script src="http://connect.facebook.net/pt_BR/all.js"></script>
 <script>
 	$(document).ready(function() {
-			if("<%= request.getAttribute("errorTitle") %>" != "null") {
-				$('.error').text("<%= request.getAttribute("errorTitle") %>").fadeIn(400).delay(3000).fadeOut(400);	
+			if("<%= request.getAttribute("errorDescription") %>" != "null") {
+				$('.error').text("<%= request.getAttribute("errorDescription") %>").fadeIn(400).delay(3000).fadeOut(400);	
 			} 
 	
 			FB.init({

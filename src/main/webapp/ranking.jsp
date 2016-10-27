@@ -146,7 +146,7 @@
 	 	          
 // // 				introJs().start();
 // 			}
-			function showError(msg) {
+			function showMsg(msg) {
 				$('.error').text(msg).css("display", "").fadeIn(400).delay(3000).fadeOut(400);
 			}
 			
@@ -191,11 +191,19 @@
 			        $("#loading").show();
 			    }).ajaxStop(function () {
 			        $("#loading").hide();
+			    }).ajaxSuccess(function(e, data){
+			    	if (data.getResponseHeader('msg')){
+			    		showMsg(data.getResponseHeader('msg'));
+	   				}
 			    }).ajaxError(function (e, data) {
 			    	if (data.getResponseHeader('msg')){
-		   				showError(data.getResponseHeader('msg'));
+			    		showMsg(data.getResponseHeader('msg'));
 	   				}
 			    });
+			    
+			    if ("<%= request.getAttribute("errorDescription") %>" != "null") {
+					showMsg("<%= request.getAttribute("errorDescription") %>");	
+				}
 			    
 			    if (verRanking) {
 			    	$(".share").css("display","none");
@@ -389,7 +397,7 @@
 	// 				   				$(".tableRank>tbody>.rankingLine").remove();
 	
 // 					   				json = JSON.parse(data.responseText);
-									alert(data);
+// 									alert(data);
 // 					   				json = JSON.parse(jqXHR.getResponseHeader('json'));
 					   				
 	// 				   				competidores = json["@items"];
@@ -407,7 +415,7 @@
 					   			method: 'get',
 					   			success: function( data, textStatus, jqXHR){
 	// 				   				$(".tableRank>tbody>.rankingLine").remove();
-					   				alert(jqXHR.getResponseHeader('msg'));
+// 					   				alert(jqXHR.getResponseHeader('msg'));
 // 					   				json = JSON.parse(jqXHR.getResponseHeader('json'));
 					   				
 	// 				   				competidores = json["@items"];
@@ -917,21 +925,12 @@
 					    type: 'POST',
 					    success: function(data){
 					    	authWindow.location.replace("https://www.facebook.com/dialog/share?app_id=749336888463283&display=popup&href=http://eic.cefet-rj.br/app/FitRank/VerRanking?idRanking=" + idRanking + "&redirect_uri=http://eic.cefet-rj.br/app/FitRank/self_close.jsp&caption=eic.cefet-rj.br/app/FitRank/","fb_share", "width=500, height=500");
-// 					    	window.open("https://www.facebook.com/dialog/share?app_id=749336888463283&display=popup&href=http://eic.cefet-rj.br/app/FitRank/VerRanking?idRanking=" + idRanking + "&redirect_uri=http://eic.cefet-rj.br/app/FitRank/self_close.jsp","fb_share", "width=500, height=500");
-// 					    	FB.ui({
-// 					    		  method: "share",
-// 					    		  app_id: "749336888463283",
-// 					    		  display: "popup",
-// 					    		  href: "http://eic.cefet-rj.br/app/FitRank/VerRanking?idRanking=" + idRanking,
-// 					    		  redirect_uri: "http://eic.cefet-rj.br/app/FitRank/VerRanking?idRanking=" + idRanking	
-// 					    		}, function(response){});	
 					    }
 					});
 					
 				  }
 				
 				});
-// 				window.open("https://www.facebook.com/dialog/share?app_id=749336888463283&display=popup&href=http://eic.cefet-rj.br/app/FitRank/VerRanking?idRanking=" + idRanking + "&redirect_uri=http://eic.cefet-rj.br/app/FitRank/VerRanking?idRanking=" + idRanking,"fb_share", "width=500, height=500");		
 			}
 		</script>
 		<link rel="stylesheet" type="text/css" href="./style/css/FitRank.css">

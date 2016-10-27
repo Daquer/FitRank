@@ -22,25 +22,31 @@ public class UploadImg extends HttpServlet {
 	ImagemRankingServico imagemRankingServico = new ImagemRankingServico();
 	
 	private void inicia(HttpServletRequest request, HttpServletResponse response) {
-		String img64 = request.getParameter("img64");
-		String idRanking = request.getParameter("idRanking");
-		
-		img64 = img64.replace("data:image/png;base64,", "");
-		
-		byte[] imageByte = DatatypeConverter.parseBase64Binary(img64);
-		
-		Blob blob = null;
-		
 		try {
-			blob = new SerialBlob(imageByte);
-		} catch (SQLException e) {
-			e.printStackTrace();
+			String img64 = request.getParameter("img64");
+			String idRanking = request.getParameter("idRanking");
+			
+			img64 = img64.replace("data:image/png;base64,", "");
+			
+			byte[] imageByte = DatatypeConverter.parseBase64Binary(img64);
+			
+			Blob blob = null;
+			
+			try {
+				blob = new SerialBlob(imageByte);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			ImagemRanking imagemRanking = new ImagemRanking();
+			imagemRanking.setId_ranking(Integer.parseInt(idRanking)); 
+			imagemRanking.setImagem(blob);
+			imagemRankingServico.adicionaRanking(imagemRanking);
+		} catch(Exception e) {
+			response.addHeader("msg", e.getMessage());
+			response.setContentType("text/html;charset=UTF-8");
+			response.setStatus(500);
 		}
-		
-		ImagemRanking imagemRanking = new ImagemRanking();
-		imagemRanking.setId_ranking(Integer.parseInt(idRanking)); 
-		imagemRanking.setImagem(blob);
-		imagemRankingServico.adicionaRanking(imagemRanking);
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

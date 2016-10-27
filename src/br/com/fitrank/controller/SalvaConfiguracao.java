@@ -86,7 +86,7 @@ public class SalvaConfiguracao extends HttpServlet {
     		//ocorreu algum erro
     		mensagem = "Ocorreu algum erro ao gerar o ranking favorito";
     	}
-    	
+    	response.addHeader("msg", mensagem);
 		response.setContentType("text/html;charset=UTF-8");
 
 		try {

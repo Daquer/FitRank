@@ -50,51 +50,74 @@ public class VerRanking extends HttpServlet {
     	RankingServico rankingServico = new RankingServico();
     	RankingPessoaServico rankingPessoaServico = new RankingPessoaServico();
     	String nomeGeradorRank = "";
-    	
-    	int idRanking = request.getAttribute("idRanking") == null ? Integer.valueOf(request.getParameter("idRanking")) : (Integer) request.getAttribute("idRanking");
     	String isAjax = request.getParameter("ajax") == null ? "" : (String) request.getParameter("ajax");
+    	RequestDispatcher rd;
+    	Configuracao configuracao = new Configuracao();
     	
-    	Ranking ranking = rankingServico.leRanking(idRanking);
-	    Configuracao configuracao = configuracaoServico.leConfiguracaoPorId(ranking.getId_configuracao());
-	    modalidade = configuracao.getModalidade();
-    	modo = configuracao.getModo();
-		periodo = configuracao.getIntervaloData();
-    	
-    	listRankingPessoas = rankingPessoaServico.listaRankingPessoaPorIdRanking(ranking.getId_ranking());
-    	
-    	//Recupera as configuracoes de pessoa, inclusive foto.
-    	for (RankingPessoa rankingPessoa : listRankingPessoas) {
-    		
-    		PessoaServico pessoaServico = new PessoaServico();
-    		
-    		rankingPessoa.setPessoa( pessoaServico.lePessoaPorIdServico( rankingPessoa.getId_pessoa() ) );
-    		
-    		if (rankingPessoa.getPessoa().getId_usuario().equals(configuracao.getIdPessoa()) ) {
-    			nomeGeradorRank = rankingPessoa.getPessoa().getNome();
-    		}
-		}
-	    
-    	request.setAttribute("geradorRank", nomeGeradorRank);
-		request.setAttribute("modalidade", modalidade);
-		request.setAttribute("modo", modo);
-		request.setAttribute("periodo", periodo);
-		
-		if(isAjax.equals("S")) {	
-			List<RankingPessoaTela> listaRankingPessoaTela = obtemListaAplicativosTela(listRankingPessoas, configuracao, ranking);
-	    	postFitnessServico = new PostFitnessServico();
+    	try {
+    		int idRanking = request.getAttribute("idRanking") == null ? Integer.valueOf(request.getParameter("idRanking")) : (Integer) request.getAttribute("idRanking");
 	    	
-			String json = com.cedarsoftware.util.io.JsonWriter.objectToJson(listaRankingPessoaTela);
-			response.setContentType("text/html;charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			out.println(json);
-			out.close();
-			
-    	} else {
-    		
-    		RequestDispatcher rd = request.getRequestDispatcher("ranking.jsp");
-    		rd.forward(request, response);
+	    	Ranking ranking = rankingServico.leRanking(idRanking);
+	    	
+	    	if( ranking.getId_ranking() != 0 ) {
+	    	
+			    configuracao = configuracaoServico.leConfiguracaoPorId(ranking.getId_configuracao());
+			    modalidade = configuracao.getModalidade();
+		    	modo = configuracao.getModo();
+				periodo = configuracao.getIntervaloData();
+		    	
+		    	listRankingPessoas = rankingPessoaServico.listaRankingPessoaPorIdRanking(ranking.getId_ranking());
+		    	
+		    	//Recupera as configuracoes de pessoa, inclusive foto.
+		    	for (RankingPessoa rankingPessoa : listRankingPessoas) {
+		    		
+		    		PessoaServico pessoaServico = new PessoaServico();
+		    		
+		    		rankingPessoa.setPessoa( pessoaServico.lePessoaPorIdServico( rankingPessoa.getId_pessoa() ) );
+		    		
+		    		if (rankingPessoa.getPessoa().getId_usuario().equals(configuracao.getIdPessoa()) ) {
+		    			nomeGeradorRank = rankingPessoa.getPessoa().getNome();
+		    		}
+				}
+			    
+		    	request.setAttribute("geradorRank", nomeGeradorRank);
+				request.setAttribute("modalidade", modalidade);
+				request.setAttribute("modo", modo);
+				request.setAttribute("periodo", periodo);
+				
+	    	} else {
+	    		request.setAttribute("errorDescription", "Número de ranking inexistente.");
+	    		response.addHeader("msg", "Número de ranking inexistente.");
+				response.setContentType("text/html;charset=UTF-8");
+				response.setStatus(500);
+	    	}
+	    	
+	    	if(isAjax.equals("S")) {	
+				List<RankingPessoaTela> listaRankingPessoaTela = obtemListaAplicativosTela(listRankingPessoas, configuracao, ranking);
+		    	postFitnessServico = new PostFitnessServico();
+		    	
+				String json = com.cedarsoftware.util.io.JsonWriter.objectToJson(listaRankingPessoaTela);
+				response.setContentType("text/html;charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println(json);
+				out.close();
+				
+	    	} else {
+	    		
+	    		rd = request.getRequestDispatcher("ranking.jsp");
+	    		rd.forward(request, response);
+	    	}
+    	} catch(Exception e) {
+    		if(isAjax.equals("S")){
+				response.addHeader("msg", e.getMessage());
+				response.setContentType("text/html;charset=UTF-8");
+				response.setStatus(500);
+	    	} else {
+	    		request.setAttribute("errorDescription", e.getMessage());
+	    		rd = request.getRequestDispatcher("/ranking.jsp");  
+	    		rd.forward(request,response);
+	    	}
     	}
-    	
     }
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

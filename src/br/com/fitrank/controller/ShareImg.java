@@ -28,23 +28,19 @@ public class ShareImg extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String imgId = request.getParameter("id");
 		
-//		byte[] b = null;
 		Blob blob;
 		byte[] blobAsBytes = null;
-		
 		
 		ImagemRanking imagemRanking = imagemRankingServico.leRanking(Integer.valueOf(imgId));
 		
 		response.setContentType("image/png");
 		
-		if (imagemRanking.getImagem() != null){
+		if (imagemRanking.getImagem() != null) {
 			try {
 				
-					blob = new SerialBlob(imagemRanking.getImagem());
-	//			blob = new SerialBlob(b);
-					int blobLength = (int) blob.length(); 
-					blobAsBytes = blob.getBytes(1, blobLength);
-				
+				blob = new SerialBlob(imagemRanking.getImagem());
+				int blobLength = (int) blob.length(); 
+				blobAsBytes = blob.getBytes(1, blobLength);
 				
 			} catch (SQLException e) {
 				e.printStackTrace();

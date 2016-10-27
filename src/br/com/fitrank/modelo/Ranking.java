@@ -4,8 +4,6 @@ public class Ranking {
 	
 	private int id_ranking;
 	
-	private String titulo;
-	
 	private int id_configuracao;
 	
 	private String data_ranking;
@@ -16,14 +14,6 @@ public class Ranking {
 
 	public void setId_ranking(int id_ranking) {
 		this.id_ranking = id_ranking;
-	}
-
-	public String getTitulo() {
-		return titulo;
-	}
-
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
 	}
 
 	public int getId_configuracao() {
