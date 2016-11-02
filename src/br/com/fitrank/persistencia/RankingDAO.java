@@ -29,7 +29,7 @@ public class RankingDAO {
 		String insertTableSQL = "INSERT INTO ranking ("
 				+ "id_configuracao, "
 				+ "data_ranking"
-				+ ") VALUES (?, ?, ?)";
+				+ ") VALUES (?, ?)";
 				
 		try {
 			dbConnection = conexao;
