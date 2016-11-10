@@ -310,9 +310,9 @@ public class CarregaRanking extends HttpServlet {
 				case ConstantesFitRank.ID_APP_NIKE:
 					//Exclusão do modo do APP da Nike embedado no Facebook, onde o título é "Your best begins here".
 					//Caso o título comece a exibir a kilometragem novamente, reavaliar a necessidade deste if
-//					if (!postFit.getDataCourse().getCourse().getUrl().contains("https://www.facebook.com/games/nikeapp/")
-//							//Existe uma publicação do Nike com o título "Comente" que serve apenas para que os usuários comentem durante a corrida
-					if (postFit.getDataCourse().getCourse().getUrl().contains("cheer")) {
+					if (postFit.getDataCourse().getCourse().getUrl().contains("facebook.com/games/nikeapp/")
+//							//Existe uma publicação do Nike em que a url contem "cheer" que serve apenas para que os usuários comentem durante a corrida
+					|| postFit.getDataCourse().getCourse().getUrl().contains("cheer")) {
 						continue;
 					}
 					
