@@ -4,12 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import br.com.fitrank.modelo.Course;
 import br.com.fitrank.util.JDBCFactory;
-import br.com.fitrank.util.Logger;
 
 
 public class CourseDAO {
@@ -29,6 +26,7 @@ public class CourseDAO {
 				+ "id_course, "
 				+ "distancia, "
 				+ "calorias, "
+				+ "ritmo, "
 				+ "id_post"
 				+ ") VALUES (?, ?, ?, ?, ?)";
 				
@@ -41,6 +39,7 @@ public class CourseDAO {
 			preparedStatement.setString(++i, course.getId_course());
 			preparedStatement.setFloat(++i, course.getDistancia());
 			preparedStatement.setFloat(++i, course.getCalorias());
+			preparedStatement.setFloat(++i, course.getRitmo()); 
 			preparedStatement.setString(++i, course.getId_post());
 
 			// execute insert SQL stetement
@@ -48,7 +47,7 @@ public class CourseDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog("adicionaCourse | " + e.getMessage());
+			System.out.println(e.getMessage());
 
 		} finally {
 
@@ -73,6 +72,7 @@ public class CourseDAO {
 		String updateTableSQL = "update course set "
 				+ "distancia = ? "
 				+ "calorias = ?, "
+				+ "ritmo = ?, "
 				+ "id_post = ? "
 				+ "where id_course = ?";
 
@@ -84,6 +84,7 @@ public class CourseDAO {
 			
 			preparedStatement.setFloat(++i, course.getDistancia());
 			preparedStatement.setFloat(++i, course.getCalorias());
+			preparedStatement.setFloat(++i, course.getRitmo()); 
 			preparedStatement.setString(++i, course.getId_post());
 			preparedStatement.setString(++i, course.getId_course());
 
@@ -92,7 +93,7 @@ public class CourseDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog("atualizaCourse |" +  e.getMessage());
+			System.out.println(e.getMessage());
 
 		} finally {
 
@@ -118,6 +119,7 @@ public class CourseDAO {
 				+ "id_course,"
 				+ "distancia, "
 				+ "calorias, "
+				+ "ritmo, "
 				+ "id_post, "
 				+ "FROM course "
 				+ "WHERE id_course = ?";
@@ -138,12 +140,13 @@ public class CourseDAO {
 				course.setId_course(rs.getString("id_course"));
 				course.setDistancia(rs.getFloat("distancia"));
 				course.setCalorias(rs.getFloat("calorias"));
+				course.setRitmo(rs.getFloat("ritmo"));
 				course.setId_post(rs.getString("id_post"));
 
 			}
 		} catch (SQLException e) {
 			 
-			Logger.insertLog("leCourse | " + e.getMessage());
+			System.out.println(e.getMessage());
 	
 		} finally {
 	
@@ -158,163 +161,5 @@ public class CourseDAO {
 		}
 		
 		return course;
-	}
-
-	public boolean adicionaListaIdsCourse(ArrayList<Course> listaCourses) throws SQLException {
-		
-		Connection dbConnection = null;
-		PreparedStatement preparedStatement = null;
-		boolean isSucess = true;
-		
-		String insertTableSQL = "INSERT INTO course ("
-				+ "id_course, "
-				+ "id_pessoa, "
-				+ "id_post " 
-				+ ") VALUES (?, ?, ?)";
-
-		
-		for (int aux = 0; aux < (listaCourses.size() - 1); aux++) {
-			insertTableSQL +=  ", (?, ?, ?)";			
-		}	
-		
-		try {
-			dbConnection = conexao;
-			preparedStatement = dbConnection.prepareStatement(insertTableSQL);
-			
-			int i = 0;
-			
-			for (Course course : listaCourses) {
-			
-				preparedStatement.setString(++i, course.getId_course());
-				preparedStatement.setString(++i, course.getId_pessoa());
-				preparedStatement.setString(++i, course.getId_post());
-				
-			}
-			// execute insert SQL statement
-			preparedStatement.executeUpdate();
-
-		} catch (SQLException e) {
-
-			Logger.insertLog("adicionaListaIdsCourse | " + e.getMessage() + "\n"+
-							 preparedStatement.toString());
-			isSucess = false;
-			
-		} finally {
-
-			if (preparedStatement != null) {
-				preparedStatement.close();
-			}
-
-			if (dbConnection != null) {
-				dbConnection.close();
-			}
-
-		}
-		
-		return isSucess;
-	}
-	
-	public boolean atualizaListaCourses(List<Course> listaCourses)
-			throws SQLException {
-
-		Connection dbConnection = null;
-		PreparedStatement preparedStatement = null;
-		boolean isSucess = true;
-		
-		String updateTableSQL = "update course set "
-				+ "distancia = ?, "
-				+ "calorias = ?, "
-				+ "json = ? "
-				+ "where id_course = ?;";
-		
-		for (int aux = 0; aux < (listaCourses.size() - 1); aux++) {	
-			updateTableSQL += "update course set "
-					+ "distancia = ?, "
-					+ "calorias = ?, "
-					+ "json = ? "
-					+ "where id_course = ?;";
-		}	
-		
-		try {
-			dbConnection = conexao;
-			preparedStatement = dbConnection.prepareStatement(updateTableSQL);
-			
-			int i = 0;
-
-			
-			for (Course course : listaCourses) {
-				preparedStatement.setFloat(++i, course.getDistancia());
-				preparedStatement.setFloat(++i, course.getCalorias());
-				preparedStatement.setString(++i, course.getJson());
-				preparedStatement.setString(++i, course.getId_course());
-			}
-			// execute insert SQL stetement
-			preparedStatement.executeUpdate();
-			
-		} catch (SQLException e) {
-
-			Logger.insertLog("atualizaListaCourses |" +  e.getMessage());
-			isSucess = false;
-			
-		} finally {
-
-			if (preparedStatement != null) {
-				preparedStatement.close();
-			}
-
-			if (dbConnection != null) {
-				dbConnection.close();
-			}
-
-		}
-
-		return isSucess;
-	}
-	
-	public List<Course> leCoursePorIdPessoa(String idPessoa) throws SQLException {
-		
-		Connection dbConnection = null;
-		PreparedStatement preparedStatement = null;
-		List<Course> listaPostFitness = new ArrayList<Course>();
-	
-		String selectTableSQL = "select "
-				+ "id_course, "
-				+ "id_post, "
-				+ "id_pessoa "
-				+ "from course "
-				+ "where id_pessoa = ?";
-				
-		try {
-			dbConnection = conexao;
-			preparedStatement = dbConnection.prepareStatement(selectTableSQL);
-			preparedStatement.setString(1, idPessoa);
-			
-			ResultSet rs = preparedStatement.executeQuery();
-			
-			while ( rs.next() ) {
-				Course course = new Course();
-				course.setId_course(rs.getString("id_course"));
-				course.setId_post(rs.getString("id_post"));
-				course.setId_pessoa(rs.getString("id_pessoa"));
-				
-				listaPostFitness.add(course);
-			}
-	
-		} catch (SQLException e) {
-	
-			Logger.insertLog("leCoursePorIdPessoa | " + e.getMessage());
-	
-		} finally {
-	
-			if (preparedStatement != null) {
-				preparedStatement.close();
-			}
-	
-			if (dbConnection != null) {
-				dbConnection.close();
-			}
-	
-		}
-		return listaPostFitness;
 	}
 }

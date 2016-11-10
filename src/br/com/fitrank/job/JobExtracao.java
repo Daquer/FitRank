@@ -211,10 +211,12 @@ public class JobExtracao implements Job {
 		    	localizacaoServico.adicionaLocalizacoes(localizacoesDB);
 		    }
 		    
-		    Logger.insertLog("---------------------------------------Job finalizado---------------------------------------");
+		    
 		} catch(Exception e) {
-			Logger.insertLog("General Job Exception" + e.getMessage());
+			Logger.insertLog("General Job Exception  " + e.getMessage());
 			
+	    } finally {
+	    	Logger.insertLog("---------------------------------------Job finalizado---------------------------------------");
 	    }
 	}
 }

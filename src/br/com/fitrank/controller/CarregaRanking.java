@@ -297,8 +297,6 @@ public class CarregaRanking extends HttpServlet {
 			course.setId_pessoa(facebookUser.getId());
 			course.setId_post(postFit.getId());
 			
-			listCourses.add(course);
-			
 			postFitness.setId_publicacao(postFit.getId());
 			postFitness.setId_pessoa(facebookUser.getId());
 			postFitness.setId_app(postFit.getApplication().getId());
@@ -310,9 +308,18 @@ public class CarregaRanking extends HttpServlet {
 
 				switch (postFit.getApplication().getId()) {
 				case ConstantesFitRank.ID_APP_NIKE:
+					//Exclusão do modo do APP da Nike embedado no Facebook, onde o título é "Your best begins here".
+					//Caso o título comece a exibir a kilometragem novamente, reavaliar a necessidade deste if
+//					if (!postFit.getDataCourse().getCourse().getUrl().contains("https://www.facebook.com/games/nikeapp/")
+//							//Existe uma publicação do Nike com o título "Comente" que serve apenas para que os usuários comentem durante a corrida
+					if (postFit.getDataCourse().getCourse().getUrl().contains("cheer")) {
+						continue;
+					}
+					
 					postFitness.setDistancia_percorrida(PostFitnessUtil.getNikeDistance(postFit.getDataCourse().getCourse().getTitle()));
 					postFitness.setDuracao(PostFitnessUtil.getDuration(postFit.getStartTime(), postFit.getEndTime()));
 					postsFit.add(postFitness);
+
 					break;
 				case ConstantesFitRank.ID_APP_RUNTASTIC:
 				case ConstantesFitRank.ID_APP_RUNTASTIC_MOUNTAIN_BIKE:
@@ -340,6 +347,10 @@ public class CarregaRanking extends HttpServlet {
 					continue;
 				}
 				
+				//Condição para não gerar duplicidade na inserção. Existem courses que são compartilhados duas vezes para um mesmo post_fitness.  
+				if (!listCourses.contains(course)){
+					listCourses.add(course);
+				}
 			} catch (NumberFormatException e) {
 				continue;
 			}
