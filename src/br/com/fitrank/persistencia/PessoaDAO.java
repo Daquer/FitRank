@@ -64,7 +64,7 @@ public class PessoaDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog("adicionaPessoa" + e.getMessage() + "Id pessoa: " + pessoa.getId_usuario());
+			Logger.insertLog("adicionaPessoa | " + e.getMessage() + "Id pessoa: " + pessoa.getId_usuario());
 
 		} finally {
 
@@ -281,7 +281,7 @@ public class PessoaDAO {
 			
 		} catch (SQLException e) {
 			 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leTodasPessoas | " + e.getMessage());
  
 		} finally {
  

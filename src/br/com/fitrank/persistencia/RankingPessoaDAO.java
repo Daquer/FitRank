@@ -57,7 +57,7 @@ public class RankingPessoaDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("adicionaRankingPessoa | " + e.getMessage());
 
 		} finally {
 
@@ -101,7 +101,7 @@ public class RankingPessoaDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("atualizaRankingPessoa | " + e.getMessage());
 	
 		} finally {
 	
@@ -163,7 +163,7 @@ public class RankingPessoaDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("listaRankingPessoaPorIdRanking | " + e.getMessage());
 	
 		} finally {
 	
@@ -268,7 +268,7 @@ public class RankingPessoaDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("geraRanking | " + e.getMessage());
 	
 		} finally {
 	

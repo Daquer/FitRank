@@ -42,7 +42,7 @@ public class ImagemRankingDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("adicionaImagemRanking | " + e.getMessage());
 
 		} finally {
 
@@ -86,7 +86,7 @@ public class ImagemRankingDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leImagemRanking | " + e.getMessage());
 	
 		} finally {
 	

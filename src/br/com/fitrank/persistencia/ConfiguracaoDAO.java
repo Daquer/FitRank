@@ -72,7 +72,7 @@ public class ConfiguracaoDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("adicionaConfiguracao | " + e.getMessage());
 
 		} finally {
 
@@ -135,7 +135,7 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("atualizaConfiguracao | " + e.getMessage());
 
 		} finally {
 
@@ -194,7 +194,7 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 			}
 		} catch (SQLException e) {
 			 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leConfiguracaoPorId | " + e.getMessage());
 	
 		} finally {
 	
@@ -267,7 +267,7 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 			}
 		} catch (SQLException e) {
 			 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leConfiguracaoPorPessoa | " + e.getMessage());
 	
 		} finally {
 	

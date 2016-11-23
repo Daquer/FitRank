@@ -52,7 +52,7 @@ public class RankingDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("adicionaRanking | " + e.getMessage());
 
 		} finally {
 
@@ -94,7 +94,7 @@ public class RankingDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("atualizaRanking | " + e.getMessage());
 	
 		} finally {
 	
@@ -140,7 +140,7 @@ public class RankingDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leRanking | " + e.getMessage());
 	
 		} finally {
 	

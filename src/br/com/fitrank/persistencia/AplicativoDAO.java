@@ -52,7 +52,7 @@ public class AplicativoDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("adicionaAplicativo | " + e.getMessage());
 
 		} finally {
 
@@ -99,7 +99,7 @@ public class AplicativoDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("adicionaAplicativos | " + e.getMessage());
 
 		} finally {
 
@@ -141,7 +141,7 @@ public class AplicativoDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("atualizaAplicativo | " + e.getMessage());
 
 		} finally {
 
@@ -193,7 +193,7 @@ public class AplicativoDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leAplicativo | " + e.getMessage());
 
 		} finally {
 
@@ -259,7 +259,7 @@ public class AplicativoDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leListaAplicativos | " + e.getMessage());
 
 		} finally {
 
@@ -334,7 +334,7 @@ public class AplicativoDAO {
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("listaAplicativosUsuarioNoRanking | " + e.getMessage());
 	
 		} finally {
 	

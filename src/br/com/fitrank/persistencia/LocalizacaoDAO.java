@@ -49,7 +49,7 @@ public class LocalizacaoDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("adicionaLocalizacao | " + e.getMessage());
 
 		} finally {
 
@@ -94,7 +94,7 @@ public class LocalizacaoDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("atualizaLocalizacao | " + e.getMessage());
 
 		} finally {
 
@@ -146,7 +146,7 @@ public class LocalizacaoDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog(e.getMessage());
+			Logger.insertLog("leLocalizacao | " + e.getMessage());
 
 		} finally {
 
