@@ -258,7 +258,8 @@ public class CarregaRanking extends HttpServlet {
     
     private void atualizaCorridasAmigos(String idUsuario, String modalidade, FacebookClient facebookClient, HttpServletRequest request){
 		AmizadeServico amizadeServico = new AmizadeServico();
-		List<Amizade> amigos = amizadeServico.listaAmizades(idUsuario);
+//		List<Amizade> amigos = amizadeServico.listaAmizades(idUsuario);
+		List<Amizade> amigos = amizadeServico.listaAmizadesMenosAtualizadas(idUsuario, ConstantesFitRank.LIMITE_ATUALIZACAO_USUARIOS, modalidade);
 		
 		for(Amizade amizade : amigos){
 			try {

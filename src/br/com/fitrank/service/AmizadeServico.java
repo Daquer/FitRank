@@ -7,16 +7,18 @@ import java.util.List;
 
 import br.com.fitrank.modelo.Amizade;
 import br.com.fitrank.persistencia.AmizadeDAO;
+import br.com.fitrank.persistencia.PessoaDAO;
+import br.com.fitrank.util.ConstantesFitRank;
 
 public class AmizadeServico {
 	
 	private AmizadeDAO amizadeDAO = new AmizadeDAO();
+	private PessoaDAO pessoaDAO = new PessoaDAO();
 	private Amizade amizade;
 	
 	public Amizade adicionaAmizadeServico(String idPessoa, String idAmigo) {
 		
 		amizade = new Amizade();
-		
 		
 		amizade.setData_amizade(new Date());
 		
@@ -42,7 +44,7 @@ public class AmizadeServico {
 	    
 	}
 	
-	public List<Amizade> listaAmizades(String idPessoa){
+	public ArrayList<Amizade> listaAmizades(String idPessoa){
 		ArrayList<Amizade> listaAmigos;
 		try {
 			listaAmigos = (ArrayList<Amizade>) amizadeDAO.listaAmizades(idPessoa);
@@ -70,6 +72,58 @@ public class AmizadeServico {
 
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	public boolean desativaAmizade(String idUsuario, String id_amigo) {
+
+		this.amizadeDAO = new AmizadeDAO();
+		
+		try {
+			amizadeDAO.desativaAmizade(idUsuario,id_amigo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+
+	public List<Amizade> listaAmizadesMenosAtualizadas(String idPessoa, int limiteAtualizacaoUsuarios, String modalidade) {
+		ArrayList<Amizade> listaAmigosEntrada;
+		ArrayList<Amizade> listaAmigosSaida;
+		
+		this.pessoaDAO = new PessoaDAO();
+		String colunaModalidade = "";
+		
+		if(!modalidade.equals("A"))
+			colunaModalidade = setColunaModalidade(modalidade);
+		
+		try {
+			listaAmigosEntrada = listaAmizades(idPessoa);
+			
+			listaAmigosSaida = (ArrayList<Amizade>) pessoaDAO.listaPessoasMenosAtualizadas(listaAmigosEntrada, limiteAtualizacaoUsuarios, colunaModalidade);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return listaAmigosSaida;
+	}
+
+	private String setColunaModalidade(String modalidade) {
+		switch(modalidade){
+			case ConstantesFitRank.MODALIDADE_CAMINHADA:
+				return "data_ultima_atualizacao_walks";
+	
+			case ConstantesFitRank.MODALIDADE_CORRIDA:
+				return "data_ultima_atualizacao_runs" ;
+	
+			case ConstantesFitRank.MODALIDADE_BICICLETA:
+				return "data_ultima_atualizacao_bikes";
+		
+			default:
+				return "";
 		}
 	}
 }

@@ -13,6 +13,8 @@ public class DateConversor {
 	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat(FORMATO_DATA);
 	private static final String FORMATTER_DATA_HORA = "dd/MM/yyyy HH:mm:ss";
 	private static final SimpleDateFormat FORMATTER_DATE_HOUR = new SimpleDateFormat(FORMATTER_DATA_HORA);
+	private static final String FORMATO_MYSQL_DATETIME = "yyyy-MM-dd HH:mm:ss";
+	private static final SimpleDateFormat FORMATTER_MYSQL_DATETIME = new SimpleDateFormat(FORMATO_MYSQL_DATETIME);
 	private static GregorianCalendar gc;
 	
 	public static String DateToString(Date data) {
@@ -105,6 +107,12 @@ public class DateConversor {
 		gc = new GregorianCalendar();
 		gc.add(Calendar.DAY_OF_YEAR, -1);
 		return FORMATTER.format(gc.getTime());
+	}
+	
+	public static String getPreviousMinutesString(int minutes){
+		gc = new GregorianCalendar();
+		gc.add(Calendar.MINUTE, -minutes);
+		return FORMATTER_MYSQL_DATETIME.format(gc.getTime());
 	}
 	
 	public static GregorianCalendar convertDateToGregorian(Date date) {

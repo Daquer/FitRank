@@ -29,7 +29,7 @@
 				status : true, // verifica status do login
 				cookie : true, // habilita cookies para permitir acesso via servidor
 				xfbml : true, // habilita parser XFBML
-				version : 'v2.5'
+				version : 'v2.8'
 			});
 
 			$('#entra').on("click",
