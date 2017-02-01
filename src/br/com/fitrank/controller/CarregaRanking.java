@@ -101,6 +101,7 @@ public class CarregaRanking extends HttpServlet {
     	String atualizarTudo = request.getParameter("config") == null ? "" : (String) request.getParameter("config");
     	String isAjax = request.getParameter("ajax") == null ? "" : (String) request.getParameter("ajax");
     	String token = request.getAttribute("token") == null ? (String) request.getParameter("token") : (String) request.getAttribute("token");
+
     	try {    		
 	    	FacebookClient facebookClient = new DefaultFacebookClient(token);
 	    	User facebookUser = facebookClient.fetchObject("me", User.class);
@@ -265,13 +266,16 @@ public class CarregaRanking extends HttpServlet {
 			try {
 				User facebookUser = facebookClient.fetchObject(amizade.getId_amigo(), User.class);
 				handleUltimaAtividade(modalidade, facebookClient, facebookUser, ConstantesFitRank.CHAR_NAO);
-			} catch (FacebookGraphException e) {
+			} catch ( FacebookGraphException e) {
 				Logger.insertLog(e.getMessage());
+				if(e.getMessage().contains("GraphMethodException: Unsupported get request. Object with ID")) {
+					amizadeServico.desativaAmizade(idUsuario, amizade.getId_amigo());//chamar atualiza amizades com ativo = N
+				}
+				
 			}
 		}
 	}
     
-
     private Pessoa executaAtualizacao(String modalidade, FacebookClient facebookClient, User facebookUser, Date dataUltimaAtualizacao, String atualizarTudo) {
 		
 		Connection<PostFitnessFB> listaFitConnection = facebookClient
@@ -308,55 +312,53 @@ public class CarregaRanking extends HttpServlet {
 			try {
 
 				switch (postFit.getApplication().getId()) {
-				case ConstantesFitRank.ID_APP_NIKE:
-					//Exclusão do modo do APP da Nike embedado no Facebook, onde o título é "Your best begins here".
-					//Caso o título comece a exibir a kilometragem novamente, reavaliar a necessidade deste if
-					if (postFit.getDataCourse().getCourse().getUrl().contains("facebook.com/games/nikeapp/")
-//							//Existe uma publicação do Nike em que a url contem "cheer" que serve apenas para que os usuários comentem durante a corrida
-					|| postFit.getDataCourse().getCourse().getUrl().contains("cheer")) {
+					case ConstantesFitRank.ID_APP_NIKE:
+						//Exclusão do modo do APP da Nike embedado no Facebook, onde o título é "Your best begins here".
+						//Caso o título comece a exibir a kilometragem novamente, reavaliar a necessidade deste if
+						if (postFit.getDataCourse().getCourse().getUrl().contains("facebook.com/games/nikeapp/")
+	//							//Existe uma publicação do Nike em que a url contem "cheer" que serve apenas para que os usuários comentem durante a corrida
+						|| postFit.getDataCourse().getCourse().getUrl().contains("cheer")) {
+							continue;
+						}
+						
+						postFitness.setDistancia_percorrida(PostFitnessUtil.getNikeDistance(postFit.getDataCourse().getCourse().getTitle()));
+						postFitness.setDuracao(PostFitnessUtil.getDuration(postFit.getStartTime(), postFit.getEndTime()));
+						postsFit.add(postFitness);
+	
+						break;
+					case ConstantesFitRank.ID_APP_RUNTASTIC:
+					case ConstantesFitRank.ID_APP_RUNTASTIC_MOUNTAIN_BIKE:
+					case ConstantesFitRank.ID_APP_RUNTASTIC_ROAD_BIKE:
+						postFitness.setDistancia_percorrida(PostFitnessUtil.getRuntasticDistance(postFit.getDataCourse().getCourse().getTitle()));
+						postFitness.setDuracao(PostFitnessUtil.getRuntasticDuration(postFit.getDataCourse().getCourse().getTitle()));
+						postsFit.add(postFitness);
+						break;
+					case ConstantesFitRank.ID_APP_RUNKEEPER:
+						postFitness.setDistancia_percorrida(PostFitnessUtil.getRunKeeperDistance(postFit.getDataCourse().getCourse().getTitle()));
+						postFitness.setDuracao(PostFitnessUtil.getRunKeeperDuration(postFit.getDataCourse().getCourse().getTitle()));
+						postsFit.add(postFitness);
+						break;
+					case ConstantesFitRank.ID_APP_ENDOMONDO:
+						postFitness.setDistancia_percorrida(PostFitnessUtil.getEndomondoDistance(postFit.getDataCourse().getCourse().getTitle()));
+						postFitness.setDuracao(PostFitnessUtil.getDuration(postFit.getStartTime(), postFit.getEndTime()));
+						postsFit.add(postFitness);
+						break;
+					case ConstantesFitRank.ID_APP_STRAVA:
+						//Dados de distancia percorida e duração são preenchidos a partir do /course do FB.  
+						postFitness.setCourse(course);
+						postsFit.add(postFitness);
+						break;
+					default:
 						continue;
-					}
-					
-					postFitness.setDistancia_percorrida(PostFitnessUtil.getNikeDistance(postFit.getDataCourse().getCourse().getTitle()));
-					postFitness.setDuracao(PostFitnessUtil.getDuration(postFit.getStartTime(), postFit.getEndTime()));
-					postsFit.add(postFitness);
-
-					break;
-				case ConstantesFitRank.ID_APP_RUNTASTIC:
-				case ConstantesFitRank.ID_APP_RUNTASTIC_MOUNTAIN_BIKE:
-				case ConstantesFitRank.ID_APP_RUNTASTIC_ROAD_BIKE:
-					postFitness.setDistancia_percorrida(PostFitnessUtil.getRuntasticDistance(postFit.getDataCourse().getCourse().getTitle()));
-					postFitness.setDuracao(PostFitnessUtil.getRuntasticDuration(postFit.getDataCourse().getCourse().getTitle()));
-					postsFit.add(postFitness);
-					break;
-				case ConstantesFitRank.ID_APP_RUNKEEPER:
-					postFitness.setDistancia_percorrida(PostFitnessUtil.getRunKeeperDistance(postFit.getDataCourse().getCourse().getTitle()));
-					postFitness.setDuracao(PostFitnessUtil.getRunKeeperDuration(postFit.getDataCourse().getCourse().getTitle()));
-					postsFit.add(postFitness);
-					break;
-				case ConstantesFitRank.ID_APP_ENDOMONDO:
-					postFitness.setDistancia_percorrida(PostFitnessUtil.getEndomondoDistance(postFit.getDataCourse().getCourse().getTitle()));
-					postFitness.setDuracao(PostFitnessUtil.getDuration(postFit.getStartTime(), postFit.getEndTime()));
-					postsFit.add(postFitness);
-					break;
-				case ConstantesFitRank.ID_APP_STRAVA:
-					//Dados de distancia percorida e duração são preenchidos a partir do /course do FB.  
-					postFitness.setCourse(course);
-					postsFit.add(postFitness);
-					break;
-				default:
-					continue;
 				}
 				
 				//Condição para não gerar duplicidade na inserção. Existem courses que são compartilhados duas vezes para um mesmo post_fitness.  
-				if (!listCourses.contains(course)){
+				if (!listCourses.contains(course)) {
 					listCourses.add(course);
 				}
 			} catch (NumberFormatException e) {
 				continue;
 			}
-			
-			
 		}
 		
 		for (PostFitness postFitness : postsFit) {
@@ -402,18 +404,17 @@ public class CarregaRanking extends HttpServlet {
 		}
 
 		switch (modalidade) {
-		case ConstantesFitRank.MODALIDADE_CAMINHADA:
-			pessoa.setData_ultima_atualizacao_walks(new Date());
-			break;
-		case ConstantesFitRank.MODALIDADE_CORRIDA:
-			pessoa.setData_ultima_atualizacao_runs(new Date());
-			break;
-		case ConstantesFitRank.MODALIDADE_BICICLETA:
-			pessoa.setData_ultima_atualizacao_bikes(new Date());
-			break;
-		default:
-			break;
-
+			case ConstantesFitRank.MODALIDADE_CAMINHADA:
+				pessoa.setData_ultima_atualizacao_walks(DateConversor.getJavaSqlTimestamp(new Date()));
+				break;
+			case ConstantesFitRank.MODALIDADE_CORRIDA:
+				pessoa.setData_ultima_atualizacao_runs(DateConversor.getJavaSqlTimestamp(new Date()));
+				break;
+			case ConstantesFitRank.MODALIDADE_BICICLETA:
+				pessoa.setData_ultima_atualizacao_bikes(DateConversor.getJavaSqlTimestamp(new Date()));
+				break;
+			default:
+				break;
 		}
 
 		pessoa = pessoaServico.atualizaPessoaServico(pessoa, false);

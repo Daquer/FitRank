@@ -9,6 +9,7 @@ import br.com.fitrank.modelo.Amizade;
 import br.com.fitrank.modelo.Configuracao;
 import br.com.fitrank.modelo.Pessoa;
 import br.com.fitrank.persistencia.PessoaDAO;
+import br.com.fitrank.util.DateConversor;
 import br.com.fitrank.util.StringUtil;
 
 import com.restfb.types.User;
@@ -24,8 +25,8 @@ public class PessoaServico {
 		
 		this.pessoaDAO = new PessoaDAO();
 			
-		pessoa.setData_cadastro(new Date());
-		pessoa.setData_ultimo_login(new Date());
+		pessoa.setData_cadastro(DateConversor.getJavaSqlTimestamp(new Date()));
+		pessoa.setData_ultimo_login(DateConversor.getJavaSqlTimestamp(new Date()));
 		
 	    try {
 			return pessoaDAO.adicionaPessoa(pessoa);
@@ -41,7 +42,7 @@ public class PessoaServico {
 		
 		this.pessoaDAO = new PessoaDAO();
 				
-		pessoa.setData_ultimo_login(new Date());
+		pessoa.setData_ultimo_login(DateConversor.getJavaSqlTimestamp(new Date()));
 		
 	    try {
 			pessoa = pessoaDAO.atualizaPessoa(pessoa, proprioUsuario);
@@ -59,7 +60,7 @@ public class PessoaServico {
 		
 		this.pessoaDAO = new PessoaDAO();
 				
-		pessoa.setData_ultimo_login(new Date());
+		pessoa.setData_ultimo_login(DateConversor.getJavaSqlTimestamp(new Date()));
 		
 	    try {
 			pessoa = pessoaDAO.atualizaPessoa(pessoa, proprioUsuario);

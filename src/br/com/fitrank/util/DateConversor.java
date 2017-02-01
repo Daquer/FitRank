@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import java.sql.Timestamp;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
@@ -139,6 +141,12 @@ public class DateConversor {
 		long daysDifference =  date1.getTime()/1000 - date2.getTime()/1000;
 		 
 		return (int) TimeUnit.DAYS.convert(daysDifference, TimeUnit.SECONDS);
+	}
+	
+	public static Timestamp getJavaSqlTimestamp(Date data) {
+		gc = new GregorianCalendar();
+		gc.setTime(data);
+		return Timestamp.valueOf(FORMATTER_MYSQL_DATETIME.format(gc.getTime()));
 	}
 	
 }

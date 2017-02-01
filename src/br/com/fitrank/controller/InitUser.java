@@ -16,6 +16,7 @@ import br.com.fitrank.service.AmizadeServico;
 import br.com.fitrank.service.ConfiguracaoServico;
 import br.com.fitrank.service.PessoaServico;
 import br.com.fitrank.util.ConstantesFitRank;
+import br.com.fitrank.util.DateConversor;
 
 import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
@@ -80,7 +81,7 @@ public class InitUser extends HttpServlet {
 		   }
 		   
 		   if(facebookUser.getBirthdayAsDate()!=null){
-			   pessoa.setData_nascimento(facebookUser.getBirthdayAsDate());
+			   pessoa.setData_nascimento(DateConversor.getJavaSqlTimestamp(facebookUser.getBirthdayAsDate()));
 		   }
 		   
 		   if( picture.getJsonObject("data").getString("url") != null){

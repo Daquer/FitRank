@@ -48,17 +48,16 @@ public class PessoaDAO {
 			
 			int i = 0;
 			
-			
 			preparedStatement.setString(++i, pessoa.getId_usuario());
-			preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_cadastro()));
+			preparedStatement.setTimestamp(++i, pessoa.getData_cadastro());
 			preparedStatement.setString(++i, pessoa.getNome());
-			preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_ultimo_login()));
-			preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_ultima_atualizacao_runs()));
-			preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_ultima_atualizacao_walks()));
-			preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_ultima_atualizacao_bikes()));
+			preparedStatement.setTimestamp(++i, pessoa.getData_ultimo_login());
+			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_runs());
+			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_walks());
+			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_bikes());
 			preparedStatement.setString(++i, pessoa.getRank_anual());
 			preparedStatement.setString(++i, pessoa.getGenero());
-			preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_nascimento()));
+			preparedStatement.setTimestamp(++i, pessoa.getData_nascimento());
 			preparedStatement.setString(++i, pessoa.getUrl_foto());
 
 			// execute insert SQL statement
@@ -109,14 +108,14 @@ public class PessoaDAO {
 			
 			preparedStatement.setString(++i, pessoa.getNome());
 			if(proprioUsuario){
-				preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_ultimo_login()));
+				preparedStatement.setTimestamp(++i, pessoa.getData_ultimo_login());
 			}
-			preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_ultima_atualizacao_runs()));
-			preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_ultima_atualizacao_walks()));
-			preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_ultima_atualizacao_bikes()));
+			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_runs());
+			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_walks());
+			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_bikes());
 			preparedStatement.setString(++i, pessoa.getRank_anual());
 			preparedStatement.setString(++i, pessoa.getGenero());
-			preparedStatement.setString(++i, DateConversor.DateToString(pessoa.getData_nascimento()));
+			preparedStatement.setTimestamp(++i, pessoa.getData_nascimento());
 			preparedStatement.setString(++i, pessoa.getUrl_foto());
 			
 			preparedStatement.setString(++i, pessoa.getId_usuario());
@@ -173,15 +172,18 @@ public class PessoaDAO {
 			if ( rs.next() ) {
 				pessoa = new Pessoa();
 				pessoa.setId_usuario(rs.getString("id_usuario"));
-				pessoa.setData_cadastro(DateConversor.StringToDate(rs.getString("data_cadastro")));
+				pessoa.setData_cadastro(rs.getTimestamp("data_cadastro"));
 				pessoa.setNome(rs.getString("nome"));
-				pessoa.setData_ultimo_login(DateConversor.StringToDate(rs.getString("data_ultimo_login")));
-				pessoa.setData_ultima_atualizacao_runs(DateConversor.StringToDate( rs.getString("data_ultima_atualizacao_runs") ) );
-				pessoa.setData_ultima_atualizacao_walks(DateConversor.StringToDate( rs.getString("data_ultima_atualizacao_walks") ) );
-				pessoa.setData_ultima_atualizacao_bikes(DateConversor.StringToDate( rs.getString("data_ultima_atualizacao_bikes") ) );
+				pessoa.setData_ultimo_login(rs.getTimestamp("data_ultimo_login"));
+//				pessoa.setData_ultima_atualizacao_runs(rs.getDate("data_ultima_atualizacao_runs") ) );
+//				pessoa.setData_ultima_atualizacao_walks(rs.getDate("data_ultima_atualizacao_walks") ) );
+//				pessoa.setData_ultima_atualizacao_bikes(rs.getDate("data_ultima_atualizacao_bikes") ) );
+				pessoa.setData_ultima_atualizacao_runs(rs.getTimestamp("data_ultima_atualizacao_runs") );
+				pessoa.setData_ultima_atualizacao_walks(rs.getTimestamp("data_ultima_atualizacao_walks") );
+				pessoa.setData_ultima_atualizacao_bikes(rs.getTimestamp("data_ultima_atualizacao_bikes") );
 				pessoa.setRank_anual(rs.getString("rank_anual"));
 				pessoa.setGenero(rs.getString("genero"));
-				pessoa.setData_nascimento(DateConversor.StringToDate( rs.getString("data_nascimento") ) );
+				pessoa.setData_nascimento( rs.getTimestamp("data_nascimento") );
 				pessoa.setUrl_foto(rs.getString("url_foto"));
 			}
 			
@@ -267,15 +269,15 @@ public class PessoaDAO {
 			while ( rs.next() ) {
 				Pessoa pessoa = new Pessoa();
 				pessoa.setId_usuario(rs.getString("id_usuario"));
-				pessoa.setData_cadastro(DateConversor.StringToDate(rs.getString("data_cadastro")));
+				pessoa.setData_cadastro(rs.getTimestamp("data_cadastro"));
 				pessoa.setNome(rs.getString("nome"));
-				pessoa.setData_ultimo_login(DateConversor.StringToDate(rs.getString("data_ultimo_login")));
-				pessoa.setData_ultima_atualizacao_runs(DateConversor.StringToDate( rs.getString("data_ultima_atualizacao_runs") ) );
-				pessoa.setData_ultima_atualizacao_walks(DateConversor.StringToDate( rs.getString("data_ultima_atualizacao_walks") ) );
-				pessoa.setData_ultima_atualizacao_bikes(DateConversor.StringToDate( rs.getString("data_ultima_atualizacao_bikes") ) );
+				pessoa.setData_ultimo_login(rs.getTimestamp("data_ultimo_login"));
+				pessoa.setData_ultima_atualizacao_runs(rs.getTimestamp("data_ultima_atualizacao_runs") );
+				pessoa.setData_ultima_atualizacao_walks(rs.getTimestamp("data_ultima_atualizacao_walks") );
+				pessoa.setData_ultima_atualizacao_bikes(rs.getTimestamp("data_ultima_atualizacao_bikes") );
 				pessoa.setRank_anual(rs.getString("rank_anual"));
 				pessoa.setGenero(rs.getString("genero"));
-				pessoa.setData_nascimento(DateConversor.StringToDate( rs.getString("data_nascimento") ) );
+				pessoa.setData_nascimento(rs.getTimestamp("data_nascimento") );
 				pessoa.setUrl_foto(rs.getString("url_foto"));
 				
 				pessoas.add(pessoa);
@@ -325,7 +327,9 @@ public class PessoaDAO {
 				+ "data_ultima_atualizacao_bikes " 
 				+ "from pessoa " 
 				+ "where id_usuario IN (" + amigos + ") "
-				+ "AND " + colunaModalidade + " < '" + DateConversor.getPreviousMinutesString(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS) + "' " 
+				+ "AND " + colunaModalidade + " < '" // Os amigos que tiverem um limite maior que o valor da constante (inicialmente meia hora) da ultima atualizacao serão atualizados 
+				+ DateConversor.getPreviousMinutesString(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS) + "' " 
+				+ "ORDER BY " + colunaModalidade + " ASC "
 				+ "LIMIT " + limiteAtualizacaoUsuarios;
 
 		try {
