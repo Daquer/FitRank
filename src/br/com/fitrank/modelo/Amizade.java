@@ -15,6 +15,8 @@ public class Amizade {
 //	Column(name="data_amizade")
 	private Date data_amizade;
 	
+	private String ativo;
+	
 	public String getId_pessoa() {
 		return id_pessoa;
 	}
@@ -35,6 +37,12 @@ public class Amizade {
 	}
 	public String getDataAmizadeFormatada() {
 		return DateConversor.DateToString(data_amizade);
+	}
+	public String getAtivo() {
+		return ativo;
+	}
+	public void setAtivo(String ativo) {
+		this.ativo = ativo;
 	}
 
 }

@@ -101,6 +101,7 @@ public class CarregaRanking extends HttpServlet {
     	String atualizarTudo = request.getParameter("config") == null ? "" : (String) request.getParameter("config");
     	String isAjax = request.getParameter("ajax") == null ? "" : (String) request.getParameter("ajax");
     	String token = request.getAttribute("token") == null ? (String) request.getParameter("token") : (String) request.getAttribute("token");
+
     	try {    		
 	    	FacebookClient facebookClient = new DefaultFacebookClient(token);
 	    	User facebookUser = facebookClient.fetchObject("me", User.class);
@@ -264,13 +265,16 @@ public class CarregaRanking extends HttpServlet {
 			try {
 				User facebookUser = facebookClient.fetchObject(amizade.getId_amigo(), User.class);
 				handleUltimaAtividade(modalidade, facebookClient, facebookUser, ConstantesFitRank.CHAR_NAO);
-			} catch (FacebookGraphException e) {
+			} catch ( FacebookGraphException e) {
 				Logger.insertLog(e.getMessage());
+				if(e.getMessage().contains("GraphMethodException: Unsupported get request. Object with ID")) {
+					amizadeServico.desativaAmizade(idUsuario, amizade.getId_amigo());//chamar atualiza amizades com ativo = N
+				}
+				
 			}
 		}
 	}
     
-
     private Pessoa executaAtualizacao(String modalidade, FacebookClient facebookClient, User facebookUser, Date dataUltimaAtualizacao, String atualizarTudo) {
 		
 		Connection<PostFitnessFB> listaFitConnection = facebookClient

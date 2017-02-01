@@ -72,4 +72,18 @@ public class AmizadeServico {
 			return null;
 		}
 	}
+
+	public boolean desativaAmizade(String idUsuario, String id_amigo) {
+
+		this.amizadeDAO = new AmizadeDAO();
+		
+		try {
+			amizadeDAO.desativaAmizade(idUsuario,id_amigo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
 }

@@ -119,7 +119,8 @@ public class AmizadeDAO {
 				+ "id_amigo, "
 				+ "data_amizade " 
 				+ "from amizade " 
-				+ "where id_pessoa = ?";
+				+ "where id_pessoa = ? "
+				+ "AND ativo = 'S'";
 
 		try {
 
@@ -169,7 +170,8 @@ public class AmizadeDAO {
 		String selectTableSQL = "SELECT " 
 				+ "id_pessoa, " 
 				+ "id_amigo, "
-				+ "data_amizade " 
+				+ "data_amizade, "
+				+ "ativo "
 				+ "from amizade "
 				+ "where id_pessoa = ? and id_amigo = ?";
 
@@ -181,7 +183,6 @@ public class AmizadeDAO {
 			preparedStatement.setString(1, amizade.getId_pessoa());
 			preparedStatement.setString(2, amizade.getId_amigo());
 			
-			
 			// execute select SQL statement
 			ResultSet rs = preparedStatement.executeQuery();
 			
@@ -190,6 +191,7 @@ public class AmizadeDAO {
 				amizadeResult.setId_pessoa(rs.getString("id_pessoa"));
 				amizadeResult.setId_amigo(rs.getString("id_amigo"));
 				amizadeResult.setData_amizade(DateConversor.StringToDate(rs.getString("data_amizade")));
+				amizadeResult.setAtivo(rs.getString("ativo"));
 			}
 
 		} catch (SQLException e) {
@@ -210,6 +212,46 @@ public class AmizadeDAO {
 
 		return amizadeResult;
 	}
+	
+	public void desativaAmizade(String idUsuario, String id_amigo) throws SQLException  {
+		Connection dbConnection = null;
+		PreparedStatement preparedStatement = null;
+
+		String updateTableSQL = "update amizade set " 
+				+ "ativo = 'N' "
+				+ "where id_pessoa = ? "
+				+ "and id_amigo = ?";
+
+		try {
+			dbConnection = conexao;
+			preparedStatement = dbConnection.prepareStatement(updateTableSQL);
+
+			int i = 0;
+
+			preparedStatement.setString(++i, idUsuario);
+			preparedStatement.setString(++i, id_amigo);
+
+			// execute insert SQL stetement
+			preparedStatement.executeUpdate();
+
+		} catch (SQLException e) {
+
+			Logger.insertLog("desativaAmizade | " +e.getMessage());
+
+		} finally {
+
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+
+			if (dbConnection != null) {
+				dbConnection.close();
+			}
+
+		}
+
+	}
+	
 	//
 	// public boolean removeAmizadeFromId(Amizade amizade) throws SQLException {
 	//
@@ -245,5 +287,7 @@ public class AmizadeDAO {
 	//
 	// }
 	// }
+
+	
 
 }
