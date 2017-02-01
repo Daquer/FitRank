@@ -262,17 +262,21 @@ public class CarregaRanking extends HttpServlet {
 //		List<Amizade> amigos = amizadeServico.listaAmizades(idUsuario);
 		List<Amizade> amigos = amizadeServico.listaAmizadesMenosAtualizadas(idUsuario, ConstantesFitRank.LIMITE_ATUALIZACAO_USUARIOS, modalidade);
 		
+		int i = 1;
+		
 		for(Amizade amizade : amigos){
 			try {
 				User facebookUser = facebookClient.fetchObject(amizade.getId_amigo(), User.class);
 				handleUltimaAtividade(modalidade, facebookClient, facebookUser, ConstantesFitRank.CHAR_NAO);
 			} catch ( FacebookGraphException e) {
-				Logger.insertLog(e.getMessage());
+				Logger.insertLog(e.getMessage() + " | id_amigo = " + amizade.getId_amigo());
 				if(e.getMessage().contains("GraphMethodException: Unsupported get request. Object with ID")) {
-					amizadeServico.desativaAmizade(idUsuario, amizade.getId_amigo());//chamar atualiza amizades com ativo = N
+					//chamar atualiza amizades com ativo = N
+					amizadeServico.desativaAmizade(idUsuario, amizade.getId_amigo());
 				}
-				
 			}
+			
+			Logger.insertLog(i++ +" id_amigo = " + amizade.getId_amigo() + " | tamanho lista => " + amigos.size() );
 		}
 	}
     

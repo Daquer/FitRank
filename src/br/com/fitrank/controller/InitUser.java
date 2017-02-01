@@ -55,7 +55,7 @@ public class InitUser extends HttpServlet {
 		   
 		   FacebookClient facebookClient = new DefaultFacebookClient(token);
 		   
-		   User facebookUser = facebookClient.fetchObject("me", User.class);;
+		   User facebookUser = facebookClient.fetchObject("me", User.class);
 		   
 		   Connection<User> friendsFB = facebookClient.fetchConnection("me/friends", User.class, Parameter.with("fields", "name, id"));
 		   

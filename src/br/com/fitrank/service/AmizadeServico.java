@@ -96,8 +96,7 @@ public class AmizadeServico {
 		this.pessoaDAO = new PessoaDAO();
 		String colunaModalidade = "";
 		
-		if(!modalidade.equals("A"))
-			colunaModalidade = setColunaModalidade(modalidade);
+		colunaModalidade = setColunaModalidade(modalidade);
 		
 		try {
 			listaAmigosEntrada = listaAmizades(idPessoa);
@@ -123,7 +122,7 @@ public class AmizadeServico {
 				return "data_ultima_atualizacao_bikes";
 		
 			default:
-				return "";
+				return modalidade;
 		}
 	}
 }

@@ -318,6 +318,8 @@ public class PessoaDAO {
 				amigos += "'" + listaAmigos.get(i).getId_amigo() + "',";
 			}
 		}
+		//Os amigos que tiverem um limite maior que o valor da constante (inicialmente meia hora) da ultima atualizacao serão atualizados
+		String dataLimiteAtualizacaoUsuarios = DateConversor.getPreviousMinutesString(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS);
 		
 		String selectTableSQL = "SELECT " 
 				+ "id_usuario, " 
@@ -326,11 +328,21 @@ public class PessoaDAO {
 				+ "data_ultima_atualizacao_walks,"
 				+ "data_ultima_atualizacao_bikes " 
 				+ "from pessoa " 
-				+ "where id_usuario IN (" + amigos + ") "
-				+ "AND " + colunaModalidade + " < '" // Os amigos que tiverem um limite maior que o valor da constante (inicialmente meia hora) da ultima atualizacao serão atualizados 
-				+ DateConversor.getPreviousMinutesString(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS) + "' " 
-				+ "ORDER BY " + colunaModalidade + " ASC "
-				+ "LIMIT " + limiteAtualizacaoUsuarios;
+				+ "where id_usuario IN (" + amigos + ") ";
+		
+				if ( colunaModalidade.equals("A") ){
+					
+					selectTableSQL += "AND ( data_ultima_atualizacao_runs < '" + dataLimiteAtualizacaoUsuarios + "' "
+							+ "OR data_ultima_atualizacao_walks < '" + dataLimiteAtualizacaoUsuarios + "' "
+							+ "OR data_ultima_atualizacao_bikes < '" + dataLimiteAtualizacaoUsuarios + "') "
+							+ "ORDER BY data_ultima_atualizacao_runs, data_ultima_atualizacao_walks, data_ultima_atualizacao_bikes ASC ";
+				} else {
+					selectTableSQL += "AND " + colunaModalidade + " < '" + dataLimiteAtualizacaoUsuarios + "' " 
+							+ "ORDER BY " + colunaModalidade + " ASC ";
+				}
+				
+				
+				selectTableSQL += "LIMIT " + limiteAtualizacaoUsuarios;
 
 		try {
 			
