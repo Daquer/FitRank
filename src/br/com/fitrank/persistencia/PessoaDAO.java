@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.fitrank.modelo.Amizade;
 import br.com.fitrank.modelo.Pessoa;
+import br.com.fitrank.util.ConstantesFitRank;
 import br.com.fitrank.util.DateConversor;
 import br.com.fitrank.util.JDBCFactory;
 import br.com.fitrank.util.Logger;
@@ -296,6 +298,69 @@ public class PessoaDAO {
 		}
 		
 		return pessoas;
+	}
+	
+	public ArrayList<Amizade> listaPessoasMenosAtualizadas(ArrayList<Amizade> listaAmigos,
+			int limiteAtualizacaoUsuarios, String colunaModalidade) throws SQLException {
+		
+		conexao = new JDBCFactory().getConnection();
+		PreparedStatement preparedStatement = null;
+		Amizade amizade;
+		ArrayList<Amizade> listaAmizades = new ArrayList<Amizade>();
+		String amigos = "";
+		
+		for( int i = 0; i < (listaAmigos.size() - 1); i++) {
+			if( i == (listaAmigos.size() - 2)) {//Não usar vírgula no último elemento do IN
+				amigos += "'" + listaAmigos.get(i).getId_amigo() + "'";
+			} else {
+				amigos += "'" + listaAmigos.get(i).getId_amigo() + "',";
+			}
+		}
+		
+		String selectTableSQL = "SELECT " 
+				+ "id_usuario, " 
+				+ "data_ultimo_login, "
+				+ "data_ultima_atualizacao_runs, "
+				+ "data_ultima_atualizacao_walks,"
+				+ "data_ultima_atualizacao_bikes " 
+				+ "from pessoa " 
+				+ "where id_usuario IN (" + amigos + ") "
+				+ "AND " + colunaModalidade + " < '" + DateConversor.getPreviousMinutesString(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS) + "' " 
+				+ "LIMIT " + limiteAtualizacaoUsuarios;
+
+		try {
+			
+			preparedStatement = conexao.prepareStatement(selectTableSQL);
+
+//			preparedStatement.setString(1, idUsuario);
+
+			// execute select SQL statement
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+				amizade = new Amizade();
+				amizade.setId_amigo(rs.getString("id_usuario"));
+				listaAmizades.add(amizade);
+			}
+
+		} catch (SQLException e) {
+
+			Logger.insertLog("listaAmizades | " + e.getMessage());
+
+		} finally {
+
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+
+			if (conexao != null) {
+				conexao.close();
+			}
+
+		}
+
+		return listaAmizades;
+	
 	}
 
 }
