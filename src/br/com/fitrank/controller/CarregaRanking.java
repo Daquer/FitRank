@@ -78,7 +78,7 @@ public class CarregaRanking extends HttpServlet {
 	String periodo = null;
 	String fav = null;
 	String padrao = null;
-	
+	String myId = null;
 	
     public CarregaRanking() {
     	
@@ -106,6 +106,8 @@ public class CarregaRanking extends HttpServlet {
 	    	FacebookClient facebookClient = new DefaultFacebookClient(token);
 	    	User facebookUser = facebookClient.fetchObject("me", User.class);
 	    	
+	    	myId = facebookUser.getId();
+	    			
 	    	//Atualizações feitas em toda e qualquer chamada de ranking
 			Date ultimaAtualizacao = handleUltimaAtividade(modalidade, facebookClient, facebookUser, atualizarTudo);
 			if (ultimaAtualizacao != null) {
@@ -225,32 +227,42 @@ public class CarregaRanking extends HttpServlet {
     private Date handleUltimaAtividade(String modalidade, FacebookClient facebookClient, User facebookUser, String atualizarTudo) {
 		Pessoa pessoa = pessoaServico.lePessoaServico(facebookUser);
 		
+		Date ultimoWalk = pessoa.getData_ultima_atualizacao_walks();
+		Date ultimoRuns = pessoa.getData_ultima_atualizacao_runs();
+		Date ultimoBikes = pessoa.getData_ultima_atualizacao_bikes();
+		Date xMinutosAtras = DateConversor.getPreviousMinutesDate(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS);
+		
+		
+		if(myId.equals(facebookUser.getId())) {
+			if( (ultimoWalk != null && ultimoWalk.compareTo(xMinutosAtras) > 0)
+				|| (ultimoRuns != null && ultimoRuns.compareTo(xMinutosAtras) > 0)
+				|| (ultimoBikes != null && ultimoBikes.compareTo(xMinutosAtras) > 0) ) {
+			
+				return null;//Não atualizar até que tenha passado os minutos estipulados para atualização.
+			}
+		}
+		
 		//Somente runs estao sendo recuperadas do Facebook em ordem cronologica, walks e bikes sempre buscam com limite maximo
 		switch (modalidade) {
 			case ConstantesFitRank.MODALIDADE_CAMINHADA:
-				Date ultimoWalk = pessoa.getData_ultima_atualizacao_walks();
-				
-				if(ultimoWalk == null || ultimoWalk.compareTo(DateConversor.getPreviousMinutesDate(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS)) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+				if(ultimoWalk == null || ultimoWalk.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, ultimoWalk, ConstantesFitRank.CHAR_SIM);
 				
 				ultimoWalk = pessoa.getData_ultima_atualizacao_walks();
 				return ultimoWalk;
 				
 			case ConstantesFitRank.MODALIDADE_CORRIDA:
-				Date ultimoRuns = pessoa.getData_ultima_atualizacao_runs();
-				
-				if(ultimoRuns == null || ultimoRuns.compareTo(DateConversor.getPreviousMinutesDate(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS)) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+				if(ultimoRuns == null || ultimoRuns.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CORRIDA, facebookClient, facebookUser, ultimoRuns, atualizarTudo);
 				
 				ultimoRuns = pessoa.getData_ultima_atualizacao_runs();
 				return ultimoRuns;
 				
 			case ConstantesFitRank.MODALIDADE_BICICLETA:
-				Date ultimoBikes = pessoa.getData_ultima_atualizacao_bikes();
-				
-				if(ultimoBikes == null || ultimoBikes.compareTo(DateConversor.getPreviousMinutesDate(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS)) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+				if(ultimoBikes == null || ultimoBikes.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, ultimoBikes, ConstantesFitRank.CHAR_SIM);
 				ultimoBikes = pessoa.getData_ultima_atualizacao_bikes();
+				
 				return ultimoBikes;
 				
 			case ConstantesFitRank.MODALIDADE_TUDO:
@@ -258,26 +270,28 @@ public class CarregaRanking extends HttpServlet {
 				
 				Logger.insertLog("  INICIO Walks ");
 				
-				if(pessoa.getData_ultima_atualizacao_walks() == null || pessoa.getData_ultima_atualizacao_walks().compareTo(DateConversor.getPreviousMinutesDate(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS)) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+				if(pessoa.getData_ultima_atualizacao_walks() == null || pessoa.getData_ultima_atualizacao_walks().compareTo(xMinutosAtras) < 0) {// Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_walks(), ConstantesFitRank.CHAR_SIM);
+				}
 				
 				Logger.insertLog("  FIM Walks ");
 				
 				Logger.insertLog("  INICIO Runs ");
 				
-				if(pessoa.getData_ultima_atualizacao_runs() == null || pessoa.getData_ultima_atualizacao_runs().compareTo(DateConversor.getPreviousMinutesDate(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS)) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+				if(pessoa.getData_ultima_atualizacao_runs() == null || pessoa.getData_ultima_atualizacao_runs().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CORRIDA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_runs(), atualizarTudo);
 				
 				Logger.insertLog("  FIM Runs ");
 				
 				Logger.insertLog("  INICIO Bikes ");
 				
-				if(pessoa.getData_ultima_atualizacao_bikes() == null || pessoa.getData_ultima_atualizacao_bikes().compareTo(DateConversor.getPreviousMinutesDate(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS)) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu				
+				if(pessoa.getData_ultima_atualizacao_bikes() == null || pessoa.getData_ultima_atualizacao_bikes().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu				
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_bikes(), ConstantesFitRank.CHAR_SIM);
 				
 				Logger.insertLog("  FIM Bikes ");
 				
 				Logger.insertLog(" FIM Modalidade Tudo ");
+				
 				return new Date();
 				
 			default:
