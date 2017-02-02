@@ -361,7 +361,7 @@ public class PessoaDAO {
 
 		} catch (SQLException e) {
 
-			Logger.insertLog("listaAmizades | " + e.getMessage());
+			Logger.insertLog("listaPessoasMenosAtualizadas | " + e.getMessage());
 
 		} finally {
 

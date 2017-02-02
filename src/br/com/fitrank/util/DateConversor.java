@@ -117,6 +117,12 @@ public class DateConversor {
 		return FORMATTER_MYSQL_DATETIME.format(gc.getTime());
 	}
 	
+	public static Date getPreviousMinutesDate(int minutes){
+		gc = new GregorianCalendar();
+		gc.add(Calendar.MINUTE, -minutes);
+		return gc.getTime();
+	}
+	
 	public static GregorianCalendar convertDateToGregorian(Date date) {
 		gc = new GregorianCalendar();
 		gc.setTime(date);
