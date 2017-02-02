@@ -315,7 +315,7 @@ public class CarregaRanking extends HttpServlet {
 				.fetchConnection(facebookUser.getId()+"/fitness." + defineModalidade(modalidade),
 						PostFitnessFB.class, Parameter.with("limit", calculaLimiteDeBusca(dataUltimaAtualizacao, atualizarTudo)));
 		
-		Logger.insertLog(" FIM conexao " + facebookUser.getId()+"/fitness." + defineModalidade(modalidade) );
+		Logger.insertLog(" FIM conexao " + facebookUser.getId()+"/fitness." + defineModalidade(modalidade) + " | " + listaFitConnection.getData().size() + " atividades.");
 		
 		postFitnessServico = new PostFitnessServico();
 		ArrayList<PostFitness> postsSalvosNoBanco = (ArrayList<PostFitness>) postFitnessServico.lePostFitnessPorIdPessoa(facebookUser.getId());
