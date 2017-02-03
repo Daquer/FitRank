@@ -24,7 +24,7 @@ public final class ConstantesFitRank {
 	public static final String CHAR_SIM = "S";
 	public static final String CHAR_NAO = "N";
 	
-	public static final int TAMANHO_PADRAO_RANKING = 100;
+	public static final int TAMANHO_PADRAO_RANKING = 3000;
 	
 	
 	//Aplicativos
