@@ -393,6 +393,7 @@ public class CarregaRanking extends HttpServlet {
 						postsFit.add(postFitness);
 						break;
 					case ConstantesFitRank.ID_APP_STRAVA:
+					case ConstantesFitRank.ID_APP_MAPMYRUN:
 						//Dados de distancia percorida e duração são preenchidos a partir do /course do FB.  
 						postFitness.setCourse(course);
 						postsFit.add(postFitness);
@@ -432,16 +433,19 @@ public class CarregaRanking extends HttpServlet {
 		for(Course courseNaoInserir : coursesNaoInserir) {
 			listCourses.remove(courseNaoInserir);
 		}
-		Logger.insertLog(" INICIO conexao Strava");
-		for(int i=0; i< postsFit.size(); i++){
-			if(ConstantesFitRank.ID_APP_STRAVA.equals(postsFit.get(i).getId_app())){
+		Logger.insertLog(" INICIO conexao Strava e MapMyRun");
+		for(int i=0; i< postsFit.size(); i++) {
+			if(ConstantesFitRank.ID_APP_STRAVA.equals(postsFit.get(i).getId_app()) ||
+				ConstantesFitRank.ID_APP_MAPMYRUN.equals(postsFit.get(i).getId_app())) {
+				
 				CourseFB courseStrava = facebookClient.fetchObject(postsFit.get(i).getCourse().getId_course(),
 						CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
+				
 				postsFit.get(i).setDistancia_percorrida(PostFitnessUtil.getStravaCourseDistance(courseStrava.getData().getDistance().getValue()));
 				postsFit.get(i).setDuracao(PostFitnessUtil.getStravaCourseDuration(courseStrava.getData().getDuration().getValue()));
 			}
 		}
-		Logger.insertLog(" FIM conexao Strava");
+		Logger.insertLog(" FIM conexao Strava e MapMyRun");
 		Pessoa pessoa = pessoaServico.lePessoaServico(facebookUser);
 		
 		if ( postsFit.size() != 0 ) {

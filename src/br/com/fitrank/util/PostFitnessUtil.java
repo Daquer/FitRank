@@ -132,7 +132,7 @@ public class PostFitnessUtil {
 		return doubleHour + doubleMinutesInHour + doubleSecondsInHour;
 		
 	}
-	
+	//Strava e MapMyRun
 	public static double getStravaCourseDistance(String distanceInKm) throws NumberFormatException {
 		
 		return Double.parseDouble(distanceInKm);
