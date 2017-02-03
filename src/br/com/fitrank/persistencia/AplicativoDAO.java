@@ -283,18 +283,20 @@ public class AplicativoDAO {
 		List<AplicativoTela> listaAplicativoTela = new ArrayList<AplicativoTela>();
 		
 		String dataInicial = "";
+		String dataFinal = "";
 		
 		if(ConstantesFitRank.DIA.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial = DateConversor.DateToString(new Date());
-			
+			dataInicial = ranking.getData_ranking();
+			dataFinal = DateConversor.DateToString(new Date());
 		} else if(ConstantesFitRank.SEMANA.equalsIgnoreCase(configuracao.getIntervaloData())){
 			dataInicial =  DateConversor.getPreviousWeekStringFromStringDate(ranking.getData_ranking());
-			
+			dataFinal = ranking.getData_ranking();
 		} else if(ConstantesFitRank.MES.equalsIgnoreCase(configuracao.getIntervaloData())){
 			dataInicial =  DateConversor.getPreviousMonthStringFromStringDate(ranking.getData_ranking());
-			
+			dataFinal = ranking.getData_ranking();
 		} else if(ConstantesFitRank.ANO.equalsIgnoreCase(configuracao.getIntervaloData())){
 			dataInicial = DateConversor.getPreviousYearStringFromStringDate(ranking.getData_ranking());
+			dataFinal = ranking.getData_ranking();
 		}
 	
 		//Nao foi possivel utilizar parametros do preparedStatement nesta consulta!!!
@@ -313,7 +315,7 @@ public class AplicativoDAO {
 		if(!ConstantesFitRank.SEMPRE.equalsIgnoreCase(configuracao.getIntervaloData())){
 			selectTableSQL  +=	"   AND (str_to_date(pf.data_publicacao, '%d/%m/%Y')  												\n"
 							+	"                    BETWEEN str_to_date('"+dataInicial+"', '%d/%m/%Y') 							\n"
-			  				+	"                        AND str_to_date('"+ranking.getData_ranking()+"', '%d/%m/%Y'))	\n";
+			  				+	"                        AND str_to_date('"+dataFinal+"', '%d/%m/%Y'))	\n";
 		}
 			selectTableSQL  +=	"GROUP BY pf.id_app											\n";
 	
