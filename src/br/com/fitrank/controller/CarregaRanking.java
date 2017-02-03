@@ -232,8 +232,7 @@ public class CarregaRanking extends HttpServlet {
 		Date ultimoBikes = pessoa.getData_ultima_atualizacao_bikes();
 		Date xMinutosAtras = DateConversor.getPreviousMinutesDate(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS);
 		
-		
-		if(myId.equals(facebookUser.getId())) {
+		if(myId.equals(facebookUser.getId()) && atualizarTudo != "S") {
 			if( (ultimoWalk != null && ultimoWalk.compareTo(xMinutosAtras) > 0)
 				|| (ultimoRuns != null && ultimoRuns.compareTo(xMinutosAtras) > 0)
 				|| (ultimoBikes != null && ultimoBikes.compareTo(xMinutosAtras) > 0) ) {
