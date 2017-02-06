@@ -554,7 +554,8 @@
    					
    					//Atribuição de valores aos elementos criados acima.
    					rankingLine.children(".colocacao").text(competidor.colocacao);
-   					rankingLine.children(".profileImg").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa).attr("src", competidor.pessoa.url_foto === null ? 'imagem/default_photo.png' : competidor.pessoa.url_foto );
+   					var profileImgTd = rankingLine.children(".profileImg").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa);
+   					profileImgTd.attr("src", competidor.pessoa.url_foto === null ? 'imagem/default_photo.png' : testImage(competidor.pessoa.url_foto, competidor.id_pessoa));
    					rankingLine.children(".profileName").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
    					
    					//Resultado			   					
@@ -863,6 +864,66 @@
 // 				for(index in competidores)
 				
 // 			}
+
+			function testImage(url, idPessoa, timeout) {
+			    timeout = timeout || 5000;
+			    var timedOut = false, timer;
+			    var img = new Image();
+			    
+			    img.onerror = img.onabort = function() {
+			        if (!timedOut) {
+			            clearTimeout(timer);
+			            
+			        }
+			        
+			        
+			        if( token != "null") {
+				        FB.api(
+	 					  '/' + idPessoa + '/picture',
+	 					  'GET',
+	 					  { 
+	 						"type" : "normal", 
+	 					  	"access_token" : token
+						  },
+	 					  function(response) {
+							  $("[data-id_pessoa = " + idPessoa + "]").attr("src",response.data.url);
+							  
+							  var data = {};
+							  data["id"] = idPessoa;
+							  data["url"] = response.data.url;
+							  
+							  jQuery.ajax({
+								    url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "AtualizaFotoPessoa",
+								    data: data,
+									async: false,
+								    type: 'POST',
+								    success: function(data){
+								    	//Foto Atualizada
+								    }
+								});
+	 					  }
+	 					);
+			        } else {
+			        	$("[data-id_pessoa = " + idPessoa + "]").attr("src", "imagem/default_photo.png");
+			        }
+			    };
+			    
+			    img.onload = function() {
+			        if (!timedOut) {
+			            clearTimeout(timer);
+			        }
+			        $("[data-id_pessoa = " + idPessoa + "]").attr("src", url);
+			    };
+			    
+			    img.src = url;
+			    
+			    timer = setTimeout(function() {
+			        timedOut = true;
+			        // reset .src to invalid URL so it stops previous
+			        // loading, but doesn't trigger new load
+			        img.src = "//!!!!/test.jpg";
+			    }, timeout); 
+			}// Code at http://stackoverflow.com/questions/9714525/javascript-image-url-verify/9714891#9714891
 // 			function buscaInformacoesPerfil(element) {
 // 				var idUsuario = $(element).attr("data-id_pessoa");
 				
