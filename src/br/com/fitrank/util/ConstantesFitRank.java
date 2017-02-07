@@ -52,9 +52,9 @@ public final class ConstantesFitRank {
 	public static final String FACEBOOK_FEMALE_GENDER = "female";
 	
 	//Limites
-	public static final int LIMITE_CORRIDAS_REALIZADAS_POR_DIA = 2;
+	public static final int LIMITE_CORRIDAS_REALIZADAS_POR_DIA = 10;
 	public static final int LIMITE_MAX_RECUPERA_FB = 99999;
-	public static final int LIMITE_ATUALIZACAO_USUARIOS = 50;
+	public static final int LIMITE_ATUALIZACAO_USUARIOS = 25;
 	public static final int LIMITE_MINUTOS_ATUALIZACAO_USUARIOS = 30;
 
 	//Outros

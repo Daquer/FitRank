@@ -97,7 +97,7 @@
 			var token = '<%=(String) request.getAttribute("token")%>';
 <%-- 			var ultimaPublicacao = '<%=(String) request.getAttribute("dataPostMaisRecente")%>'; --%>
 			var ultimaPublicacao;
-			var teste = '<%=(String) request.getAttribute("teste")%>';
+<%-- 			var idUsuario = '<%=(String) request.getAttribute("id")%>'; --%>
 <%-- 			var json =  JSON.parse('<%=(String) response.getHeader("json")%>'); --%>
 			var json;
 			var modalidadeRequest = '<%=(String) request.getAttribute("modalidade")%>';
@@ -830,19 +830,21 @@
 				
 			} 
 			
-			
+			//TODO Tratar User code #17
 			function fixTitle() {
-				FB.api('/me', 'GET',
-					{ 
-						"fields" : "name", 
-						"access_token" : token
-					},
-					function(response) {
-						if (response.name && $("title").text().split(" - ")[1] == "") {
-							$("title").text("Ranking - " + response.name);
+				if( token != "null") {
+					FB.api('/me', 'GET',
+						{ 
+							"fields" : "name", 
+							"access_token" : token
+						},
+						function(response) {
+							if (response.name && $("title").text().split(" - ")[1] == "") {
+								$("title").text("Ranking - " + response.name);
+							}
 						}
-					}
-				);
+					);
+				}
 			}
 			
 // 			function renderLastUpdate(competidores) {

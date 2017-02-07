@@ -103,10 +103,13 @@ public class CarregaRanking extends HttpServlet {
     	String token = request.getAttribute("token") == null ? (String) request.getParameter("token") : (String) request.getAttribute("token");
 
     	try {    		
+    		Logger.insertLog("CarregaRanking | pre FBClient");
 	    	FacebookClient facebookClient = new DefaultFacebookClient(token);
+	    	Logger.insertLog("CarregaRanking | pos FBClient");
+	    	Logger.insertLog("CarregaRanking | pre fetchObject");
 	    	User facebookUser = facebookClient.fetchObject("me", User.class);
-	    	
-	    	myId = facebookUser.getId();
+	    	Logger.insertLog("CarregaRanking | pos fetchObject");
+    		myId = facebookUser.getId();	    		
 	    			
 	    	//Atualizações feitas em toda e qualquer chamada de ranking
 			Date ultimaAtualizacao = handleUltimaAtividade(modalidade, facebookClient, facebookUser, atualizarTudo);
@@ -181,15 +184,22 @@ public class CarregaRanking extends HttpServlet {
 			}
 			
 	    }catch(Exception e) {
+	    	Logger.insertLog("CarregaRanking | " + e.getMessage());
+	    	
 	    	if(isAjax.equals("S")){
-				response.addHeader("msg", e.getMessage());
+	    		if(!e.getMessage().contains("(#17) User request limit reached")) {
+	    			response.addHeader("msg", e.getMessage());
+	    		}
 				response.setContentType("text/html;charset=UTF-8");
 				response.setStatus(500);
 	    	} else {
-	    		request.setAttribute("errorDescription", e.getMessage());
+	    		if(!e.getMessage().contains("(#17) User request limit reached")) {
+	    			request.setAttribute("errorDescription", e.getMessage());
+	    		}
 	    		rd = request.getRequestDispatcher("/index.jsp");  
 	    		rd.forward(request,response);
 	    	}
+	    	
 		}
     }
     
@@ -245,7 +255,7 @@ public class CarregaRanking extends HttpServlet {
 		switch (modalidade) {
 			case ConstantesFitRank.MODALIDADE_CAMINHADA:
 				if(ultimoWalk == null || ultimoWalk.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
-					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, ultimoWalk, ConstantesFitRank.CHAR_SIM);
+					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, ultimoWalk, atualizarTudo);
 				
 				ultimoWalk = pessoa.getData_ultima_atualizacao_walks();
 				return ultimoWalk;
@@ -259,7 +269,7 @@ public class CarregaRanking extends HttpServlet {
 				
 			case ConstantesFitRank.MODALIDADE_BICICLETA:
 				if(ultimoBikes == null || ultimoBikes.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
-					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, ultimoBikes, ConstantesFitRank.CHAR_SIM);
+					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, ultimoBikes, atualizarTudo);
 				ultimoBikes = pessoa.getData_ultima_atualizacao_bikes();
 				
 				return ultimoBikes;
@@ -270,7 +280,7 @@ public class CarregaRanking extends HttpServlet {
 				Logger.insertLog("  INICIO Walks ");
 				
 				if(pessoa.getData_ultima_atualizacao_walks() == null || pessoa.getData_ultima_atualizacao_walks().compareTo(xMinutosAtras) < 0) {// Se faz mais de 30 minutos que a ultima atualizacao ocorreu
-					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_walks(), ConstantesFitRank.CHAR_SIM);
+					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_walks(), atualizarTudo);
 				}
 				
 				Logger.insertLog("  FIM Walks ");
@@ -285,7 +295,7 @@ public class CarregaRanking extends HttpServlet {
 				Logger.insertLog("  INICIO Bikes ");
 				
 				if(pessoa.getData_ultima_atualizacao_bikes() == null || pessoa.getData_ultima_atualizacao_bikes().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu				
-					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_bikes(), ConstantesFitRank.CHAR_SIM);
+					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_bikes(), atualizarTudo);
 				
 				Logger.insertLog("  FIM Bikes ");
 				

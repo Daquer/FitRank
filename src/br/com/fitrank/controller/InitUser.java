@@ -17,6 +17,7 @@ import br.com.fitrank.service.ConfiguracaoServico;
 import br.com.fitrank.service.PessoaServico;
 import br.com.fitrank.util.ConstantesFitRank;
 import br.com.fitrank.util.DateConversor;
+import br.com.fitrank.util.Logger;
 
 import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
@@ -42,12 +43,15 @@ public class InitUser extends HttpServlet {
 		throws ServletException, IOException {
 	   InputStream input = null;
 	   Properties prop = new Properties();
+	   String index	= "";
 	   
 	   input = getClass().getClassLoader().getResourceAsStream("config.properties");
 	   
 	   prop.load(input);
 	   
 	   try{
+		   index = request.getParameter("index");
+		   
 		   AccessToken accessToken = new DefaultFacebookClient().obtainExtendedAccessToken(ConstantesFitRank.ID_APP_FITRANK,
 				   prop.getProperty("app_secret"), request.getParameter("token"));
 		   
@@ -60,7 +64,6 @@ public class InitUser extends HttpServlet {
 		   Connection<User> friendsFB = facebookClient.fetchConnection("me/friends", User.class, Parameter.with("fields", "name, id"));
 		   
 		   JsonObject picture = facebookClient.fetchObject("me/picture", JsonObject.class, Parameter.with("type", "normal"), Parameter.with("redirect", "false"));
-		   
 		   
 		   Pessoa pessoa = new Pessoa();
 		   
@@ -130,8 +133,23 @@ public class InitUser extends HttpServlet {
 		   rd.forward(request,response);  
 	   
 	   } catch(Exception e) {
-		   request.setAttribute("errorDescription", e.getMessage());
-		   RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");  
+		   RequestDispatcher rd = null;
+		   
+		   if("S".equals(index)) {
+			   rd = request.getRequestDispatcher("/index.jsp");
+		   } else {
+			   request.setAttribute("modalidade", ConstantesFitRank.MODALIDADE_PADRAO);
+			   request.setAttribute("modo", ConstantesFitRank.MODO_PADRAO);
+			   request.setAttribute("periodo", ConstantesFitRank.PERIODO_PADRAO);
+			   rd = request.getRequestDispatcher("/ranking.jsp");
+		   }
+		   
+		   Logger.insertLog("InitUser | " + e.getMessage());
+		   
+		   if(!e.getMessage().contains("(#17) User request limit reached")) {
+			   request.setAttribute("errorDescription", e.getMessage());
+		   }
+		   
 		   rd.forward(request,response);  
 	   }
    }

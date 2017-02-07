@@ -45,12 +45,14 @@
 						if (response.status === 'connected') {
 	
 							token = response.authResponse.accessToken;
+							
 // 							window.location = location.origin
 // 									+ location.pathname
 // 									+ "InitUser?token="
 // 									+ token;
 							
 							$("#token").val(token);
+							$("#index").val("S");
 							
 							$("#formSubmit").submit();
 
@@ -63,7 +65,9 @@
 							FB.login(function(response) {
 									if (response.authResponse) {
 										token = response.authResponse.accessToken;
+										
 										$("#token").val(token);
+										$("#index").val("S");
 										
 										$("#formSubmit").submit();
 									
