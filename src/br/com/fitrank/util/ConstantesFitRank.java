@@ -34,6 +34,9 @@ public final class ConstantesFitRank {
 	public static final String ID_APP_ENDOMONDO = "202423869273";
 	public static final String ID_APP_STRAVA = "284597785309";
 	public static final String ID_APP_MAPMYRUN = "43211574282";
+	public static final String ID_APP_MAPMYRIDE = "43656497834";
+	public static final String ID_APP_MAPMYFITNESS= "44829295357";
+	public static final String ID_APP_MAPMYWALK= "34785190853";
 	
 	public static final String ID_APP_RUNTASTIC_MOUNTAIN_BIKE = "402248583177025";
 	public static final String ID_APP_RUNTASTIC_ROAD_BIKE = "475072582538239";
@@ -52,7 +55,7 @@ public final class ConstantesFitRank {
 	public static final String FACEBOOK_FEMALE_GENDER = "female";
 	
 	//Limites
-	public static final int LIMITE_CORRIDAS_REALIZADAS_POR_DIA = 10;
+	public static final int LIMITE_CORRIDAS_REALIZADAS_POR_DIA = 2;
 	public static final int LIMITE_MAX_RECUPERA_FB = 99999;
 	public static final int LIMITE_ATUALIZACAO_USUARIOS = 25;
 	public static final int LIMITE_MINUTOS_ATUALIZACAO_USUARIOS = 30;

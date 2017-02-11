@@ -336,7 +336,9 @@ public class CarregaRanking extends HttpServlet {
     	
 		Connection<PostFitnessFB> listaFitConnection = facebookClient
 				.fetchConnection(facebookUser.getId()+"/fitness." + defineModalidade(modalidade),
-						PostFitnessFB.class, Parameter.with("limit", calculaLimiteDeBusca(dataUltimaAtualizacao, atualizarTudo)));
+						PostFitnessFB.class, Parameter.with("limit", calculaLimiteDeBusca(dataUltimaAtualizacao, atualizarTudo)), 
+												Parameter.with("fields","data,end_time,start_time,id,application,publish_time"),
+												Parameter.with("debug", "all") );
 		
 		Logger.insertLog(" FIM conexao " + facebookUser.getId()+"/fitness." + defineModalidade(modalidade) + " | " + listaFitConnection.getData().size() + " atividades.");
 		
@@ -445,7 +447,10 @@ public class CarregaRanking extends HttpServlet {
 		Logger.insertLog(" INICIO conexao Strava e MapMyRun");
 		for(int i=0; i< postsFit.size(); i++) {
 			if(ConstantesFitRank.ID_APP_STRAVA.equals(postsFit.get(i).getId_app()) ||
-				ConstantesFitRank.ID_APP_MAPMYRUN.equals(postsFit.get(i).getId_app())) {
+				ConstantesFitRank.ID_APP_MAPMYRUN.equals(postsFit.get(i).getId_app()) ||
+				ConstantesFitRank.ID_APP_MAPMYRIDE.equals(postsFit.get(i).getId_app()) ||
+				ConstantesFitRank.ID_APP_MAPMYFITNESS.equals(postsFit.get(i).getId_app()) ||
+				ConstantesFitRank.ID_APP_MAPMYWALK.equals(postsFit.get(i).getId_app()) ) {
 				
 				CourseFB courseStrava = facebookClient.fetchObject(postsFit.get(i).getCourse().getId_course(),
 						CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
@@ -489,11 +494,14 @@ public class CarregaRanking extends HttpServlet {
 		Integer limit;
 		
 		if(null != ultimaAtualizacao && !ConstantesFitRank.CHAR_SIM.equals(atualizarTudo)){
-			limit = DateConversor.getDaysDifference(new Date(), ultimaAtualizacao) * ConstantesFitRank.LIMITE_CORRIDAS_REALIZADAS_POR_DIA;
+			int diasDesdeAUltimaAtualizacao = DateConversor.getDaysDifference(new Date(), ultimaAtualizacao);
+			Logger.insertLog("Dias desde a ultima atualizacao: " + diasDesdeAUltimaAtualizacao + " | Constante atividades p/ dia => " + ConstantesFitRank.LIMITE_CORRIDAS_REALIZADAS_POR_DIA);
+			limit = diasDesdeAUltimaAtualizacao * ConstantesFitRank.LIMITE_CORRIDAS_REALIZADAS_POR_DIA;
 			limit = limit == 0 ? 1 : limit;
 		} else {
 			limit = ConstantesFitRank.LIMITE_MAX_RECUPERA_FB;
 		}
+		Logger.insertLog("Limite calculado: " + limit);
 		return limit.toString();
 	}
 	
