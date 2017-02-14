@@ -302,7 +302,7 @@ public class PessoaDAO {
 		return pessoas;
 	}
 	
-	public ArrayList<Amizade> listaPessoasMenosAtualizadas(ArrayList<Amizade> listaAmigos,
+	public ArrayList<Amizade> listaAmigosMenosAtualizados(ArrayList<Amizade> listaAmigos,
 			int limiteAtualizacaoUsuarios, String colunaModalidade) throws SQLException {
 		
 		conexao = new JDBCFactory().getConnection();
@@ -310,6 +310,10 @@ public class PessoaDAO {
 		Amizade amizade;
 		ArrayList<Amizade> listaAmizades = new ArrayList<Amizade>();
 		String amigos = "";
+		
+		if( !amigos.isEmpty()) {
+			return listaAmigos;
+		}
 		
 		for( int i = 0; i < (listaAmigos.size() - 1); i++) {
 			if( i == (listaAmigos.size() - 2)) {//Não usar vírgula no último elemento do IN
@@ -328,19 +332,17 @@ public class PessoaDAO {
 				+ "data_ultima_atualizacao_walks,"
 				+ "data_ultima_atualizacao_bikes " 
 				+ "from pessoa " 
-				+ "where id_usuario IN (" + amigos + ") ";
+				+ "where id_usuario IN (" + amigos + ") AND ";
 		
 				if ( colunaModalidade.equals("A") ){
-					
-					selectTableSQL += "AND ( data_ultima_atualizacao_runs < '" + dataLimiteAtualizacaoUsuarios + "' "
+					selectTableSQL += "( data_ultima_atualizacao_runs < '" + dataLimiteAtualizacaoUsuarios + "' "
 							+ "OR data_ultima_atualizacao_walks < '" + dataLimiteAtualizacaoUsuarios + "' "
 							+ "OR data_ultima_atualizacao_bikes < '" + dataLimiteAtualizacaoUsuarios + "') "
 							+ "ORDER BY data_ultima_atualizacao_runs, data_ultima_atualizacao_walks, data_ultima_atualizacao_bikes ASC ";
 				} else {
-					selectTableSQL += "AND " + colunaModalidade + " < '" + dataLimiteAtualizacaoUsuarios + "' " 
+					selectTableSQL += colunaModalidade + " < '" + dataLimiteAtualizacaoUsuarios + "' " 
 							+ "ORDER BY " + colunaModalidade + " ASC ";
 				}
-				
 				
 				selectTableSQL += "LIMIT " + limiteAtualizacaoUsuarios;
 

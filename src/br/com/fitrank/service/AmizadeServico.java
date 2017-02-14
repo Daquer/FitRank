@@ -101,7 +101,7 @@ public class AmizadeServico {
 		try {
 			listaAmigosEntrada = listaAmizades(idPessoa);
 			
-			listaAmigosSaida = (ArrayList<Amizade>) pessoaDAO.listaPessoasMenosAtualizadas(listaAmigosEntrada, limiteAtualizacaoUsuarios, colunaModalidade);
+			listaAmigosSaida = (ArrayList<Amizade>) pessoaDAO.listaAmigosMenosAtualizados(listaAmigosEntrada, limiteAtualizacaoUsuarios, colunaModalidade);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
