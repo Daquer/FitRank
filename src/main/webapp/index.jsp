@@ -135,9 +135,8 @@
 					
 						<p class="text" style="text-align: center;">Para socializar as suas atividades físicas usando o FitRank </p>
 						<p class="text" style="text-align: center;">é necessário se logar com a conta do Facebook.</p>
-						<input type="button" id="entra"
-							style="cursor: pointer; margin: 0 auto; margin-top: 35px; display: block; border: none; width: 288px; height: 62px; background-image: url('https://fbcdn-dragon-a.akamaihd.net/hphotos-ak-xaf1/t39.2178-6/851579_209602122530903_1060396115_n.png')"
-						/>
+<!-- 						<input type="button" id="entra"	style="cursor: pointer; margin: 0 auto; margin-top: 35px; display: block; border: none; width: 288px; height: 62px; background-image: url('../imagem/FB_Login.png')'" /> -->
+						<img src="imagem/FB_Login.png" id="entra" style="cursor: pointer; margin: 0 auto; margin-top: 35px; display: block; border: none; width: 288px; height: 62px;" />
 					</div>
 				</div>
 			</div>

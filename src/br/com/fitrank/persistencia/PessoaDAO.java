@@ -311,12 +311,12 @@ public class PessoaDAO {
 		ArrayList<Amizade> listaAmizades = new ArrayList<Amizade>();
 		String amigos = "";
 		
-		if( !amigos.isEmpty()) {
+		if(listaAmigos.size() == 0) {
 			return listaAmigos;
 		}
 		
-		for( int i = 0; i < (listaAmigos.size() - 1); i++) {
-			if( i == (listaAmigos.size() - 2)) {//Não usar vírgula no último elemento do IN
+		for( int i = 0; i <= (listaAmigos.size() - 1); i++) {
+			if( i == (listaAmigos.size() - 1)) {//Não usar vírgula no último elemento do IN
 				amigos += "'" + listaAmigos.get(i).getId_amigo() + "'";
 			} else {
 				amigos += "'" + listaAmigos.get(i).getId_amigo() + "',";
