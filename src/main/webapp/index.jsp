@@ -135,12 +135,12 @@
 					
 						<p class="text" style="text-align: center;">Para socializar as suas atividades físicas usando o FitRank </p>
 						<p class="text" style="text-align: center;">é necessário se logar com a conta do Facebook.</p>
-<!-- 						<input type="button" id="entra"	style="cursor: pointer; margin: 0 auto; margin-top: 35px; display: block; border: none; width: 288px; height: 62px; background-image: url('../imagem/FB_Login.png')'" /> -->
 						<img src="imagem/FB_Login.png" id="entra" style="cursor: pointer; margin: 0 auto; margin-top: 35px; display: block; border: none; width: 288px; height: 62px;" />
+						<div class="fb-like" data-href="https://www.facebook.com/fitrank.go" style="margin: 0 auto; margin-top: 35px; display: block; width: 275px;" data-width="275" data-layout="standard" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
 					</div>
 				</div>
 			</div>
-			
+<!-- 			<iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Ffitrank.go&width=250&layout=standard&action=like&size=large&show_faces=true&share=true&height=80&appId=749336888463283" width="250" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
 		</div>
 		<div class="footer">
 			<div class='error' style='display:none'></div>
