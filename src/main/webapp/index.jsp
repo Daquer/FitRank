@@ -6,6 +6,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="theme-color" content="#6f3d94" />
+<meta property="og:url"           content="http://eic.cefet-rj.br/app/FitRank/" />
+<meta property="og:type"          content="website" />
+<meta property="og:title"         content="FitRank" />
+<meta property="og:description"   content="Um novo meio de interação para pessoas que praticam atividades físicas.O FitRank reúne atividades de diferentes apps gerar rankings com seus amigos!" />
+<meta property="og:image"         content="http://eic.cefet-rj.br/app/FitRank/icon-730x250.png" />
+<meta property="og:image:width"	  content="805">
+<meta property="og:image:height"  content="250">
+<meta property="fb:app_id" content="749336888463283">
 <title>FitRank</title>
 <link rel="stylesheet" type="text/css" href="./style/css/FitRank.css">
 <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon.png">
@@ -18,6 +26,7 @@
 <meta name="theme-color" content="#ffffff">
 <script src="./js/jquery-1.11.2.js"></script>
 <script src="http://connect.facebook.net/pt_BR/all.js"></script>
+<script src="//use.typekit.net/srs6muz.js" async=""></script>
 <script>
 	$(document).ready(function() {
 			if("<%= request.getAttribute("errorDescription") %>" != "null") {
@@ -140,7 +149,6 @@
 					</div>
 				</div>
 			</div>
-<!-- 			<iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Ffitrank.go&width=250&layout=standard&action=like&size=large&show_faces=true&share=true&height=80&appId=749336888463283" width="250" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
 		</div>
 		<div class="footer">
 			<div class='error' style='display:none'></div>

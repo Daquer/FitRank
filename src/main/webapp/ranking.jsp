@@ -1039,7 +1039,9 @@
 						</div>
 					</div>
 					</div>
-					<div class="footer"></div>
+					<div class="footer">
+						<a href="creditoImagens.jsp" style="position: relative;top: 45px;left: 25px;">Autoria das imagens</a>
+					</div>
 				</div>
 				<div class="ranks">
 					<table class="tableRank">
