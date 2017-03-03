@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 	<%@ page import="br.com.fitrank.modelo.RankingPessoa" %>
 	<%@ page import="java.util.List" %>
 	<%@ page import="java.util.ArrayList" %>
@@ -9,7 +8,8 @@
 
 <html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!-- 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"> -->
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta property="og:image" content="http://eic.cefet-rj.br/app/FitRank/ShareImg?id=<%= request.getParameter("idRanking") %>" />
 <!-- 		<meta property="og:image:width" content="711"> -->
 <!-- 		<meta property="og:image:height" content="315"> -->
@@ -21,7 +21,7 @@
 		<meta property="og:url" content="http://eic.cefet-rj.br/app/FitRank/VerRanking?idRanking=<%= request.getParameter("idRanking") %>" />
 		<meta property="og:site_name" content="FitRank">
 		<meta property="og:type" content="website" />
-		<meta property="og:title" content="Ranking de Atividades Físicas de <%= (String) request.getAttribute("geradorRank") %> e amigos" />
+		<meta property="og:title" content="Ranking de Atividades FÃ­sicas de <%= (String) request.getAttribute("geradorRank") %> e amigos" />
 		<meta property="og:description" content="Junte-se a <%= (String) request.getAttribute("geradorRank") %> neste jogo junto com seus amigos em busca de uma melhor qualidade de vida." />
 		<meta name="theme-color" content="#6f3d94" />
 		<title>Ranking - <%= (String) request.getAttribute("geradorRank") == null ?  "" : (String) request.getAttribute("geradorRank")%></title>
@@ -43,13 +43,13 @@
 			var periodo = {
 				"D":"Dia", 
 				"S":"Semana",
-				"M":"Mês", 
+				"M":"MÃªs", 
 				"A":"Ano",
 				"T":"Sempre"
 			};
 			
 			var modo = {
-				"D" : "Distância",
+				"D" : "Distancia",
 				"V" : "Velocidade",
 				"Q" : "Quantidade"
 			};
@@ -61,8 +61,8 @@
 			};
 			
 			var modoDescricao = {
-				"D" : "Distância",
-				"V" : "Velocidade Média",
+				"D" : "DistÃ¢ncia",
+				"V" : "Velocidade MÃ©dia",
 				"Q" : "Quantidade"
 			};
 			
@@ -86,7 +86,7 @@
 			};
 			
 			var configsDesc = {
-				"C": "Configurações",
+				"C": "ConfiguraÃ§Ãµes",
 				"F": "Favorito",
 				"R": "Recarregar atividades"
 			};
@@ -105,7 +105,7 @@
 			var periodoRequest = '<%=(String) request.getAttribute("periodo")%>';
 			
 			//substituir por scriptlet java
-// 			var idRanking = json["@items"][0]["id_ranking"]; //pega o id do ranking a partir do primeiro usuário, pois este sempre existirá
+// 			var idRanking = json["@items"][0]["id_ranking"]; //pega o id do ranking a partir do primeiro usuÃ¡rio, pois este sempre existirÃ¡
 			var idRanking = <%=(String) request.getParameter("idRanking")%>;
 			var verRanking = location.pathname.indexOf("VerRanking") !== -1 ? true : false; 
 // 			function startTutorial() {
@@ -113,27 +113,27 @@
 // 	 	          intro.setOptions({
 // 	 	            steps: [
 // 	 	              { 
-// 	 	                intro: "Olá! Vimos que este é o seu primeiro login. Vamos à algumas instruções."
+// 	 	                intro: "OlÃ¡! Vimos que este Ã© o seu primeiro login. Vamos Ã  algumas instruÃ§Ãµes."
 // 	 	              },
 // 	 	              {
 // 	 	                element: document.querySelector('.siteHeader'),
-// 	 	                intro: "Aqui é o centro de configurações do FitRank. Vamos aos detalhes..."
+// 	 	                intro: "Aqui Ã© o centro de configuraÃ§Ãµes do FitRank. Vamos aos detalhes..."
 // 	 	              },
 // 	 	              {
 // 	 	                element: document.querySelector('img.fav'),
-// 	 	                intro: "Clique aqui quando quiser compartilhar com seus amigos do Facebook o ranking que você gerou."
+// 	 	                intro: "Clique aqui quando quiser compartilhar com seus amigos do Facebook o ranking que vocÃª gerou."
 // 		 	          },
 // 	 	              {
 // 	 	                element: document.querySelector(".modalidade:not(.opcao)"),
-// 	 	                intro: "Aqui você escolhe entre as opções de modalidade que são Corrida, Caminhada e Ciclismo."
+// 	 	                intro: "Aqui vocÃª escolhe entre as opÃ§Ãµes de modalidade que sÃ£o Corrida, Caminhada e Ciclismo."
 // 		 	          },
 // 		 	          {
 // 		 	            element: document.querySelector(".modo:not(.opcao)"),
-// 		 	            intro: "Aqui você escolhe entre os modos que são Distância Percorida, Velocidade média e Quantidade de Atividades."
+// 		 	            intro: "Aqui vocÃª escolhe entre os modos que sÃ£o DistÃ¢ncia Percorida, Velocidade mÃ©dia e Quantidade de Atividades."
 // 			 	      },
 // 			 	      {
 // 			 	      	element: document.querySelector(".periodo:not(.opcao)"),
-// 			 	        intro: "Aqui você escolhe o período período desejado para o ranking até 1 ano."
+// 			 	        intro: "Aqui vocÃª escolhe o perÃ­odo perÃ­odo desejado para o ranking atÃ© 1 ano."
 // 				 	  }	
 	 	              
 // 	 	            ]
@@ -171,7 +171,7 @@
 		   				
 					   	ultimaPublicacao = data.getResponseHeader('dataPostMaisRecente');
 					   	
-						$("<span class='capsula descOpcaoConfig' style='font-size: 16px;' title='Última Atividade: " + ultimaPublicacao +"'></span>").text("Última Atividade: " + ultimaPublicacao).appendTo(".Recarregar.atividades");
+						$("<span class='capsula descOpcaoConfig' style='font-size: 16px;' title='Ãšltima Atividade: " + ultimaPublicacao +"'></span>").text("Ãšltima Atividade: " + ultimaPublicacao).appendTo(".Recarregar.atividades");
 						
 		   				competidores = json["@items"];
 		   				
@@ -245,7 +245,7 @@
 				   		
 				   		var time = 125;
 				   		
-				   		//Esconde as opcoes que estão aparecendo
+				   		//Esconde as opcoes que estÃ£o aparecendo
 			   			$(".menu").not($(this)).children(".opcao").each(function(index, el){
 				    		
 				    		if($(el).css("display") !== 'none') {
@@ -261,7 +261,7 @@
 				    	
 			   			var spanDescChosen = $(this).children(":not(.opcao)").children("[class*='chosen']");
 	
-			   			//Esconde as descricoes que estão aparecendo
+			   			//Esconde as descricoes que estÃ£o aparecendo
 			   			$(mainDescriptionButtons).each(function(index, el){
 			   				var isElEqualChosen =  $(spanDescChosen).attr('class') === $(el).attr('class'); 
 			   				var isPeriod = $(el).hasClass("chosenPeriod");
@@ -455,7 +455,7 @@
 					   		
 					   		opcao.attr("data-ref", menuDataRef);
 		
-					   		//para o caso de mudança de periodo
+					   		//para o caso de mudanÃ§a de periodo
 					   		menu.siblings(".chosenPeriod").text(opcaoDataRef);
 					   		
 					   		opcao.children(".descOpcao").text(menuDataRef);
@@ -538,13 +538,13 @@
 
    					var rankingLine = $( $(".rankingLine")[index] );
 					
-   					//Posição no Ranking, imagem de perfil e nome de perfil
+   					//PosiÃ§Ã£o no Ranking, imagem de perfil e nome de perfil
    					rankingLine.append("<td class='colocacao'></td>");
    					rankingLine.append("<td class='profileImg'><a><img class='perfil' align='middle' ></a></td>");
    					
    					rankingLine.append("<td class='profileName'><a><span></span></a></td>");
    					
-   					//Coluna de medidas do Ranking, definidos em configuração
+   					//Coluna de medidas do Ranking, definidos em configuraÃ§Ã£o
    					rankingLine.append("<td class='measure'></td>");
    					
    					rankingLine.children(".measure").append("<span class='spanEmphasized'></span><br>");
@@ -552,7 +552,7 @@
    					rankingLine.children(".measure").append("<span class='not_emphasized thirdSpan'><div class='circle bgTiny'></div></span>");
 //    					rankingLine.children(".measure").append("<span class='not_emphasized appSpan'><div class='fitApp bgTiny' data-ref='Runtastic Mountain Bike'></div></span>");
    					
-   					//Atribuição de valores aos elementos criados acima.
+   					//AtribuiÃ§Ã£o de valores aos elementos criados acima.
    					rankingLine.children(".colocacao").text(competidor.colocacao);
    					var profileImgTd = rankingLine.children(".profileImg").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa);
    					profileImgTd.attr("src", competidor.pessoa.url_foto === null ? 'imagem/default_photo.png' : testImage(competidor.pessoa.url_foto, competidor.id_pessoa));
@@ -625,13 +625,13 @@
 
    					var rankingLine = $( $(".rankingLine")[competidores.length + parseInt(index)] );
 					
-   					//Posição no Ranking, imagem de perfil e nome de perfil
+   					//PosiÃ§Ã£o no Ranking, imagem de perfil e nome de perfil
    					rankingLine.append("<td class='colocacao'></td>");
 //    					rankingLine.append("<td class='profileImg'><a><img align='middle' ></a></td>");
    					
    					rankingLine.append("<td class='profileName'><a><span></span></a></td>");
    					
-   					//Coluna de medidas do Ranking, definidos em configuração
+   					//Coluna de medidas do Ranking, definidos em configuraÃ§Ã£o
    					rankingLine.append("<td class='measure share'></td>");
    					
    					rankingLine.children(".measure").append("<span class='spanEmphasized'></span><br>");
@@ -639,7 +639,7 @@
 //    					rankingLine.children(".measure").append("<span class='not_emphasized thirdSpan'><div class='circle bgTiny'></div></span>");
 //    					rankingLine.children(".measure").append("<span class='not_emphasized appSpan'><div class='fitApp bgTiny' data-ref='Runtastic Mountain Bike'></div></span>");
    					
-   					//Atribuição de valores aos elementos criados acima.
+   					//AtribuiÃ§Ã£o de valores aos elementos criados acima.
    					rankingLine.children(".colocacao").text(competidor.colocacao);
 //    					rankingLine.children(".profileImg").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa).attr("src", competidor.pessoa.url_foto === null ? 'imagem/default_photo.png' : competidor.pessoa.url_foto );
    					rankingLine.children(".profileName").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
@@ -823,7 +823,7 @@
 					}
 					
 // 					if (value == configsDesc['R']) {
-// 						$("<span class='capsula descOpcaoConfig' style='font-size: 16px;' title='Última Atividade: " + ultimaPublicacao +"'></span>").text("Última Atividade: " + ultimaPublicacao).appendTo(".Recarregar.atividades");
+// 						$("<span class='capsula descOpcaoConfig' style='font-size: 16px;' title='Ãšltima Atividade: " + ultimaPublicacao +"'></span>").text("Ãšltima Atividade: " + ultimaPublicacao).appendTo(".Recarregar.atividades");
 // 					}
 				});
 				
@@ -1040,7 +1040,7 @@
 					</div>
 					</div>
 					<div class="footer">
-						<a href="creditoImagens.jsp" style="position: relative;top: 45px;left: 25px;">Autoria das imagens</a>
+						<a target="_blank" href="creditoImagens.jsp" style="position: relative;top: 45px;left: 25px;">Autoria das imagens</a>
 					</div>
 				</div>
 				<div class="ranks">

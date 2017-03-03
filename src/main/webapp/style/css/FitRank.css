@@ -160,14 +160,14 @@ a:hover {
 	width: 64px;
 }
 
-.circle.Velocidade,.circle.Distância,.circle.Quantidade {
-	background-color: rgb(157, 234, 200);
-	height: 128px;
-	width: 128px;
-}
+/* .circle.Velocidade,.circle.Distância,.circle.Quantidade { */
+/* 	background-color: rgb(157, 234, 200); */
+/* 	height: 128px; */
+/* 	width: 128px; */
+/* } */
 
 
-.circle.velocidade,.circle.distancia,.circle.quantidade {
+.circle.Velocidade,.circle.Distancia,.circle.Quantidade {
 	background-color: rgb(157, 234, 200);
 	height: 128px;
 	width: 128px;
@@ -186,7 +186,7 @@ a:hover {
 	background-image: url('../../imagem/speedometer14.png');
 }
 
-.Distância {
+.Distancia {
 	background-image: url('../../imagem/races.png');
 }
 

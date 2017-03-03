@@ -40,7 +40,9 @@ import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
+import com.restfb.FacebookClient.AccessToken;
 import com.restfb.exception.FacebookGraphException;
+import com.restfb.json.JsonObject;
 import com.restfb.types.User;
 
 /**
@@ -184,8 +186,9 @@ public class CarregaRanking extends HttpServlet {
 			}
 			
 	    }catch(Exception e) {
-	    	Logger.insertLog("CarregaRanking | " + e.getMessage());
-	    	
+	    	Logger.insertLog("[ERRO] CarregaRanking | " + e.getMessage());
+	    	Date horaFim = new Date();
+	    	Logger.insertLog("ID= " + myId + "\n\nTempo de processamento CarregaRanking: " + (horainicio.getTime() - horaFim.getTime())/1000 + " segundos.\n\n");
 	    	if(isAjax.equals("S")){
 	    		if(!e.getMessage().contains("(#17) User request limit reached")) {
 	    			response.addHeader("msg", e.getMessage());
@@ -342,6 +345,10 @@ public class CarregaRanking extends HttpServlet {
 		
 		Logger.insertLog(" FIM conexao " + facebookUser.getId()+"/fitness." + defineModalidade(modalidade) + " | " + listaFitConnection.getData().size() + " atividades.");
 		
+		AccessToken accessToken = new DefaultFacebookClient().obtainAppAccessToken(ConstantesFitRank.ID_APP_FITRANK, ConstantesFitRank.app_secret);
+		FacebookClient facebookClientApp = new DefaultFacebookClient(accessToken.getAccessToken());
+		
+		
 		postFitnessServico = new PostFitnessServico();
 		ArrayList<PostFitness> postsSalvosNoBanco = (ArrayList<PostFitness>) postFitnessServico.lePostFitnessPorIdPessoa(facebookUser.getId());
 		ArrayList<PostFitness> postsNaoInserir = new ArrayList<PostFitness>();
@@ -452,8 +459,10 @@ public class CarregaRanking extends HttpServlet {
 				ConstantesFitRank.ID_APP_MAPMYFITNESS.equals(postsFit.get(i).getId_app()) ||
 				ConstantesFitRank.ID_APP_MAPMYWALK.equals(postsFit.get(i).getId_app()) ) {
 				
-				CourseFB courseStrava = facebookClient.fetchObject(postsFit.get(i).getCourse().getId_course(),
-						CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
+//				CourseFB courseStrava = facebookClient.fetchObject(postsFit.get(i).getCourse().getId_course(),
+//						CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
+				
+				CourseFB courseStrava = facebookClientApp.fetchObject(postsFit.get(i).getCourse().getId_course(), CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
 				
 				postsFit.get(i).setDistancia_percorrida(PostFitnessUtil.getStravaCourseDistance(courseStrava.getData().getDistance().getValue()));
 				postsFit.get(i).setDuracao(PostFitnessUtil.getStravaCourseDuration(courseStrava.getData().getDuration().getValue()));
