@@ -39,10 +39,9 @@ import br.com.fitrank.util.PostFitnessUtil;
 import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
-import com.restfb.Parameter;
 import com.restfb.FacebookClient.AccessToken;
+import com.restfb.Parameter;
 import com.restfb.exception.FacebookGraphException;
-import com.restfb.json.JsonObject;
 import com.restfb.types.User;
 
 /**
