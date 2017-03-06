@@ -411,6 +411,9 @@ public class CarregaRanking extends HttpServlet {
 						break;
 					case ConstantesFitRank.ID_APP_STRAVA:
 					case ConstantesFitRank.ID_APP_MAPMYRUN:
+					case ConstantesFitRank.ID_APP_MAPMYRIDE:
+					case ConstantesFitRank.ID_APP_MAPMYFITNESS:
+					case ConstantesFitRank.ID_APP_MAPMYWALK: 
 						//Dados de distancia percorida e duração são preenchidos a partir do /course do FB.  
 						postFitness.setCourse(course);
 						postsFit.add(postFitness);

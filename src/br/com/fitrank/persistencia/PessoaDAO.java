@@ -336,11 +336,15 @@ public class PessoaDAO {
 		
 				if ( colunaModalidade.equals("A") ){
 					selectTableSQL += "( data_ultima_atualizacao_runs < '" + dataLimiteAtualizacaoUsuarios + "' "
+							+ "OR data_ultima_atualizacao_runs IS NULL "
 							+ "OR data_ultima_atualizacao_walks < '" + dataLimiteAtualizacaoUsuarios + "' "
-							+ "OR data_ultima_atualizacao_bikes < '" + dataLimiteAtualizacaoUsuarios + "') "
+							+ "OR data_ultima_atualizacao_walks IS NULL "
+							+ "OR data_ultima_atualizacao_bikes < '" + dataLimiteAtualizacaoUsuarios + "' "
+							+ "OR data_ultima_atualizacao_bikes IS NULL ) "
 							+ "ORDER BY data_ultima_atualizacao_runs, data_ultima_atualizacao_walks, data_ultima_atualizacao_bikes ASC ";
 				} else {
-					selectTableSQL += colunaModalidade + " < '" + dataLimiteAtualizacaoUsuarios + "' " 
+					selectTableSQL += colunaModalidade + " < '" + dataLimiteAtualizacaoUsuarios + "' "
+							+ "OR " + colunaModalidade + "IS NULL "
 							+ "ORDER BY " + colunaModalidade + " ASC ";
 				}
 				
