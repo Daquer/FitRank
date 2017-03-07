@@ -30,7 +30,8 @@
 <script>
 	$(document).ready(function() {
 			if("<%= request.getAttribute("errorDescription") %>" != "null") {
-				$('.error').text("<%= request.getAttribute("errorDescription") %>").fadeIn(400).delay(3000).fadeOut(400);	
+				$('.error').text("<%= request.getAttribute("errorDescription") %>").fadeIn(400);
+// 				.delay(3000).fadeOut(400);	
 			} 
 	
 			FB.init({
@@ -151,7 +152,7 @@
 			</div>
 		</div>
 		<div class="footer">
-			<div class='error' style='display:none'></div>
+			<div class='error' style='display:none' onclick="$(this).fadeOut(400);"></div>
 		</div>
 	</div>
 	<div id="fb-root"></div>

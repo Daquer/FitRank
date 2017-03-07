@@ -147,7 +147,7 @@
 // // 				introJs().start();
 // 			}
 			function showMsg(msg) {
-				$('.error').text(msg).css("display", "").fadeIn(400).delay(3000).fadeOut(400);
+				$('.error').text(msg).css("display", "").fadeIn(400);
 			}
 			
 			function ajaxRanking() {
@@ -1003,7 +1003,7 @@
 	<body>
 		<div class="wrapper">
 			<div class="preheader">
-				<div class='error' style='display:none;'></div>
+				<div class='error' style='display:none;' onclick="$(this).fadeOut(400);"></div>
 			</div>
 			<div class="content">
 				<div class="headerContent rankingHeader">
