@@ -287,7 +287,7 @@ public class AplicativoDAO {
 		
 		if(ConstantesFitRank.DIA.equalsIgnoreCase(configuracao.getIntervaloData())){
 			dataInicial = ranking.getData_ranking();
-			dataFinal = DateConversor.DateToString(new Date());
+			dataFinal = ranking.getData_ranking();
 		} else if(ConstantesFitRank.SEMANA.equalsIgnoreCase(configuracao.getIntervaloData())){
 			dataInicial =  DateConversor.getPreviousWeekStringFromStringDate(ranking.getData_ranking());
 			dataFinal = ranking.getData_ranking();

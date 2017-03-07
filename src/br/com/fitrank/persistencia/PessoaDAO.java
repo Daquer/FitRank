@@ -343,8 +343,8 @@ public class PessoaDAO {
 							+ "OR data_ultima_atualizacao_bikes IS NULL ) "
 							+ "ORDER BY data_ultima_atualizacao_runs, data_ultima_atualizacao_walks, data_ultima_atualizacao_bikes ASC ";
 				} else {
-					selectTableSQL += colunaModalidade + " < '" + dataLimiteAtualizacaoUsuarios + "' "
-							+ "OR " + colunaModalidade + "IS NULL "
+					selectTableSQL += "( " + colunaModalidade + " < '" + dataLimiteAtualizacaoUsuarios + "' "
+							+ "OR " + colunaModalidade + " IS NULL ) "
 							+ "ORDER BY " + colunaModalidade + " ASC ";
 				}
 				

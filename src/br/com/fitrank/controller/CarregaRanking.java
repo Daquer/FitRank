@@ -143,6 +143,8 @@ public class CarregaRanking extends HttpServlet {
 				}
 			}
 			
+			List<RankingPessoaTela> listaRankingPessoaTela = obtemListaAplicativosTela(listRankingPessoas, configuracaoRanking, ranking);
+			
 			//Recupera as configurações de pessoa, inclusive foto.
 	    	for (RankingPessoa rankingPessoa : listRankingPessoas) {
 	    		
@@ -151,7 +153,6 @@ public class CarregaRanking extends HttpServlet {
 	    		rankingPessoa.setPessoa( pessoaServico.lePessoaPorIdServico( rankingPessoa.getId_pessoa() ) );
 			}
 	    	
-	    	List<RankingPessoaTela> listaRankingPessoaTela = obtemListaAplicativosTela(listRankingPessoas, configuracaoRanking, ranking);
 	    	postFitnessServico = new PostFitnessServico();
 	    	String dataPostMaisRecente = postFitnessServico.obtemDataPostMaisRecente(facebookUser.getId());
 	
