@@ -62,7 +62,7 @@ public class ImagemRankingDAO {
 		
 		Connection dbConnection = null;
 		PreparedStatement preparedStatement = null;
-		ImagemRanking imagemRanking = new ImagemRanking();
+		ImagemRanking imagemRanking = null;
 	
 		String selectTableSQL = "SELECT  "
 				+ "id_ranking, "
@@ -78,7 +78,7 @@ public class ImagemRankingDAO {
 			ResultSet rs = preparedStatement.executeQuery();
 			
 			if (rs.next()) {
-				
+				imagemRanking = new ImagemRanking();
 				imagemRanking.setId_ranking(rs.getInt("id_ranking"));
 				imagemRanking.setImagem(rs.getBlob("imagem"));
 				

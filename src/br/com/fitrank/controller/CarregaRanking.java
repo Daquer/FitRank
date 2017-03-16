@@ -114,8 +114,8 @@ public class CarregaRanking extends HttpServlet {
 	    			
 	    	//Atualizações feitas em toda e qualquer chamada de ranking
 			Date ultimaAtualizacao = handleUltimaAtividade(modalidade, facebookClient, facebookUser, atualizarTudo);
-			if (ultimaAtualizacao != null) {
-				
+			
+			if (ultimaAtualizacao != null && !ConstantesFitRank.CHAR_SIM.equals(atualizarTudo)) {
 				atualizaCorridasAmigos(facebookUser.getId(), modalidade, facebookClient, request);
 			}
 			
@@ -510,7 +510,7 @@ public class CarregaRanking extends HttpServlet {
 			int diasDesdeAUltimaAtualizacao = DateConversor.getDaysDifference(new Date(), ultimaAtualizacao);
 			Logger.insertLog("Dias desde a ultima atualizacao: " + diasDesdeAUltimaAtualizacao + " | Constante atividades p/ dia => " + ConstantesFitRank.LIMITE_CORRIDAS_REALIZADAS_POR_DIA);
 			limit = diasDesdeAUltimaAtualizacao * ConstantesFitRank.LIMITE_CORRIDAS_REALIZADAS_POR_DIA;
-			limit = limit == 0 ? 1 : limit;
+			limit = limit == 0 ? 2 : limit;
 		} else {
 			limit = ConstantesFitRank.LIMITE_MAX_RECUPERA_FB;
 		}

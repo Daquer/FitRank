@@ -21,6 +21,10 @@ public final class ConstantesFitRank {
 	public static final String MODO_PADRAO = "D";                                           
 	public static final String PERIODO_PADRAO = "M";
 	
+	public static final String MODALIDADE_PRIMEIRO_LOGIN = "A";
+	public static final String MODO_PRIMEIRO_LOGIN = "D";                                           
+	public static final String PERIODO_PRIMEIRO_LOGIN = "M";
+	
 	public static final String CHAR_SIM = "S";
 	public static final String CHAR_NAO = "N";
 	

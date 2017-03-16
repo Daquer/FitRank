@@ -52,17 +52,24 @@ public class InitUser extends HttpServlet {
 	   try{
 		   index = request.getParameter("index");
 		   
+		   Logger.insertLog("pre obtencao AppToken");
 		   AccessToken accessToken = new DefaultFacebookClient().obtainExtendedAccessToken(ConstantesFitRank.ID_APP_FITRANK,
 				   prop.getProperty("app_secret"), request.getParameter("token"));
+		   Logger.insertLog("pos obtencao AppToken");
 		   
 		   String token = accessToken.getAccessToken();
 		   
+		   Logger.insertLog("pre obtencao UserToken");
 		   FacebookClient facebookClient = new DefaultFacebookClient(token);
+		   Logger.insertLog("pos obtencao UserToken");
 		   
+		   Logger.insertLog("pre fetchObject/me");
 		   User facebookUser = facebookClient.fetchObject("me", User.class);
+		   Logger.insertLog("pos fetchObject/me");
 		   
+		   Logger.insertLog("pre fetchObject/me/friends");
 		   Connection<User> friendsFB = facebookClient.fetchConnection("me/friends", User.class, Parameter.with("fields", "name, id"));
-		   
+		   Logger.insertLog("pos fetchObject/me/friends");
 		   JsonObject picture = facebookClient.fetchObject("me/picture", JsonObject.class, Parameter.with("type", "normal"), Parameter.with("redirect", "false"));
 		   
 		   Pessoa pessoa = new Pessoa();
@@ -114,19 +121,23 @@ public class InitUser extends HttpServlet {
 			configuracao = configuracaoServico
 					.leConfiguracaoFavorita(facebookUser.getId());
 			
-			//Caso o usuário tenha um favorito cadastrado ou seja o primeiro login
+			//Caso o usuário tenha um favorito cadastrado
 			if (configuracao != null && configuracao.isFavorito() ) {
 				
 				request.setAttribute("modalidade", configuracao.getModalidade());
 				request.setAttribute("modo", configuracao.getModo());
 				request.setAttribute("periodo", configuracao.getIntervaloData());
 	
-			} else {
+			} else if (usuarioExistente == null) { //caso seja o primeiro login deste usuario
 				request.setAttribute("modalidade", ConstantesFitRank.MODALIDADE_PADRAO);
-				request.setAttribute("modo", ConstantesFitRank.MODO_PADRAO);
-				request.setAttribute("periodo", ConstantesFitRank.PERIODO_PADRAO);
+			    request.setAttribute("modo", ConstantesFitRank.MODO_PADRAO);
+			    request.setAttribute("periodo", ConstantesFitRank.PERIODO_PADRAO);
+			} else { //caso o usuario NAO tenha um favorito cadastrado
+			    request.setAttribute("modalidade", ConstantesFitRank.MODALIDADE_PRIMEIRO_LOGIN);
+			    request.setAttribute("modo", ConstantesFitRank.MODO_PRIMEIRO_LOGIN);
+			    request.setAttribute("periodo", ConstantesFitRank.PERIODO_PRIMEIRO_LOGIN);
 			}
-		   
+			
 		   request.setAttribute("token", token);
 		   
 		   RequestDispatcher rd = request.getRequestDispatcher("/ranking.jsp");  
@@ -149,6 +160,9 @@ public class InitUser extends HttpServlet {
 		   if(!e.getMessage().contains("(#17) User request limit reached")) {
 			   request.setAttribute("errorDescription", e.getMessage());
 		   }
+		   
+		   if(e.getMessage().contains("accessToken"))
+			   Logger.insertLog("Index: " + index + " userToken recebido -> " + request.getParameter("token"));
 		   
 		   rd.forward(request,response);  
 	   }

@@ -26,22 +26,29 @@ public class UploadImg extends HttpServlet {
 			String img64 = request.getParameter("img64");
 			String idRanking = request.getParameter("idRanking");
 			
-			img64 = img64.replace("data:image/png;base64,", "");
-			
-			byte[] imageByte = DatatypeConverter.parseBase64Binary(img64);
-			
-			Blob blob = null;
-			
-			try {
-				blob = new SerialBlob(imageByte);
-			} catch (SQLException e) {
-				e.printStackTrace();
+			if( idRanking != null && img64 != null){
+				
+				
+				if (imagemRankingServico.leRanking(Integer.parseInt(idRanking)) == null) {
+				
+					img64 = img64.replace("data:image/png;base64,", "");
+					
+					byte[] imageByte = DatatypeConverter.parseBase64Binary(img64);
+					
+					Blob blob = null;
+					
+					try {
+						blob = new SerialBlob(imageByte);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					
+					ImagemRanking imagemRanking = new ImagemRanking();
+					imagemRanking.setId_ranking(Integer.parseInt(idRanking)); 
+					imagemRanking.setImagem(blob);
+					imagemRankingServico.adicionaRanking(imagemRanking);
+				}
 			}
-			
-			ImagemRanking imagemRanking = new ImagemRanking();
-			imagemRanking.setId_ranking(Integer.parseInt(idRanking)); 
-			imagemRanking.setImagem(blob);
-			imagemRankingServico.adicionaRanking(imagemRanking);
 		} catch(Exception e) {
 			response.addHeader("msg", e.getMessage());
 			response.setContentType("text/html;charset=UTF-8");
