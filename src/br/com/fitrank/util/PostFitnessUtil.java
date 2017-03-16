@@ -142,4 +142,37 @@ public class PostFitnessUtil {
 		
 		return Double.parseDouble(durationInSeconds) / 3600;
 	}
+	
+	public static double getPolarFlowDuration(String courseTitle) throws NumberFormatException {
+		
+		courseTitle = courseTitle.split(",")[1].trim();
+		
+		String strHour = "";
+		String strMinutes = "";
+		String strSeconds = "";
+			
+		strHour = courseTitle.split(":")[0].trim();
+		strMinutes = courseTitle.split(":")[1].trim();
+		strSeconds = courseTitle.split(":")[2].trim();
+		
+		double doubleHour = 0.0;
+		double doubleMinutesInHour = 0.0;
+		double doubleSecondsInHour = 0.0;
+		
+		doubleHour = Double.parseDouble(strHour);
+		doubleMinutesInHour = Double.parseDouble(strMinutes) / 60;
+		doubleSecondsInHour = Double.parseDouble(strSeconds) / 3600;
+		
+		return doubleHour + doubleMinutesInHour + doubleSecondsInHour;
+		
+	}
+	
+	public static double getPolarFlowDistance(String courseTitle) throws NumberFormatException {
+		String kms = "";
+
+		kms = courseTitle.split("km")[0].trim();
+		kms = kms.split("-")[1].trim();
+		
+		return Double.parseDouble(kms);
+	}
 }

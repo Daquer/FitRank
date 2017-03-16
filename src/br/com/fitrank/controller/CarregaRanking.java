@@ -416,12 +416,16 @@ public class CarregaRanking extends HttpServlet {
 						postFitness.setDuracao(PostFitnessUtil.getDuration(postFit.getStartTime(), postFit.getEndTime()));
 						postsFit.add(postFitness);
 						break;
+					case ConstantesFitRank.ID_APP_POLARFLOW:
+						postFitness.setDistancia_percorrida(PostFitnessUtil.getPolarFlowDistance(postFit.getDataCourse().getCourse().getTitle()));
+						postFitness.setDuracao(PostFitnessUtil.getPolarFlowDuration(postFit.getDataCourse().getCourse().getTitle()));
+						postsFit.add(postFitness);
+						break;
 					case ConstantesFitRank.ID_APP_STRAVA:
 					case ConstantesFitRank.ID_APP_MAPMYRUN:
 					case ConstantesFitRank.ID_APP_MAPMYRIDE:
 					case ConstantesFitRank.ID_APP_MAPMYFITNESS:
 					case ConstantesFitRank.ID_APP_MAPMYWALK:
-					case ConstantesFitRank.ID_APP_POLARFLOW:	
 						//Dados de distancia percorida e duração são preenchidos a partir do /course do FB.  
 						postFitness.setCourse(course);
 						postsFit.add(postFitness);
@@ -467,8 +471,7 @@ public class CarregaRanking extends HttpServlet {
 				ConstantesFitRank.ID_APP_MAPMYRUN.equals(postsFit.get(i).getId_app()) ||
 				ConstantesFitRank.ID_APP_MAPMYRIDE.equals(postsFit.get(i).getId_app()) ||
 				ConstantesFitRank.ID_APP_MAPMYFITNESS.equals(postsFit.get(i).getId_app()) ||
-				ConstantesFitRank.ID_APP_MAPMYWALK.equals(postsFit.get(i).getId_app()) ||
-				ConstantesFitRank.ID_APP_POLARFLOW.equals(postsFit.get(i).getId_app()) ) {
+				ConstantesFitRank.ID_APP_MAPMYWALK.equals(postsFit.get(i).getId_app())) {
 				
 //				CourseFB courseStrava = facebookClient.fetchObject(postsFit.get(i).getCourse().getId_course(),
 //						CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
