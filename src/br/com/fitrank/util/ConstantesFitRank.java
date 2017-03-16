@@ -41,6 +41,7 @@ public final class ConstantesFitRank {
 	public static final String ID_APP_MAPMYRIDE = "43656497834";
 	public static final String ID_APP_MAPMYFITNESS= "44829295357";
 	public static final String ID_APP_MAPMYWALK= "34785190853";
+	public static final String ID_APP_POLARFLOW= "1571997839755230";
 	
 	public static final String ID_APP_RUNTASTIC_MOUNTAIN_BIKE = "402248583177025";
 	public static final String ID_APP_RUNTASTIC_ROAD_BIKE = "475072582538239";

@@ -246,7 +246,7 @@ public class CarregaRanking extends HttpServlet {
 		Date ultimoBikes = pessoa.getData_ultima_atualizacao_bikes();
 		Date xMinutosAtras = DateConversor.getPreviousMinutesDate(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS);
 		
-		if(myId.equals(facebookUser.getId()) && atualizarTudo != "S") {
+		if(myId.equals(facebookUser.getId()) && !"S".equals(atualizarTudo)) {
 			if( (ultimoWalk != null && ultimoWalk.compareTo(xMinutosAtras) > 0)
 				|| (ultimoRuns != null && ultimoRuns.compareTo(xMinutosAtras) > 0)
 				|| (ultimoBikes != null && ultimoBikes.compareTo(xMinutosAtras) > 0) ) {
@@ -255,24 +255,29 @@ public class CarregaRanking extends HttpServlet {
 			}
 		}
 		
+		if("S".equals(atualizarTudo)){
+			Logger.insertLog("Recarregando atividades...");
+			modalidade = "A";
+		}
+		
 		//Somente runs estao sendo recuperadas do Facebook em ordem cronologica, walks e bikes sempre buscam com limite maximo
 		switch (modalidade) {
 			case ConstantesFitRank.MODALIDADE_CAMINHADA:
-				if(ultimoWalk == null || ultimoWalk.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+				if("S".equals(atualizarTudo) || ultimoWalk == null || ultimoWalk.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, ultimoWalk, atualizarTudo);
 				
 				ultimoWalk = pessoa.getData_ultima_atualizacao_walks();
 				return ultimoWalk;
 				
 			case ConstantesFitRank.MODALIDADE_CORRIDA:
-				if(ultimoRuns == null || ultimoRuns.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+				if("S".equals(atualizarTudo) || ultimoRuns == null || ultimoRuns.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CORRIDA, facebookClient, facebookUser, ultimoRuns, atualizarTudo);
 				
 				ultimoRuns = pessoa.getData_ultima_atualizacao_runs();
 				return ultimoRuns;
 				
 			case ConstantesFitRank.MODALIDADE_BICICLETA:
-				if(ultimoBikes == null || ultimoBikes.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+				if("S".equals(atualizarTudo) || ultimoBikes == null || ultimoBikes.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, ultimoBikes, atualizarTudo);
 				ultimoBikes = pessoa.getData_ultima_atualizacao_bikes();
 				
@@ -283,7 +288,7 @@ public class CarregaRanking extends HttpServlet {
 				
 				Logger.insertLog("  INICIO Walks ");
 				
-				if(pessoa.getData_ultima_atualizacao_walks() == null || pessoa.getData_ultima_atualizacao_walks().compareTo(xMinutosAtras) < 0) {// Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+				if("S".equals(atualizarTudo) || pessoa.getData_ultima_atualizacao_walks() == null || pessoa.getData_ultima_atualizacao_walks().compareTo(xMinutosAtras) < 0) {// Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_walks(), atualizarTudo);
 				}
 				
@@ -291,14 +296,14 @@ public class CarregaRanking extends HttpServlet {
 				
 				Logger.insertLog("  INICIO Runs ");
 				
-				if(pessoa.getData_ultima_atualizacao_runs() == null || pessoa.getData_ultima_atualizacao_runs().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+				if("S".equals(atualizarTudo) || pessoa.getData_ultima_atualizacao_runs() == null || pessoa.getData_ultima_atualizacao_runs().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CORRIDA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_runs(), atualizarTudo);
 				
 				Logger.insertLog("  FIM Runs ");
 				
 				Logger.insertLog("  INICIO Bikes ");
 				
-				if(pessoa.getData_ultima_atualizacao_bikes() == null || pessoa.getData_ultima_atualizacao_bikes().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu				
+				if("S".equals(atualizarTudo) || pessoa.getData_ultima_atualizacao_bikes() == null || pessoa.getData_ultima_atualizacao_bikes().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu				
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_bikes(), atualizarTudo);
 				
 				Logger.insertLog("  FIM Bikes ");
@@ -415,7 +420,8 @@ public class CarregaRanking extends HttpServlet {
 					case ConstantesFitRank.ID_APP_MAPMYRUN:
 					case ConstantesFitRank.ID_APP_MAPMYRIDE:
 					case ConstantesFitRank.ID_APP_MAPMYFITNESS:
-					case ConstantesFitRank.ID_APP_MAPMYWALK: 
+					case ConstantesFitRank.ID_APP_MAPMYWALK:
+					case ConstantesFitRank.ID_APP_POLARFLOW:	
 						//Dados de distancia percorida e duração são preenchidos a partir do /course do FB.  
 						postFitness.setCourse(course);
 						postsFit.add(postFitness);
@@ -461,7 +467,8 @@ public class CarregaRanking extends HttpServlet {
 				ConstantesFitRank.ID_APP_MAPMYRUN.equals(postsFit.get(i).getId_app()) ||
 				ConstantesFitRank.ID_APP_MAPMYRIDE.equals(postsFit.get(i).getId_app()) ||
 				ConstantesFitRank.ID_APP_MAPMYFITNESS.equals(postsFit.get(i).getId_app()) ||
-				ConstantesFitRank.ID_APP_MAPMYWALK.equals(postsFit.get(i).getId_app()) ) {
+				ConstantesFitRank.ID_APP_MAPMYWALK.equals(postsFit.get(i).getId_app()) ||
+				ConstantesFitRank.ID_APP_POLARFLOW.equals(postsFit.get(i).getId_app()) ) {
 				
 //				CourseFB courseStrava = facebookClient.fetchObject(postsFit.get(i).getCourse().getId_course(),
 //						CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
