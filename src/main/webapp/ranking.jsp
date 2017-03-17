@@ -36,8 +36,9 @@
 		<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
 		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 		<script src="http://connect.facebook.net/pt_BR/all.js"></script>
-		<script src="js/introjs/intro.js" type="text/javascript"></script>	
-		<script src="js/hmtl2canvas/html2canvas.js" type="text/javascript"></script>	
+<!-- 		<script src="js/introjs/intro.js" type="text/javascript"></script>	 -->
+		<script src="js/hmtl2canvas/html2canvas.js" type="text/javascript"></script>
+<!-- 		<script src="js/wheel-menu-master/jquery.wheelmenu.js" type="text/javascript"></script>	 -->
 		<script type="text/javascript">
 		
 			var periodo = {
@@ -108,6 +109,7 @@
 // 			var idRanking = json["@items"][0]["id_ranking"]; //pega o id do ranking a partir do primeiro usuário, pois este sempre existirá
 			var idRanking = <%=(String) request.getParameter("idRanking")%>;
 			var verRanking = location.pathname.indexOf("VerRanking") !== -1 ? true : false; 
+			var clickDisabled = false;
 // 			function startTutorial() {
 // 				var intro = introJs();
 // 	 	          intro.setOptions({
@@ -146,6 +148,342 @@
 	 	          
 // // 				introJs().start();
 // 			}
+			
+			function menuBubbleAnimationPrepare() {
+			
+				$(".menu").click(function(e) {
+			   		if (clickDisabled)
+			            return;
+			   		
+			   		clickDisabled = true;
+			   		
+			   		var itemClicado = $(this);
+			   		
+			   		var toHide = 0; 
+			   		
+			   		$(".menu").not($(this)).children(".opcao").each(function(index, el) {
+			    		
+			    		if($(el).css("display") !== 'none') {
+			    			toHide++;
+			    		}
+					});
+			   		
+			   		var espera = toHide * (125 + 120) + ($(this).children(".opcao").length) * (125 + 120);
+			   		
+			   		setTimeout(function() {
+			   			clickDisabled = false;
+			   		}, espera);
+			   		
+			   		var time = 125;
+			   		
+			   		//Esconde as opcoes que estão aparecendo
+		   			$(".menu").not($(this)).children(".opcao").each(function(index, el){
+			    		
+			    		if($(el).css("display") !== 'none') {
+							setTimeout(function() {
+								$(el).toggle('slide', {direction : 'down', duration: 120});
+							}, time);
+							
+							time += 125;
+			    		}
+					});
+			   		
+		   			var mainDescriptionButtons = $(".menu").children(":not(.opcao)").children("[class*='chosen']");
+			    	
+		   			var spanDescChosen = $(this).children(":not(.opcao)").children("[class*='chosen']");
+
+		   			//Esconde as descricoes que estão aparecendo
+		   			$(mainDescriptionButtons).each(function(index, el){
+		   				var isElEqualChosen =  $(spanDescChosen).attr('class') === $(el).attr('class'); 
+		   				var isPeriod = $(el).hasClass("chosenPeriod");
+		   				
+		   				if ( !isElEqualChosen && $(el).css("display") !== "none" && !isPeriod) {
+		   					
+		   					$(this).toggle('slide', {direction : 'down', duration: 120});
+
+		   				} else if( isElEqualChosen && $(spanDescChosen).css("display") !== "none" && !isPeriod) {
+		   				
+		   					$(spanDescChosen).toggle('slide', {direction : 'down', duration: 120});
+		   					
+		   					$(".headerContent").animate({
+								marginBottom : "0"
+							},120);
+		   				} else if(isElEqualChosen && $(spanDescChosen).css("display") === "none") {
+		   					$(spanDescChosen).toggle('slide', {direction : 'down', duration: 120});
+		   					
+		   					if(!$(spanDescChosen).hasClass("mainConfig")) {
+			   					$(".headerContent").animate({
+									marginBottom : "20px"
+								},120);
+		   					}
+		   					
+		   					
+		   				}
+		   				
+		   				if (isElEqualChosen) {
+
+							var marginTop =  $(".headerContent").css("margin-top");
+							
+							if ($(".periodo.opcao").first().css("display") == "none"  && isPeriod){
+			   					$(".headerContent, .configWrapper").animate({
+									marginTop : "50px"
+								},120);
+			   					
+			   					if(!$(spanDescChosen).hasClass("mainConfig")) {
+				   					$(".headerContent").animate({
+										marginBottom : "0"
+									},120);
+			   					}
+							} else {
+								$(".headerContent, .configWrapper").animate({
+									marginTop : "0"
+								},120);
+							}
+		   				}
+		   				
+		   				
+		   			});
+		   			
+// 		   			$(spanClassesChosen).toggle('slide', {direction : 'down', duration: 120});
+		   			
+// 		   			setTimeout(function() {
+						
+// //							if( !$(spanTextChosen).hasClass("chosenPeriod")) {
+							
+// //							}
+						
+// 						if($(".headerContent").css("margin-bottom") == 0 || $(".headerContent").css("margin-bottom") == '0px') { 
+						
+// 							$(".headerContent").animate({
+// 								marginBottom : "20px"
+// 							},120);
+							
+							
+// 						} else {
+// 							$(".headerContent").animate({
+// 								marginBottom : "0"
+// 							},120);
+// 						}
+						
+// 					}, time);
+					
+// 					time += 125;
+			   		
+// 					if(!$(this).hasClass("periodoWrapper")){
+						
+// 						var spanTextChosen = $(this).children(":not(.opcao)").children("[class*='chosen']");
+						
+// 						if (spanTextChosen.css("display") === 'none' ) {
+// 							spanTextChosen
+// 							hiddened = $(this).children(".opcao");
+							
+// 						} else {
+							
+// 							hiddened = $(this).children(".opcao").get().reverse();
+							
+// 						}
+// 					}
+					
+					//circulos de opcoes
+			   		var hiddened;
+					
+					if ($(this).children(".opcao").css("display") === 'none' ) {
+						hiddened = $(this).children(".opcao");
+					} else {
+						hiddened = $(this).children(".opcao").get().reverse();
+					}
+					
+					
+					$(hiddened).each(function(index, el){
+						
+						setTimeout(function() {
+							$(el).toggle('slide', {direction : 'down', duration: 120});
+							
+						}, time);
+						
+						time += 125;
+					});
+					
+				});
+			   	
+			   	$(".opcao").click(function() {
+			   		var element = $(this);
+			   		
+			   		dadosAjax['token'] = token;
+			   		dadosAjax['ajax'] = 'S';
+			   		dadosAjax[element.attr('data-ref')] = element.children().attr('data-ref');
+			   		dadosAjax[element.parent().siblings(".menu").first().children(":not(.opcao)").attr('data-ref')] = element.parent().siblings(".menu").first().children(":not(.opcao)").children(".bgSmall").attr('data-ref');
+			   		dadosAjax[element.parent().siblings(".menu").eq(1).children(":not(.opcao)").attr('data-ref')] = element.parent().siblings(".menu").eq(1).children(":not(.opcao)").children(".bgSmall").attr('data-ref');
+			   		dadosAjax[element.parent().siblings(".menu").eq(2).children(":not(.opcao)").attr('data-ref')] = element.parent().siblings(".menu").eq(2).children(":not(.opcao)").children(".bgSmall").attr('data-ref');
+				   	//Troca os valores das propriedades de dados para os aceitos pelo controller.
+			   		dadosAjax = prepareProperties(dadosAjax);
+			   	
+			   		if (dadosAjax['config'] == configs['F'] ) {
+			   			
+			   			$.ajax({
+				   			url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "SalvaConfiguracao",
+				   			data: dadosAjax,
+				   			method: 'get',
+				   			success: function( data, textStatus, jqXHR){
+// 				   				$(".tableRank>tbody>.rankingLine").remove();
+
+//					   				json = JSON.parse(data.responseText);
+//									alert(data);
+//					   				json = JSON.parse(jqXHR.getResponseHeader('json'));
+				   				
+// 				   				competidores = json["@items"];
+				   				
+// 				   				geraRanking(competidores, dadosAjax.modo);
+				   			}
+				   				
+				   		});
+				   		
+			   		} else if (dadosAjax['config'] == configs['R']) {
+			   			
+			   			$.ajax({
+				   			url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "CarregaRanking",
+				   			data: dadosAjax,
+				   			method: 'get',
+				   			success: function( data, textStatus, jqXHR){
+// 				   				$(".tableRank>tbody>.rankingLine").remove();
+//					   				alert(jqXHR.getResponseHeader('msg'));
+//					   				json = JSON.parse(jqXHR.getResponseHeader('json'));
+				   				
+// 				   				competidores = json["@items"];
+				   				
+// 				   				geraRanking(competidores, dadosAjax.modo);
+				   			}
+				   				
+				   		});
+			   			
+			   		} else {
+			   			
+						var menu = element.siblings(":not(.opcao)").children(".bgSmall");
+				   		
+				   		var opcao = element.children();
+				   		
+				   		var menuDataRef = menu.attr("data-ref");
+				   		
+				   		var menuText = menu.siblings(".capsula").text();
+				   		
+				   		var opcaoDataRef = opcao.attr("data-ref");
+				   		
+				   		var opcaoText= opcao.children(".capsula").text();
+	
+				   		menu.removeClass(menuDataRef);
+				   		
+				   		opcao.removeClass(opcaoDataRef);
+				   		
+				   		menu.addClass(opcaoDataRef);
+				   		
+				   		menu.siblings(".capsula").text(opcaoText);
+				   		
+				   		menu.attr("data-ref", opcaoDataRef);
+				   		
+				   		opcao.addClass(menuDataRef);
+				   		
+				   		opcao.children(".capsula").text(menuText);
+				   		
+				   		opcao.attr("data-ref", menuDataRef);
+	
+				   		//para o caso de mudança de periodo
+				   		menu.siblings(".chosenPeriod").text(opcaoDataRef);
+				   		
+				   		opcao.children(".descOpcao").text(menuDataRef);
+				   		
+				   		
+	// 					if (opcaoDataRef == 'Semana') {
+	// 						menu.siblings(".chosenPeriod").css("right", "-56px");
+	// 			   		} else {
+	// 			   			menu.siblings(".chosenPeriod").css("right", "-25px");
+	// 			   		}
+				   		
+				   		
+				   		$.ajax({
+				   			url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "CarregaRanking",
+				   			data: dadosAjax,
+				   			method: 'get',
+//					   			success: function( data, textStatus, jqXHR){
+							complete: function(data, jqXHR, textStatus) {
+				   				$(".tableRank>tbody>.rankingLine").remove();
+				   				
+				   				json = JSON.parse(data.responseText);
+				   				
+//					   				json = JSON.parse(jqXHR.getResponseHeader('json'));
+				   				
+				   				competidores = json["@items"];
+				   				
+				   				idRanking = competidores[0]["id_ranking"]; 
+				   				
+				   				geraRanking(competidores, dadosAjax.modo);
+				   				
+				   				appBubbleAnimationPrepare();
+				   			}
+				   				
+				   		});
+			   		}
+			   		
+			   		
+			   		
+			   	});	
+			}
+			   	
+			function appBubbleAnimationPrepare() {
+// 				$(".wheel-button").wheelmenu({
+// 					  trigger: "click", // Can be "click" or "hover". Default: "click"
+// 					  animation: "fly", // Entrance animation. Can be "fade" or "fly". Default: "fade"
+// 					  animationSpeed: "fast", // Entrance animation speed. Can be "instant", "fast", "medium", or "slow". Default: "medium"
+// 					  angle: "all", // Angle which the menu will appear. Can be "all", "N", "NE", "E", "SE", "S", "SW", "W", "NW", or even array [0, 360]. Default: "all" or [0, 360]
+// 				});	
+// 				return false;
+				
+				$(".moreAppsWrapper").click(function(e) {
+			   		if (clickDisabled)
+			            return;
+			   		
+			   		clickDisabled = true;
+			   		
+			   		var itemClicado = $(this);
+			   		
+			   		var toHide = 0; 
+			   		
+			   		$(this).not($(this)).children(".appOpcao").each(function(index, el) {
+			    		if($(el).css("display") !== 'none') {
+			    			toHide++;
+			    		}
+					});
+			   		
+			   		var espera = toHide * (125 + 120) + ($(this).children(".appOpcao").length) * (125 + 120);
+			   		
+			   		setTimeout(function() {
+			   			clickDisabled = false;
+			   		}, espera);
+			   		
+			   		var time = 125;
+			   		
+					//circulos de opcoes
+			   		var hiddened;
+					
+					if ($(this).children(".appOpcao").css("display") === 'none' ) {
+						hiddened = $(this).children(".appOpcao");
+					} else {
+						hiddened = $(this).children(".appOpcao").get().reverse();
+					}
+					
+					
+					$(hiddened).each(function(index, el){
+						
+						setTimeout(function() {
+							$(el).toggle('slide', {direction : 'down', duration: 120});
+							
+						}, time);
+						
+						time += 125;
+					});
+					
+				});
+			}
+			
 			function showMsg(msg) {
 				$('.error').text(msg).css("display", "").fadeIn(400);
 			}
@@ -178,6 +516,8 @@
 		   				idRanking = competidores[0]["id_ranking"]; 
 		   				
 		   				geraRanking(competidores, dadosAjax.modo);
+		   				
+		   				appBubbleAnimationPrepare();
 		   			}
 		   				
 		   		});
@@ -199,6 +539,7 @@
 			    	if (data.getResponseHeader('msg')){
 			    		showMsg(data.getResponseHeader('msg'));
 	   				}
+			    	$("#loading").hide();
 			    });
 			    
 			    if ("<%= request.getAttribute("errorDescription") %>" != "null") {
@@ -216,285 +557,9 @@
 			    
 			    if (!verRanking) {
 				    ajaxRanking();
-				    
 			    	fixTitle();
-			    	var clickDisabled = false;
-			     
-				   	$(".menu").click(function(e) {
-				   		if (clickDisabled)
-				            return;
-				   		
-				   		clickDisabled = true;
-				   		
-				   		var itemClicado = $(this);
-				   		
-				   		var toHide = 0; 
-				   		
-				   		$(".menu").not($(this)).children(".opcao").each(function(index, el) {
-				    		
-				    		if($(el).css("display") !== 'none') {
-				    			toHide++;
-				    		}
-						});
-				   		
-				   		var espera = toHide * (125 + 120) + ($(this).children(".opcao").length) * (125 + 120);
-				   		
-				   		setTimeout(function() {
-				   			clickDisabled = false;
-				   		}, espera);
-				   		
-				   		var time = 125;
-				   		
-				   		//Esconde as opcoes que estão aparecendo
-			   			$(".menu").not($(this)).children(".opcao").each(function(index, el){
-				    		
-				    		if($(el).css("display") !== 'none') {
-								setTimeout(function() {
-									$(el).toggle('slide', {direction : 'down', duration: 120});
-								}, time);
-								
-								time += 125;
-				    		}
-						});
-				   		
-			   			var mainDescriptionButtons = $(".menu").children(":not(.opcao)").children("[class*='chosen']");
-				    	
-			   			var spanDescChosen = $(this).children(":not(.opcao)").children("[class*='chosen']");
-	
-			   			//Esconde as descricoes que estão aparecendo
-			   			$(mainDescriptionButtons).each(function(index, el){
-			   				var isElEqualChosen =  $(spanDescChosen).attr('class') === $(el).attr('class'); 
-			   				var isPeriod = $(el).hasClass("chosenPeriod");
-			   				
-			   				if ( !isElEqualChosen && $(el).css("display") !== "none" && !isPeriod) {
-			   					
-			   					$(this).toggle('slide', {direction : 'down', duration: 120});
-	
-			   				} else if( isElEqualChosen && $(spanDescChosen).css("display") !== "none" && !isPeriod) {
-			   				
-			   					$(spanDescChosen).toggle('slide', {direction : 'down', duration: 120});
-			   					
-			   					$(".headerContent").animate({
-									marginBottom : "0"
-								},120);
-			   				} else if(isElEqualChosen && $(spanDescChosen).css("display") === "none") {
-			   					$(spanDescChosen).toggle('slide', {direction : 'down', duration: 120});
-			   					
-			   					if(!$(spanDescChosen).hasClass("mainConfig")) {
-				   					$(".headerContent").animate({
-										marginBottom : "20px"
-									},120);
-			   					}
-			   					
-			   					
-			   				}
-			   				
-			   				if (isElEqualChosen) {
-	
-								var marginTop =  $(".headerContent").css("margin-top");
-								
-								if ($(".periodo.opcao").first().css("display") == "none"  && isPeriod){
-				   					$(".headerContent, .configWrapper").animate({
-										marginTop : "50px"
-									},120);
-				   					
-				   					if(!$(spanDescChosen).hasClass("mainConfig")) {
-					   					$(".headerContent").animate({
-											marginBottom : "0"
-										},120);
-				   					}
-								} else {
-									$(".headerContent, .configWrapper").animate({
-										marginTop : "0"
-									},120);
-								}
-			   				}
-			   				
-			   				
-			   			});
-			   			
-	// 		   			$(spanClassesChosen).toggle('slide', {direction : 'down', duration: 120});
-			   			
-	// 		   			setTimeout(function() {
-							
-	// //							if( !$(spanTextChosen).hasClass("chosenPeriod")) {
-								
-	// //							}
-							
-	// 						if($(".headerContent").css("margin-bottom") == 0 || $(".headerContent").css("margin-bottom") == '0px') { 
-							
-	// 							$(".headerContent").animate({
-	// 								marginBottom : "20px"
-	// 							},120);
-								
-								
-	// 						} else {
-	// 							$(".headerContent").animate({
-	// 								marginBottom : "0"
-	// 							},120);
-	// 						}
-							
-	// 					}, time);
-						
-	// 					time += 125;
-				   		
-	// 					if(!$(this).hasClass("periodoWrapper")){
-							
-	// 						var spanTextChosen = $(this).children(":not(.opcao)").children("[class*='chosen']");
-							
-	// 						if (spanTextChosen.css("display") === 'none' ) {
-	// 							spanTextChosen
-	// 							hiddened = $(this).children(".opcao");
-								
-	// 						} else {
-								
-	// 							hiddened = $(this).children(".opcao").get().reverse();
-								
-	// 						}
-	// 					}
-						
-						//circulos de opcoes
-				   		var hiddened;
-						
-						if ($(this).children(".opcao").css("display") === 'none' ) {
-							hiddened = $(this).children(".opcao");
-						} else {
-							hiddened = $(this).children(".opcao").get().reverse();
-						}
-						
-						
-						$(hiddened).each(function(index, el){
-							
-							setTimeout(function() {
-								$(el).toggle('slide', {direction : 'down', duration: 120});
-								
-							}, time);
-							
-							time += 125;
-						});
-						
-					});
-				   	
-				   	$(".opcao").click(function() {
-				   		var element = $(this);
-				   		
-				   		dadosAjax['token'] = token;
-				   		dadosAjax['ajax'] = 'S';
-				   		dadosAjax[element.attr('data-ref')] = element.children().attr('data-ref');
-				   		dadosAjax[element.parent().siblings(".menu").first().children(":not(.opcao)").attr('data-ref')] = element.parent().siblings(".menu").first().children(":not(.opcao)").children(".bgSmall").attr('data-ref');
-				   		dadosAjax[element.parent().siblings(".menu").eq(1).children(":not(.opcao)").attr('data-ref')] = element.parent().siblings(".menu").eq(1).children(":not(.opcao)").children(".bgSmall").attr('data-ref');
-				   		dadosAjax[element.parent().siblings(".menu").eq(2).children(":not(.opcao)").attr('data-ref')] = element.parent().siblings(".menu").eq(2).children(":not(.opcao)").children(".bgSmall").attr('data-ref');
-					   	//Troca os valores das propriedades de dados para os aceitos pelo controller.
-				   		dadosAjax = prepareProperties(dadosAjax);
-				   	
-				   		if (dadosAjax['config'] == configs['F'] ) {
-				   			
-				   			$.ajax({
-					   			url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "SalvaConfiguracao",
-					   			data: dadosAjax,
-					   			method: 'get',
-					   			success: function( data, textStatus, jqXHR){
-	// 				   				$(".tableRank>tbody>.rankingLine").remove();
-	
-// 					   				json = JSON.parse(data.responseText);
-// 									alert(data);
-// 					   				json = JSON.parse(jqXHR.getResponseHeader('json'));
-					   				
-	// 				   				competidores = json["@items"];
-					   				
-	// 				   				geraRanking(competidores, dadosAjax.modo);
-					   			}
-					   				
-					   		});
-					   		
-				   		} else if (dadosAjax['config'] == configs['R']) {
-				   			
-				   			$.ajax({
-					   			url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "CarregaRanking",
-					   			data: dadosAjax,
-					   			method: 'get',
-					   			success: function( data, textStatus, jqXHR){
-	// 				   				$(".tableRank>tbody>.rankingLine").remove();
-// 					   				alert(jqXHR.getResponseHeader('msg'));
-// 					   				json = JSON.parse(jqXHR.getResponseHeader('json'));
-					   				
-	// 				   				competidores = json["@items"];
-					   				
-	// 				   				geraRanking(competidores, dadosAjax.modo);
-					   			}
-					   				
-					   		});
-				   			
-				   		} else {
-				   			
-							var menu = element.siblings(":not(.opcao)").children(".bgSmall");
-					   		
-					   		var opcao = element.children();
-					   		
-					   		var menuDataRef = menu.attr("data-ref");
-					   		
-					   		var menuText = menu.siblings(".capsula").text();
-					   		
-					   		var opcaoDataRef = opcao.attr("data-ref");
-					   		
-					   		var opcaoText= opcao.children(".capsula").text();
-		
-					   		menu.removeClass(menuDataRef);
-					   		
-					   		opcao.removeClass(opcaoDataRef);
-					   		
-					   		menu.addClass(opcaoDataRef);
-					   		
-					   		menu.siblings(".capsula").text(opcaoText);
-					   		
-					   		menu.attr("data-ref", opcaoDataRef);
-					   		
-					   		opcao.addClass(menuDataRef);
-					   		
-					   		opcao.children(".capsula").text(menuText);
-					   		
-					   		opcao.attr("data-ref", menuDataRef);
-		
-					   		//para o caso de mudança de periodo
-					   		menu.siblings(".chosenPeriod").text(opcaoDataRef);
-					   		
-					   		opcao.children(".descOpcao").text(menuDataRef);
-					   		
-					   		
-		// 					if (opcaoDataRef == 'Semana') {
-		// 						menu.siblings(".chosenPeriod").css("right", "-56px");
-		// 			   		} else {
-		// 			   			menu.siblings(".chosenPeriod").css("right", "-25px");
-		// 			   		}
-					   		
-					   		
-					   		$.ajax({
-					   			url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "CarregaRanking",
-					   			data: dadosAjax,
-					   			method: 'get',
-// 					   			success: function( data, textStatus, jqXHR){
-								complete: function(data, jqXHR, textStatus) {
-					   				$(".tableRank>tbody>.rankingLine").remove();
-					   				
-					   				json = JSON.parse(data.responseText);
-					   				
-// 					   				json = JSON.parse(jqXHR.getResponseHeader('json'));
-					   				
-					   				competidores = json["@items"];
-					   				
-					   				idRanking = competidores[0]["id_ranking"]; 
-					   				
-					   				geraRanking(competidores, dadosAjax.modo);
-					   			}
-					   				
-					   		});
-				   		}
-				   		
-				   		
-				   		
-				   	});
-			    
-				} else {
+			    	menuBubbleAnimationPrepare();
+				} else {//VerRanking else
 					dadosAjax['ajax'] = 'S';
 					dadosAjax['idRanking'] = idRanking;
 					dadosAjax['modo'] = modoRequest; 
@@ -512,6 +577,8 @@
 			   				competidores = json["@items"];
 			   				
 			   				geraRanking(competidores, dadosAjax.modo);
+			   				
+			   				appBubbleAnimationPrepare();
 			   			}
 			   				
 			   		});
@@ -588,15 +655,63 @@
    					}
    					
    					var leftPos = 5;
+   					var countApp = 1;
+   					var maxAppsWithoutOverflow = 6;
+   					var alturaOpcaoApp = 65; 
+   					
+   					if (competidor.listaAplicativosTela['@items'] !== undefined) {
+						var itemsLength = competidor.listaAplicativosTela['@items'].length;
+						var hiddenItemsLength = itemsLength - (maxAppsWithoutOverflow - 1);
+						if (competidor.listaAplicativosTela['@items'] > maxAppsWithoutOverflow) {
+							var hiddenItemsArray = competidor.listaAplicativosTela['@items'].slice(5, itemsLength);
+   						}
+   					}
    					
    					for (appTelaIndex in competidor.listaAplicativosTela['@items'] ) {
    						var appTela = competidor.listaAplicativosTela['@items'][appTelaIndex];
    						var appTelaNomeEscaped = escape(appTela.nome);
+						
+						
+						if (itemsLength <= maxAppsWithoutOverflow) {
+							rankingLine.children(".measure").append("<span class='not_emphasized appSpan' style='left:" + leftPos + "px'>" +
+	   								"<div class='fitApp bgTiny' style='background-image: url(imagem/" + appTelaNomeEscaped +".png)' title='"+ appTela.nome +"'></div><span style='padding-left:40px;'>" + appTela.quantidadeAtividades + "</span></span>");
+						} else {//Criar "dropdown" para evitar overflow
+							if(countApp < maxAppsWithoutOverflow ) {
+	   							rankingLine.children(".measure").append("<span class='not_emphasized appSpan' style='left:" + leftPos + "px'>" +
+	   								"<div class='fitApp bgTiny' style='background-image: url(imagem/" + appTelaNomeEscaped +".png)' title='"+ appTela.nome +"'></div><span style='padding-left:40px;'>" + appTela.quantidadeAtividades + "</span></span>");
 
-   						var teste = rankingLine.children(".measure").append("<span class='not_emphasized appSpan' style='left:" + leftPos + "px'>" +
-   							"<div class='fitApp bgTiny' style='background-image: url(imagem/" + appTelaNomeEscaped +".png)' title='"+ appTela.nome +"'></div>" + appTela.quantidadeAtividades + "</span>");
+	   						
+	   						} else if ( countApp >= maxAppsWithoutOverflow ){//Aplicativos no badge para evitar overflow
+	   							if (countApp == maxAppsWithoutOverflow){ 
+	   								rankingLine.children(".measure").append("<span class='not_emphasized appSpan' style='left:" + leftPos + "px'>" +
+	   	   									"<div class='fitApp bgTiny moreAppsWrapper' style='background-image: url(imagem/ic_add_circle_black_24dp_2x.png)' title='testeTooltip'></div><span class='badge'>" + hiddenItemsLength + "</span></span>");
+// 		   							rankingLine.children(".measure").append("<span class='not_emphasized appSpan' style='left:" + 
+// 		   									leftPos + "px'><div class='fitApp bgTiny' ><a href='#wheel" + appTelaIndex + "' class='wheel-button ne'>" +
+// 		   										"<div style='background-image: url(imagem/ic_add_circle_black_24dp_2x.png)' title='testeTooltip'></div></a><ul id='wheel" + appTelaIndex + "' class='wheel'></ul><span class='badge'>" + hiddenItemsLength + "</span></span>");
+	   							}
+	   									
+	   						  
+// 									$("<li class='item'><a href='#home'><div class='fitApp bgTiny' style='background-image: url(imagem/" + appTelaNomeEscaped +".png)' title='"+ appTela.nome +"'></div></span></a></li>").appendTo("#wheel" + appTelaIndex);
+   									//Adiciona os apps
+   									
+									$("<div class='fitApp bgTiny' style='background-image: url(imagem/" + appTelaNomeEscaped +".png)' title='"+ appTela.nome +"'></div></span>")
+									.appendTo( 
+										$("<div></div>").appendTo(".moreAppsWrapper").addClass("appOpcao")
+										.css("display", "none")
+										.css("bottom" , alturaOpcaoApp)
+									);
+   									
+									$("[title='" + appTela.nome + "']").parent().append("<span class='fitOpcao'>" + appTela.quantidadeAtividades + "</span>");
+   									
+   									
+   									alturaOpcaoApp += $(".opcao").height() * 2;
+	   						}
+						}
+						
    						
-   						leftPos += 65;  
+   						
+   						leftPos += 65;
+   						countApp += 1;
    					}
    					
    				}	
@@ -997,7 +1112,8 @@
 			}
 		</script>
 		<link rel="stylesheet" type="text/css" href="./style/css/FitRank.css">
-		<link rel="stylesheet" type="text/css" href="./js/introjs/introjs.css">
+<!-- 		<link rel="stylesheet" type="text/css" href="./js/introjs/introjs.css"> -->
+<!-- 		<link rel="stylesheet" type="text/css" href="./js/wheel-menu-master/wheelmenu.css"> -->
 	</head>
 
 	<body>

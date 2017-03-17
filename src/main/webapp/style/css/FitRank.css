@@ -505,7 +505,7 @@ td.profileName {
 	display: none !important;
 }
 
-.opcao {
+.opcao,.appOpcao {
 	position: absolute !important;
 	width: 20px !important;
     height: 20px !important;
@@ -657,7 +657,8 @@ td.profileName {
     position: absolute;
     left: 5px;
     top: 108px;
-    text-align: center;
+    text-align: right;
+    width: 50px;
 }
 
 .fitApp {
@@ -718,4 +719,26 @@ img.perfil {
     -webkit-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
     -moz-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
     box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
+}
+
+.badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #777;
+    border-radius: 10px;
+    position: relative;
+}
+
+.fitOpcao {
+    padding-left: 20px;
+	position: absolute;
+    top: 30px;
 }
