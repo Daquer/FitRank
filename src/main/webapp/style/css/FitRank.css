@@ -69,7 +69,7 @@ a:hover {
 }
 
 .headerContent {
-	padding-top: 60px;
+padding-top: 60px;
 	margin: 0 auto;
 	width: 60%;
 	
@@ -629,6 +629,10 @@ td.profileName {
 
 .Favorito {
 	background-image: url('../../imagem/favourites7.png');
+}
+
+.Descadastrar {
+	background-image: url('../../imagem/account-remove.png');
 }
 
 .descOpcaoConfig {

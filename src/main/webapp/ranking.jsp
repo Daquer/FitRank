@@ -83,13 +83,15 @@
 			
 			var configs = {
 				"F": "Favorito",
-				"R": "S"
+				"R": "S",
+				"D": "Descadastrar"
 			};
 			
 			var configsDesc = {
 				"C": "Configurações",
 				"F": "Favorito",
-				"R": "Recarregar atividades"
+				"R": "Recarregar atividades",
+				"D": "Descadastrar"
 			};
 			
 			var dadosAjax = {};
@@ -355,7 +357,9 @@
 				   			}
 				   				
 				   		});
-			   			
+			   		
+			   		} else if(dadosAjax['config'] == configs['D']){
+			   			descadastrar();//retira todas as permissões do usuário concedidas ao FitRank 	
 			   		} else {
 			   			
 						var menu = element.siblings(":not(.opcao)").children(".bgSmall");
@@ -684,7 +688,7 @@
 	   						} else if ( countApp >= maxAppsWithoutOverflow ){//Aplicativos no badge para evitar overflow
 	   							if (countApp == maxAppsWithoutOverflow){ 
 	   								rankingLine.children(".measure").append("<span class='not_emphasized appSpan' style='left:" + leftPos + "px'>" +
-	   	   									"<div class='fitApp bgTiny moreAppsWrapper' style='background-image: url(imagem/ic_add_circle_black_24dp_2x.png)' title='testeTooltip'></div><span class='badge'>" + hiddenItemsLength + "</span></span>");
+	   	   									"<div class='fitApp bgTiny moreAppsWrapper' style='/*background-image: url(imagem/ic_add_circle_black_24dp_2x.png)*/' title='+ " + hiddenItemsLength + " apps'></div><span class='badge'>" + hiddenItemsLength + "</span></span>");
 // 		   							rankingLine.children(".measure").append("<span class='not_emphasized appSpan' style='left:" + 
 // 		   									leftPos + "px'><div class='fitApp bgTiny' ><a href='#wheel" + appTelaIndex + "' class='wheel-button ne'>" +
 // 		   										"<div style='background-image: url(imagem/ic_add_circle_black_24dp_2x.png)' title='testeTooltip'></div></a><ul id='wheel" + appTelaIndex + "' class='wheel'></ul><span class='badge'>" + hiddenItemsLength + "</span></span>");
@@ -694,14 +698,14 @@
 // 									$("<li class='item'><a href='#home'><div class='fitApp bgTiny' style='background-image: url(imagem/" + appTelaNomeEscaped +".png)' title='"+ appTela.nome +"'></div></span></a></li>").appendTo("#wheel" + appTelaIndex);
    									//Adiciona os apps
    									
-									$("<div class='fitApp bgTiny' style='background-image: url(imagem/" + appTelaNomeEscaped +".png)' title='"+ appTela.nome +"'></div></span>")
+									$("<div class='fitApp bgTiny' style='background-image: url(imagem/" + appTelaNomeEscaped +".png)' data-id_pessoa = '" + competidor.id_pessoa + "' title='"+ appTela.nome +"'></div></span>")
 									.appendTo( 
 										$("<div></div>").appendTo(".moreAppsWrapper").addClass("appOpcao")
 										.css("display", "none")
 										.css("bottom" , alturaOpcaoApp)
 									);
    									
-									$("[title='" + appTela.nome + "']").parent().append("<span class='fitOpcao'>" + appTela.quantidadeAtividades + "</span>");
+									$("[title='" + appTela.nome + "'][data-id_pessoa=" + competidor.id_pessoa + "]").parent().append("<span class='fitOpcao'>" + appTela.quantidadeAtividades + "</span>");
    									
    									
    									alturaOpcaoApp += $(".opcao").height() * 2;
@@ -962,6 +966,23 @@
 				}
 			}
 			
+			function descadastrar(){
+				if( token != "null") {
+					FB.api('/me/permissions', 'DELETE',
+						{ 
+							"access_token" : token
+						},
+						function(response) {
+							if (!response || response.error) {
+								showMsg("Ocorreu algum erro desconhecido.");
+							  } else {
+							    alert('Você foi descadastrado com sucesso do FitRank');
+							    window.location = "http://eic.cefet-rj.br/app/FitRank/";
+							  }
+						}
+					);
+				}
+			}
 // 			function renderLastUpdate(competidores) {
 // 				var myId = getOwnId();
 // 				switch($('.chosenModalidade~[data-ref]').attr('data-ref')) {
