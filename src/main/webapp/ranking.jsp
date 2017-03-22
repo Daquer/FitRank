@@ -688,7 +688,7 @@
 	   						} else if ( countApp >= maxAppsWithoutOverflow ){//Aplicativos no badge para evitar overflow
 	   							if (countApp == maxAppsWithoutOverflow){ 
 	   								rankingLine.children(".measure").append("<span class='not_emphasized appSpan' style='left:" + leftPos + "px'>" +
-	   	   									"<div class='fitApp bgTiny moreAppsWrapper' style='/*background-image: url(imagem/ic_add_circle_black_24dp_2x.png)*/' title='+ " + hiddenItemsLength + " apps'></div><span class='badge'>" + hiddenItemsLength + "</span></span>");
+	   	   									"<div class='fitApp bgTiny moreAppsWrapper' style='background-image: url(imagem/ic_add_circle_black_24dp_2x.png)' title='+ " + hiddenItemsLength + " apps'></div><span class='badge'>" + hiddenItemsLength + "</span></span>");
 // 		   							rankingLine.children(".measure").append("<span class='not_emphasized appSpan' style='left:" + 
 // 		   									leftPos + "px'><div class='fitApp bgTiny' ><a href='#wheel" + appTelaIndex + "' class='wheel-button ne'>" +
 // 		   										"<div style='background-image: url(imagem/ic_add_circle_black_24dp_2x.png)' title='testeTooltip'></div></a><ul id='wheel" + appTelaIndex + "' class='wheel'></ul><span class='badge'>" + hiddenItemsLength + "</span></span>");

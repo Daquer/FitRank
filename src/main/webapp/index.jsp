@@ -1,15 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="theme-color" content="#6f3d94" />
 <meta property="og:url"           content="http://eic.cefet-rj.br/app/FitRank/" />
 <meta property="og:type"          content="website" />
 <meta property="og:title"         content="FitRank" />
-<meta property="og:description"   content="Um novo meio de interação para pessoas que praticam atividades físicas.O FitRank reúne atividades de diferentes apps gerar rankings com seus amigos!" />
+<meta property="og:description"   content="Um novo meio de interaÃ§Ã£o para pessoas que praticam atividades fÃ­sicas.O FitRank reÃºne atividades de diferentes apps gerar rankings com seus amigos!" />
 <meta property="og:image"         content="http://eic.cefet-rj.br/app/FitRank/icon-730x250.png" />
 <meta property="og:image:width"	  content="805">
 <meta property="og:image:height"  content="250">
@@ -68,7 +66,7 @@
 
 							// 					        }else if(response.status === 'not_authorized'){
 
-							// 					          alert("Não autorizado");
+							// 					          alert("NÃ£o autorizado");
 
 						} else {
 
@@ -101,7 +99,7 @@
 										
 									} else {
 										console
-												.log("O usuário não permitiu acesso aos dados!");
+												.log("O usuÃ¡rio nÃ£o permitiu acesso aos dados!");
 									}
 
 // 									if (response.status == "connected"
@@ -123,7 +121,7 @@
 								});//user_birthday
 							// 					        	if(!popup) { 
 							// 									   //an alert in this example
-							// 									   alert('Parece que seu navegador está bloqueando o popup para autorizar a nossa conexão com o Facebook. \nPara continuar será necessário desabilitar o bloqueio.');
+							// 									   alert('Parece que seu navegador estÃ¡ bloqueando o popup para autorizar a nossa conexÃ£o com o Facebook. \nPara continuar serÃ¡ necessÃ¡rio desabilitar o bloqueio.');
 							// 									}
 						}
 					});
@@ -143,8 +141,8 @@
 					</div>
 					<div>
 					
-						<p class="text" style="text-align: center;">Para socializar as suas atividades físicas usando o FitRank </p>
-						<p class="text" style="text-align: center;">é necessário se logar com a conta do Facebook.</p>
+						<p class="text" style="text-align: center;">Para socializar as suas atividades fÃ­sicas usando o FitRank </p>
+						<p class="text" style="text-align: center;">Ã© necessÃ¡rio se logar com a conta do Facebook.</p>
 						<img src="imagem/FB_Login.png" id="entra" style="cursor: pointer; margin: 0 auto; margin-top: 35px; display: block; border: none; width: 288px; height: 62px;" />
 						<div class="fb-like" data-href="https://www.facebook.com/fitrank.go" style="margin: 0 auto; margin-top: 35px; display: block; width: 275px;" data-width="275" data-layout="standard" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
 					</div>
