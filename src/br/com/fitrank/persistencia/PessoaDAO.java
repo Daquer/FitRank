@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -323,7 +324,7 @@ public class PessoaDAO {
 			}
 		}
 		//Os amigos que tiverem um limite maior que o valor da constante (inicialmente meia hora) da ultima atualizacao serão atualizados
-		String dataLimiteAtualizacaoUsuarios = DateConversor.getPreviousMinutesString(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS);
+		Timestamp dataLimiteAtualizacaoUsuarios = DateConversor.getPreviousMinutesTimestamp(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS);
 		
 		String selectTableSQL = "SELECT " 
 				+ "id_usuario, " 

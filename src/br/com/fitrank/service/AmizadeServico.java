@@ -9,6 +9,7 @@ import br.com.fitrank.modelo.Amizade;
 import br.com.fitrank.persistencia.AmizadeDAO;
 import br.com.fitrank.persistencia.PessoaDAO;
 import br.com.fitrank.util.ConstantesFitRank;
+import br.com.fitrank.util.DateConversor;
 
 public class AmizadeServico {
 	
@@ -20,7 +21,7 @@ public class AmizadeServico {
 		
 		amizade = new Amizade();
 		
-		amizade.setData_amizade(new Date());
+		amizade.setData_amizade(DateConversor.getJavaSqlTimestamp(new Date()));
 		
 	    try {
 	    	this.amizadeDAO = new AmizadeDAO();

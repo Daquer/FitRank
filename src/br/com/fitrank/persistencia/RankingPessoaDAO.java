@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -185,21 +186,25 @@ public class RankingPessoaDAO {
 		PreparedStatement preparedStatement = null;
 		List<RankingPessoa> listaRanking = new ArrayList<RankingPessoa>();
 		
-		String dataInicial = "";
+		Timestamp dataInicial = null;
 		
 		if(ConstantesFitRank.DIA.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial = DateConversor.DateToString(new Date());
+			dataInicial = DateConversor.getJavaSqlTimestamp(new Date());
 			
 		} else if(ConstantesFitRank.SEMANA.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial =  DateConversor.getPreviousWeekString();
-			
+			dataInicial =  DateConversor.getPreviousWeekFromSqlTimestamp(DateConversor.getJavaSqlTimestamp(new Date()));
+
 		} else if(ConstantesFitRank.MES.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial = DateConversor.getPreviousMonthString();
+			dataInicial = DateConversor.getPreviousMonthFromSqlTimestamp(DateConversor.getJavaSqlTimestamp(new Date()));
 			
 		} else if(ConstantesFitRank.ANO.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial = DateConversor.getPreviousYearString();
+			dataInicial = DateConversor.getPreviousYearFromSqlTimestamp(DateConversor.getJavaSqlTimestamp(new Date()));
 		}
-	
+		
+		if (null != dataInicial) {
+			dataInicial = DateConversor.removeTimestampHourPart(dataInicial);
+		}
+		
 		//Nao foi possivel utilizar parametros do preparedStatement nesta consulta!!!
 		String selectTableSQL = "SELECT @rownum := @rownum + 1 AS colocacao,							\n"
 							+	"		consulta.id_pessoa id_pessoa,									\n"
@@ -222,9 +227,9 @@ public class RankingPessoaDAO {
 			selectTableSQL  +=  "			AND pf.modalidade = '"+configuracao.getModalidade()+"'									\n";
 		}
 		if(!ConstantesFitRank.SEMPRE.equalsIgnoreCase(configuracao.getIntervaloData())){
-			selectTableSQL  +=	"			AND (str_to_date(pf.data_publicacao, '%d/%m/%Y') 										\n"
-							+	"					BETWEEN str_to_date('"+dataInicial+"', '%d/%m/%Y') 								\n"
-			  				+	"						AND str_to_date('"+DateConversor.DateToString(new Date())+"', '%d/%m/%Y'))	\n";
+			selectTableSQL  +=	"			AND (pf.data_publicacao 										\n"
+							+	"					BETWEEN '"+dataInicial+"' 								\n"
+			  				+	"						AND '"+DateConversor.getJavaSqlTimestamp(new Date())+"')	\n";
 		}
 			selectTableSQL  +=	"		 GROUP BY pf.id_pessoa											\n"
 							+	"		 ) consulta 													\n";

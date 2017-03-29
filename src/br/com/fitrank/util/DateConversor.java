@@ -1,11 +1,10 @@
 package br.com.fitrank.util;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import java.sql.Timestamp;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
@@ -69,6 +68,27 @@ public class DateConversor {
 		return gc.getTime();
 	}
 	
+	public static Timestamp getPreviousYearFromSqlTimestamp(Timestamp timestamp){
+		gc = new GregorianCalendar();
+		gc.setTimeInMillis(timestamp.getTime());
+		gc.add(Calendar.YEAR, -1);
+		return new Timestamp(gc.getTimeInMillis());
+	}
+	
+	public static Timestamp getPreviousMonthFromSqlTimestamp(Timestamp timestamp){
+		gc = new GregorianCalendar();
+		gc.setTimeInMillis(timestamp.getTime());
+		gc.add(Calendar.MONTH, -1);
+		return new Timestamp(gc.getTimeInMillis());
+	}
+	
+	public static Timestamp getPreviousWeekFromSqlTimestamp(Timestamp timestamp){
+		gc = new GregorianCalendar();
+		gc.setTimeInMillis(timestamp.getTime());
+		gc.add(Calendar.WEEK_OF_YEAR, -1);
+		return new Timestamp(gc.getTimeInMillis());
+	}
+	
 	public static String getPreviousYearString(){
 		gc = new GregorianCalendar();
 		gc.add(Calendar.YEAR, -1);
@@ -117,6 +137,12 @@ public class DateConversor {
 		return FORMATTER_MYSQL_DATETIME.format(gc.getTime());
 	}
 	
+	public static Timestamp getPreviousMinutesTimestamp(int minutes){
+		gc = new GregorianCalendar();
+		gc.add(Calendar.MINUTE, -minutes);
+		return new Timestamp(gc.getTimeInMillis());
+	}
+	
 	public static Date getPreviousMinutesDate(int minutes){
 		gc = new GregorianCalendar();
 		gc.add(Calendar.MINUTE, -minutes);
@@ -127,6 +153,11 @@ public class DateConversor {
 		gc = new GregorianCalendar();
 		gc.setTime(date);
 		return gc;
+	}
+	
+	public static Date convertGregorianToDate(GregorianCalendar gc) {
+		Date date = gc.getTime();
+		return date;
 	}
 	
 	public static int getHourFromDate(Date date) {
@@ -143,7 +174,6 @@ public class DateConversor {
 	
 	public static int getDaysDifference(Date date1, Date date2) {
 		
-		
 		long daysDifference =  date1.getTime()/1000 - date2.getTime()/1000;
 		 
 		return (int) TimeUnit.DAYS.convert(daysDifference, TimeUnit.SECONDS);
@@ -155,4 +185,19 @@ public class DateConversor {
 		return Timestamp.valueOf(FORMATTER_MYSQL_DATETIME.format(gc.getTime()));
 	}
 	
+	public static Date convertTimestampToDate(Timestamp timestamp) {
+		gc = new GregorianCalendar();
+		gc.setTimeInMillis( timestamp.getTime() );
+		return gc.getTime();
+	}
+	
+	public static Timestamp removeTimestampHourPart(Timestamp timestamp) {
+		gc = new GregorianCalendar();
+		gc.setTimeInMillis(timestamp.getTime());
+		gc.set(Calendar.HOUR_OF_DAY, 0);
+		gc.set(Calendar.MINUTE, 0);
+		gc.set(Calendar.SECOND, 0);
+		gc.set(Calendar.MILLISECOND, 0);
+		return new Timestamp(gc.getTimeInMillis()); 
+	}
 }

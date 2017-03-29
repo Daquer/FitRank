@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import br.com.fitrank.modelo.Aplicativo;
@@ -282,23 +282,27 @@ public class AplicativoDAO {
 		PreparedStatement preparedStatement = null;
 		List<AplicativoTela> listaAplicativoTela = new ArrayList<AplicativoTela>();
 		
-		String dataInicial = "";
-		String dataFinal = "";
+		Timestamp dataInicialTimestamp = null;
+		Timestamp dataFinalTimestamp = null;
 		
 		if(ConstantesFitRank.DIA.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial = ranking.getData_ranking();
-			dataFinal = ranking.getData_ranking();
+			dataInicialTimestamp = ranking.getData_ranking();
+			dataFinalTimestamp = ranking.getData_ranking();
 		} else if(ConstantesFitRank.SEMANA.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial =  DateConversor.getPreviousWeekStringFromStringDate(ranking.getData_ranking());
-			dataFinal = ranking.getData_ranking();
+			dataInicialTimestamp =  DateConversor.getPreviousWeekFromSqlTimestamp(ranking.getData_ranking());
+			dataFinalTimestamp = ranking.getData_ranking();
 		} else if(ConstantesFitRank.MES.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial =  DateConversor.getPreviousMonthStringFromStringDate(ranking.getData_ranking());
-			dataFinal = ranking.getData_ranking();
+			dataInicialTimestamp =  DateConversor.getPreviousMonthFromSqlTimestamp(ranking.getData_ranking());
+			dataFinalTimestamp = ranking.getData_ranking();
 		} else if(ConstantesFitRank.ANO.equalsIgnoreCase(configuracao.getIntervaloData())){
-			dataInicial = DateConversor.getPreviousYearStringFromStringDate(ranking.getData_ranking());
-			dataFinal = ranking.getData_ranking();
+			dataInicialTimestamp = DateConversor.getPreviousYearFromSqlTimestamp(ranking.getData_ranking());
+			dataFinalTimestamp = ranking.getData_ranking();
 		}
-	
+		
+		if (dataInicialTimestamp != null) {
+			dataInicialTimestamp = DateConversor.removeTimestampHourPart(dataInicialTimestamp);
+		}
+		
 		//Nao foi possivel utilizar parametros do preparedStatement nesta consulta!!!
 		String selectTableSQL = "SELECT pf.id_app,												\n"
 							+	"       a.nome,													\n"
@@ -309,15 +313,18 @@ public class AplicativoDAO {
 							+	" WHERE p.id_usuario = '"+rankingPessoaTela.getId_pessoa()+"'										\n"
 							+	"   AND p.id_usuario = pf.id_pessoa																	\n"
 							+	"   AND pf.id_app = a.id_aplicativo																	\n";
-		if(!ConstantesFitRank.MODALIDADE_TUDO.equals(configuracao.getModalidade())){
+		if(!ConstantesFitRank.MODALIDADE_TUDO.equals(configuracao.getModalidade())) {
 			selectTableSQL  +=  "   AND pf.modalidade = '"+configuracao.getModalidade()+"'											\n";
 		}
-		if(!ConstantesFitRank.SEMPRE.equalsIgnoreCase(configuracao.getIntervaloData())){
-			selectTableSQL  +=	"   AND (str_to_date(pf.data_publicacao, '%d/%m/%Y')  												\n"
-							+	"                    BETWEEN str_to_date('"+dataInicial+"', '%d/%m/%Y') 							\n"
-			  				+	"                        AND str_to_date('"+dataFinal+"', '%d/%m/%Y'))	\n";
+		if(!ConstantesFitRank.SEMPRE.equalsIgnoreCase(configuracao.getIntervaloData())) {
+			selectTableSQL  +=	"   AND pf.data_publicacao  												\n"
+//							+	"                    BETWEEN str_to_date('"+dataInicial+"', '%d/%m/%Y') 							\n"
+//			  				+	"                        AND str_to_date('"+dataFinal+"', '%d/%m/%Y'))	\n";
+							+	"                    BETWEEN '"+dataInicialTimestamp+"' 							\n"
+							+	"                        AND '"+dataFinalTimestamp+"'	\n";
 		}
-			selectTableSQL  +=	"GROUP BY pf.id_app											\n";
+			selectTableSQL  +=	"GROUP BY pf.id_app "
+							+ 	"ORDER BY atividades desc";
 	
 		try {
 			dbConnection = conexao;

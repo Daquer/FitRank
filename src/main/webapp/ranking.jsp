@@ -103,6 +103,7 @@
 <%-- 			var idUsuario = '<%=(String) request.getAttribute("id")%>'; --%>
 <%-- 			var json =  JSON.parse('<%=(String) response.getHeader("json")%>'); --%>
 			var json;
+			var debug;
 			var modalidadeRequest = '<%=(String) request.getAttribute("modalidade")%>';
 			var modoRequest = '<%=(String) request.getAttribute("modo")%>';
 			var periodoRequest = '<%=(String) request.getAttribute("periodo")%>';
@@ -508,6 +509,8 @@
 	//				   			success: function( data, textStatus, jqXHR){
 					complete: function(data, jqXHR, textStatus) {
 		   				$(".tableRank>tbody>.rankingLine").remove();
+		   				
+		   				debug = data.responseText;
 		   				
 		   				json = JSON.parse(data.responseText);
 		   				

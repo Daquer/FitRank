@@ -378,7 +378,7 @@ public class CarregaRanking extends HttpServlet {
 			postFitness.setId_publicacao(postFit.getId());
 			postFitness.setId_pessoa(facebookUser.getId());
 			postFitness.setId_app(postFit.getApplication().getId());
-			postFitness.setData_publicacao(DateConversor.DateToString(postFit.getPublishTime()));
+			postFitness.setData_publicacao(DateConversor.getJavaSqlTimestamp(postFit.getPublishTime()));
 			postFitness.setUrl(postFit.getDataCourse().getCourse().getUrl());
 			postFitness.setModalidade(modalidade);
 

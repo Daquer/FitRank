@@ -1,5 +1,7 @@
 package br.com.fitrank.modelo;
 
+import java.sql.Timestamp;
+
 /** Entity(name="post_fitness")
  *
  */
@@ -9,17 +11,13 @@ public class PostFitness implements Comparable<Object> {
 	
 	private String  id_pessoa;
 	
-	private String  data_inicio_corrida;
-	
-	private String  data_fim_corrida;
-	
 	private String 	id_app;
 	
 	private double	distancia_percorrida;
 	
 	private double 	duracao;
 	
-	private String 	data_publicacao;
+	private Timestamp data_publicacao;
 	
 	private String  url;
 	
@@ -41,22 +39,6 @@ public class PostFitness implements Comparable<Object> {
 
 	public void setId_pessoa(String id_pessoa) {
 		this.id_pessoa = id_pessoa;
-	}
-
-	public String getData_inicio_corrida() {
-		return data_inicio_corrida;
-	}
-
-	public void setData_inicio_corrida(String data_inicio_corrida) {
-		this.data_inicio_corrida = data_inicio_corrida;
-	}
-
-	public String getData_fim_corrida() {
-		return data_fim_corrida;
-	}
-
-	public void setData_fim_corrida(String data_fim_corrida) {
-		this.data_fim_corrida = data_fim_corrida;
 	}
 
 	public String getId_app() {
@@ -83,11 +65,11 @@ public class PostFitness implements Comparable<Object> {
 		this.duracao = duracao;
 	}
 
-	public String getData_publicacao() {
+	public Timestamp getData_publicacao() {
 		return data_publicacao;
 	}
 
-	public void setData_publicacao(String data_publicacao) {
+	public void setData_publicacao(Timestamp data_publicacao) {
 		this.data_publicacao = data_publicacao;
 	}
 

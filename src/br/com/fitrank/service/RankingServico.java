@@ -14,7 +14,7 @@ public class RankingServico {
 	
 	public Ranking adicionaRanking(Ranking ranking) {
 		rankingDAO = new RankingDAO();
-		ranking.setData_ranking(DateConversor.DateToString(new Date()));
+		ranking.setData_ranking(DateConversor.getJavaSqlTimestamp(new Date()));
 		
 		try {
 			ranking = rankingDAO.adicionaRanking(ranking);

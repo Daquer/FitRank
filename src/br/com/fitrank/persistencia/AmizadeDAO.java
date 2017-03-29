@@ -39,7 +39,7 @@ public class AmizadeDAO {
 
 			preparedStatement.setString(++i, amizade.getId_pessoa());
 			preparedStatement.setString(++i, amizade.getId_amigo());
-			preparedStatement.setString(++i, DateConversor.DateToString(amizade.getData_amizade()));
+			preparedStatement.setTimestamp(++i, amizade.getData_amizade());
 
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -136,7 +136,7 @@ public class AmizadeDAO {
 				amizade = new Amizade();
 				amizade.setId_pessoa(rs.getString("id_pessoa"));
 				amizade.setId_amigo(rs.getString("id_amigo"));
-				amizade.setData_amizade(DateConversor.StringToDate(rs.getString("data_amizade")));
+				amizade.setData_amizade(rs.getTimestamp("data_amizade"));
 				listaAmizades.add(amizade);
 			}
 
@@ -190,7 +190,7 @@ public class AmizadeDAO {
 				amizadeResult = new Amizade();
 				amizadeResult.setId_pessoa(rs.getString("id_pessoa"));
 				amizadeResult.setId_amigo(rs.getString("id_amigo"));
-				amizadeResult.setData_amizade(DateConversor.StringToDate(rs.getString("data_amizade")));
+				amizadeResult.setData_amizade(rs.getTimestamp("data_amizade"));
 				amizadeResult.setAtivo(rs.getString("ativo"));
 			}
 

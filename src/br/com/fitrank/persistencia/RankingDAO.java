@@ -38,7 +38,7 @@ public class RankingDAO {
 			int i = 0;
 			
 			preparedStatement.setInt(++i, ranking.getId_configuracao());
-			preparedStatement.setString(++i, ranking.getData_ranking()); 
+			preparedStatement.setTimestamp(++i, ranking.getData_ranking()); 
 
 			// execute insert SQL statement
 			preparedStatement.executeUpdate();
@@ -85,7 +85,7 @@ public class RankingDAO {
 			int i = 0;
 			
 			preparedStatement.setInt(++i, ranking.getId_configuracao());
-			preparedStatement.setString(++i, ranking.getData_ranking());
+			preparedStatement.setTimestamp(++i, ranking.getData_ranking());
 			preparedStatement.setInt(++i, ranking.getId_ranking());
 			
 	
@@ -134,7 +134,7 @@ public class RankingDAO {
 				
 				ranking.setId_ranking(rs.getInt("id_ranking"));
 				ranking.setId_configuracao(rs.getInt("id_configuracao"));
-				ranking.setData_ranking(rs.getString("data_ranking"));
+				ranking.setData_ranking(rs.getTimestamp("data_ranking"));
 				
 			}
 	
