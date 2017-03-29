@@ -79,7 +79,7 @@ public class InitUser extends HttpServlet {
 			   pessoa.setId_usuario(facebookUser.getId());
 		   }
 			
-		   if(facebookUser.getFirstName()!=null){
+		   if(facebookUser.getName()!=null){
 			   pessoa.setNome(facebookUser.getName());
 		   }
 		   
