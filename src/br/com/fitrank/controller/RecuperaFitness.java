@@ -19,6 +19,7 @@ import com.restfb.Connection;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
+import com.restfb.Version;
 
 //@WebServlet("/RecuperaFitness")
 public class RecuperaFitness extends HttpServlet {
@@ -37,7 +38,7 @@ public class RecuperaFitness extends HttpServlet {
 	}
 	
     protected void inicia(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	FacebookClient facebookClient = new DefaultFacebookClient(request.getParameter("token"));
+    	FacebookClient facebookClient = new DefaultFacebookClient(request.getParameter("token"), Version.LATEST);
     	String categoria = (String) request.getParameter("categoria");
     	String jsoupParam = (String) request.getParameter("jsoup");
     	String idRun = (String) request.getParameter("idRun");

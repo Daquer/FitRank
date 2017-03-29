@@ -14,6 +14,7 @@ import br.com.fitrank.util.ConstantesFitRank;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
+import com.restfb.Version;
 import com.restfb.types.User;
 
 /**
@@ -40,7 +41,7 @@ public class SalvaConfiguracao extends HttpServlet {
     	
     	PrintWriter out;
     	
-    	FacebookClient facebookClient = new DefaultFacebookClient(request.getParameter("token"));
+    	FacebookClient facebookClient = new DefaultFacebookClient(request.getParameter("token"), Version.LATEST);
     	
     	User facebookUser = facebookClient.fetchObject("me", User.class);
     	

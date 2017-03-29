@@ -20,6 +20,7 @@ import br.com.fitrank.util.Logger;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
+import com.restfb.Version;
 import com.restfb.FacebookClient.AccessToken;
 import com.restfb.Parameter;
 import com.restfb.json.JsonArray;
@@ -55,11 +56,11 @@ public class JobExtracao implements Job {
 		    
 		    pessoas = pessoaServico.leTodasPessoasServico();
 		    
-		    AccessToken accessToken = new DefaultFacebookClient().obtainAppAccessToken(ConstantesFitRank.ID_APP_FITRANK, ConstantesFitRank.app_secret);
+		    AccessToken accessToken = new DefaultFacebookClient(Version.LATEST).obtainAppAccessToken(ConstantesFitRank.ID_APP_FITRANK, ConstantesFitRank.app_secret);
 		    
 		    Logger.insertLog("Access token de aplicativo obtido");
 		    
-		    FacebookClient facebookClient = new DefaultFacebookClient(accessToken.getAccessToken());
+		    FacebookClient facebookClient = new DefaultFacebookClient(accessToken.getAccessToken(), Version.LATEST);
 		    
 		    for(Pessoa pessoa: pessoas) {
 		    	//Foto de perfil

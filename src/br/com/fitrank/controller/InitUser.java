@@ -24,6 +24,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.FacebookClient.AccessToken;
 import com.restfb.Parameter;
+import com.restfb.Version;
 import com.restfb.json.JsonObject;
 import com.restfb.types.User;
 
@@ -53,14 +54,14 @@ public class InitUser extends HttpServlet {
 		   index = request.getParameter("index");
 		   
 		   Logger.insertLog("pre obtencao AppToken");
-		   AccessToken accessToken = new DefaultFacebookClient().obtainExtendedAccessToken(ConstantesFitRank.ID_APP_FITRANK,
+		   AccessToken accessToken = new DefaultFacebookClient(Version.LATEST).obtainExtendedAccessToken(ConstantesFitRank.ID_APP_FITRANK,
 				   prop.getProperty("app_secret"), request.getParameter("token"));
 		   Logger.insertLog("pos obtencao AppToken");
 		   
 		   String token = accessToken.getAccessToken();
 		   
 		   Logger.insertLog("pre obtencao UserToken");
-		   FacebookClient facebookClient = new DefaultFacebookClient(token);
+		   FacebookClient facebookClient = new DefaultFacebookClient(token, Version.LATEST);
 		   Logger.insertLog("pos obtencao UserToken");
 		   
 		   Logger.insertLog("pre fetchObject/me");
@@ -95,7 +96,7 @@ public class InitUser extends HttpServlet {
 		   }
 		   
 		   if( picture.getJsonObject("data").getString("url") != null){
-			   pessoa.setUrl_foto( picture.getJsonObject("data").getString("url") );
+			   pessoa.setUrl_foto( picture. getJsonObject("data").getString("url") );
 		   }
 		   
 		   Pessoa usuarioExistente = pessoaServico.lePessoaServico(facebookUser);
