@@ -64,17 +64,17 @@ public class JobExtracao implements Job {
 		    
 		    for(Pessoa pessoa: pessoas) {
 		    	//Foto de perfil
-		    	JsonObject picture = facebookClient.fetchObject(pessoa.getId_usuario() + "/picture", JsonObject.class, Parameter.with("type", "normal"), Parameter.with("redirect", "false"));
+		    	JsonObject picture = facebookClient.fetchObject(pessoa.getIdUsuario() + "/picture", JsonObject.class, Parameter.with("type", "normal"), Parameter.with("redirect", "false"));
 		    	String url = picture.getJsonObject("data").getString("url");
 		    
-		    	if (pessoa.getUrl_foto() == null || !pessoa.getUrl_foto().equals(url)) {
-		    		pessoa.setUrl_foto(url);
+		    	if (pessoa.getUrlFoto() == null || !pessoa.getUrlFoto().equals(url)) {
+		    		pessoa.setUrlFoto(url);
 		    	
 		    		pessoaServico.atualizaPessoaServico(pessoa, false);
 		    	}
 		    	
 		    	//Courses
-		    	coursesPessoa = courseServico.leCoursePorIdPessoa(pessoa.getId_usuario());
+		    	coursesPessoa = courseServico.leCoursePorIdPessoa(pessoa.getIdUsuario());
 		    	localizacoesSalvasNoBanco.addAll( (ArrayList<Localizacao>) localizacaoServico.leLocalizacoesPorIdsCourse(coursesPessoa));
 //		    	localizacoesNaoInserir.addAll(localizacoesPessoa); 
 		    	
@@ -87,9 +87,9 @@ public class JobExtracao implements Job {
 		    		
 		    		
 		    		if (i % 50 == 0){
-		    			coursesStr = course.getId_course();
+		    			coursesStr = course.getIdCourse();
 		    		} else {
-		    			coursesStr += "," + course.getId_course();
+		    			coursesStr += "," + course.getIdCourse();
 		    		}
 		    	
 		    		if (i == courseLimit - 1 || i == coursesPessoa.size() - 1){
@@ -129,7 +129,7 @@ public class JobExtracao implements Job {
 				    		} finally {
 				    			Course courseDB = new Course();
 				    			
-				    			courseDB.setId_course(courseId);
+				    			courseDB.setIdCourse(courseId);
 				    			
 				    			if (distanceValueDbl != 0.0) { 
 				    				courseDB.setDistancia(Float.parseFloat(distanceValueDbl.toString()));
@@ -172,7 +172,7 @@ public class JobExtracao implements Job {
 							    			localizacaoDB.setLatitude(latitude);
 							    			localizacaoDB.setLongitude(longitude);
 							    			localizacaoDB.setAltitude(altitude);
-							    			localizacaoDB.setId_course(courseId);
+							    			localizacaoDB.setIdCourse(courseId);
 							    			localizacaoDB.setRitmo(ritmo);
 							    			
 							    			localizacoesDB.add(localizacaoDB);

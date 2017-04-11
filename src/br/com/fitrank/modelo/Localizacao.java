@@ -6,15 +6,15 @@ public class Localizacao implements Comparable<Object> {
 	private double 	longitude;
 	private double  altitude;
 	private double  ritmo;
-	private String  id_course;
-	private int 	id_localizacao;
+	private String  idCourse;
+	private int 	idLocalizacao;
 	
 
-	public String getId_course() {
-		return id_course;
+	public String getIdCourse() {
+		return idCourse;
 	}
-	public void setId_course(String id_course) {
-		this.id_course = id_course;
+	public void setIdCourse(String idCourse) {
+		this.idCourse = idCourse;
 	}
 	public double getLatitude() {
 		return latitude;
@@ -40,11 +40,11 @@ public class Localizacao implements Comparable<Object> {
 	public void setRitmo(double ritmo) {
 		this.ritmo = ritmo;
 	}
-	public int getId_localizacao() {
-		return id_localizacao;
+	public int getIdLocalizacao() {
+		return idLocalizacao;
 	}
-	public void setId_localizacao(int id_localizacao) {
-		this.id_localizacao = id_localizacao;
+	public void setIdLocalizacao(int idLocalizacao) {
+		this.idLocalizacao = idLocalizacao;
 	}	
 	
 	@Override
@@ -52,7 +52,7 @@ public class Localizacao implements Comparable<Object> {
 		if(o != null && o instanceof Localizacao){
 			Localizacao localizacao = (Localizacao) o;
 			
-			if(localizacao.id_course.equals(this.id_course) && localizacao.latitude == this.latitude && localizacao.longitude == this.longitude && localizacao.altitude == this.altitude && localizacao.ritmo == this.ritmo){
+			if(localizacao.idCourse.equals(this.idCourse) && localizacao.latitude == this.latitude && localizacao.longitude == this.longitude && localizacao.altitude == this.altitude && localizacao.ritmo == this.ritmo){
 				return 0;
 			}
 		}
@@ -65,7 +65,7 @@ public class Localizacao implements Comparable<Object> {
 		if(o != null && o instanceof Localizacao){
 			Localizacao localizacao = (Localizacao) o;
 			
-			if(localizacao.id_course.equals(this.id_course) && localizacao.latitude == this.latitude && localizacao.longitude == this.longitude && localizacao.altitude == this.altitude && localizacao.ritmo == this.ritmo){
+			if(localizacao.idCourse.equals(this.idCourse) && localizacao.latitude == this.latitude && localizacao.longitude == this.longitude && localizacao.altitude == this.altitude && localizacao.ritmo == this.ritmo){
 				return true;
 			}
 		}

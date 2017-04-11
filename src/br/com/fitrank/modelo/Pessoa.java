@@ -8,46 +8,44 @@ import java.util.List;
  */
 public class Pessoa {
 //	Column(name="id_usuario", Primary Key)
-	private String id_usuario;
+	private String idUsuario;
 //	Column(name="data_cadastro")
-	private Timestamp data_cadastro;
+	private Timestamp dataCadastro;
 //	Column(name="nome")
 	private String nome;
 //	Column(name="data_ultimo_login")	
-	private Timestamp data_ultimo_login;
+	private Timestamp dataUltimoLogin;
 //	Column(name="data_ultimo_login")	
-	private Timestamp data_ultima_atualizacao_runs;
+	private Timestamp dataUltimaAtualizacaoRuns;
 //	Column(name="data_ultimo_login")	
-	private Timestamp data_ultima_atualizacao_walks;
+	private Timestamp dataUltimaAtualizacaoWalks;
 //	Column(name="data_ultimo_login")	
-	private Timestamp data_ultima_atualizacao_bikes;
-//	Column(name="rank_anual")	
-	private String rank_anual;
+	private Timestamp dataUltimaAtualizacaoBikes;
 //	Column(name="genero")
 	private String genero;
 //	Column(name="data_nascimento")
-	private Timestamp data_nascimento;
+	private Timestamp dataNascimento;
 //	Column(name="url_foto")
-	private String url_foto;
+	private String urlFoto;
 	
 	private Configuracao configuracaoFavorita;
 
 	private List<Pessoa> amigos;
 
-	public String getId_usuario() {
-		return id_usuario;
+	public String getIdUsuario() {
+		return idUsuario;
 	}
 
-	public void setId_usuario(String id_usuario) {
-		this.id_usuario = id_usuario;
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
-	public Timestamp getData_cadastro() {
-		return data_cadastro;
+	public Timestamp getDataCadastro() {
+		return dataCadastro;
 	}
 
-	public void setData_cadastro(Timestamp data_cadastro) {
-		this.data_cadastro = data_cadastro;
+	public void setData_cadastro(Timestamp dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
 	public String getNome() {
@@ -58,44 +56,36 @@ public class Pessoa {
 		this.nome = nome;
 	}
 
-	public Timestamp getData_ultimo_login() {
-		return data_ultimo_login;
+	public Timestamp getDataUltimoLogin() {
+		return dataUltimoLogin;
 	}
 
-	public void setData_ultimo_login(Timestamp data_ultimo_login) {
-		this.data_ultimo_login = data_ultimo_login;
+	public void setData_ultimo_login(Timestamp dataUltimoLogin) {
+		this.dataUltimoLogin = dataUltimoLogin;
 	}
 
-	public Timestamp getData_ultima_atualizacao_runs() {
-		return data_ultima_atualizacao_runs;
+	public Timestamp getDataUltimaAtualizacaoRuns() {
+		return dataUltimaAtualizacaoRuns;
 	}
 
-	public void setData_ultima_atualizacao_runs(Timestamp data_ultima_atualizacao_runs) {
-		this.data_ultima_atualizacao_runs = data_ultima_atualizacao_runs;
+	public void setDataUltimaAtualizacaoRuns(Timestamp dataUltimaAtualizacaoRuns) {
+		this.dataUltimaAtualizacaoRuns = dataUltimaAtualizacaoRuns;
 	}
 
-	public Timestamp getData_ultima_atualizacao_walks() {
-		return data_ultima_atualizacao_walks;
+	public Timestamp getDataUltimaAtualizacaoWalks() {
+		return dataUltimaAtualizacaoWalks;
 	}
 
-	public void setData_ultima_atualizacao_walks(Timestamp data_ultima_atualizacao_walks) {
-		this.data_ultima_atualizacao_walks = data_ultima_atualizacao_walks;
+	public void setDataUltimaAtualizacaoWalks(Timestamp dataUltimaAtualizacaoWalks) {
+		this.dataUltimaAtualizacaoWalks = dataUltimaAtualizacaoWalks;
 	}
 
-	public Timestamp getData_ultima_atualizacao_bikes() {
-		return data_ultima_atualizacao_bikes;
+	public Timestamp getDataUltimaAtualizacaoBikes() {
+		return dataUltimaAtualizacaoBikes;
 	}
 
-	public void setData_ultima_atualizacao_bikes(Timestamp data_ultima_atualizacao_bikes) {
-		this.data_ultima_atualizacao_bikes = data_ultima_atualizacao_bikes;
-	}
-
-	public String getRank_anual() {
-		return rank_anual;
-	}
-
-	public void setRank_anual(String rank_anual) {
-		this.rank_anual = rank_anual;
+	public void setDataUltimaAtualizacaoBikes(Timestamp dataUltimaAtualizacaoBikes) {
+		this.dataUltimaAtualizacaoBikes = dataUltimaAtualizacaoBikes;
 	}
 
 	public Configuracao getConfiguracaoFavorita() {
@@ -122,20 +112,20 @@ public class Pessoa {
 		this.genero = genero;
 	}
 
-	public Timestamp getData_nascimento() {
-		return data_nascimento;
+	public Timestamp getDataNascimento() {
+		return dataNascimento;
 	}
 
-	public void setData_nascimento(Timestamp data_nascimento) {
-		this.data_nascimento = data_nascimento;
+	public void setDataNascimento(Timestamp dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
-	public String getUrl_foto() {
-		return url_foto;
+	public String getUrlFoto() {
+		return urlFoto;
 	}
 
-	public void setUrl_foto(String url_foto) {
-		this.url_foto = url_foto;
+	public void setUrlFoto(String urlFoto) {
+		this.urlFoto = urlFoto;
 	}
 	
 }

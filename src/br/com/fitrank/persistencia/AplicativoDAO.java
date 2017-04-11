@@ -43,9 +43,9 @@ public class AplicativoDAO {
 
 			int i = 0;
 
-			preparedStatement.setString(++i, aplicativo.getId_aplicativo());
+			preparedStatement.setString(++i, aplicativo.getIdAplicativo());
 			preparedStatement.setString(++i, aplicativo.getNome());
-			preparedStatement.setString(++i, aplicativo.getUrl_site());
+			preparedStatement.setString(++i, aplicativo.getUrlSite());
 
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -90,9 +90,9 @@ public class AplicativoDAO {
 			int i = 0;
 			
 			for (Aplicativo aplicativo : aplicativos) {
-				preparedStatement.setString(++i, aplicativo.getId_aplicativo());
+				preparedStatement.setString(++i, aplicativo.getIdAplicativo());
 				preparedStatement.setString(++i, aplicativo.getNome());
-				preparedStatement.setString(++i, aplicativo.getUrl_site());
+				preparedStatement.setString(++i, aplicativo.getUrlSite());
 			}
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -133,8 +133,8 @@ public class AplicativoDAO {
 			int i = 0;
 
 			preparedStatement.setString(++i, aplicativo.getNome());
-			preparedStatement.setString(++i, aplicativo.getUrl_site());
-			preparedStatement.setString(++i, aplicativo.getId_aplicativo());
+			preparedStatement.setString(++i, aplicativo.getUrlSite());
+			preparedStatement.setString(++i, aplicativo.getIdAplicativo());
 
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -186,9 +186,9 @@ public class AplicativoDAO {
 			
 			while (rs.next()) {
 				aplicativo = new Aplicativo();
-				aplicativo.setId_aplicativo(rs.getString("id_aplicativo"));
+				aplicativo.setIdAplicativo(rs.getString("id_aplicativo"));
 				aplicativo.setNome(rs.getString("nome"));
-				aplicativo.setUrl_site(rs.getString("url_site"));
+				aplicativo.setUrlSite(rs.getString("url_site"));
 			}
 
 		} catch (SQLException e) {
@@ -238,7 +238,7 @@ public class AplicativoDAO {
 			int i = 0;
 
 			for (Aplicativo aplicativo : aplicativos) {
-				preparedStatement.setString(++i, aplicativo.getId_aplicativo());
+				preparedStatement.setString(++i, aplicativo.getIdAplicativo());
 			}
 
 			// execute select SQL stetement
@@ -249,9 +249,9 @@ public class AplicativoDAO {
 			while (rs.next()) {
 				Aplicativo aplicativo = new Aplicativo();
 				
-				aplicativo.setId_aplicativo(rs.getString("id_aplicativo"));
+				aplicativo.setIdAplicativo(rs.getString("id_aplicativo"));
 				aplicativo.setNome(rs.getString("nome"));
-				aplicativo.setUrl_site(rs.getString("url_site"));
+				aplicativo.setUrlSite(rs.getString("url_site"));
 				
 				aplicativosReturn.add(aplicativo);
 
@@ -335,7 +335,7 @@ public class AplicativoDAO {
 
 			while (rs.next()) {
 				aplicativoTela = new AplicativoTela();
-				aplicativoTela.setId_aplicativo(rs.getString("id_app"));
+				aplicativoTela.setIdAplicativo(rs.getString("id_app"));
 				aplicativoTela.setNome(rs.getString("nome"));
 				aplicativoTela.setQuantidadeAtividades(rs.getInt("atividades"));
 				listaAplicativoTela.add(aplicativoTela);

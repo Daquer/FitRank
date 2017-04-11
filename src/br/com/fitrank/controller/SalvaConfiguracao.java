@@ -31,7 +31,6 @@ public class SalvaConfiguracao extends HttpServlet {
 	String turno = null;
 	String periodo = null;
 	String fav = null;
-	String padrao = null;
 	
     public SalvaConfiguracao() {
     	super();
@@ -59,8 +58,6 @@ public class SalvaConfiguracao extends HttpServlet {
         	
         	configuracao.setModalidade(modalidade);
         	configuracao.setModo(modo);
-        	configuracao.setDiaNoite(turno);
-        	configuracao.setIntervaloData(periodo);
         	configuracao.setFavorito(fav.equals("S") ? true : false);
         	configuracao.setIdPessoa(userID);
         	
@@ -72,15 +69,8 @@ public class SalvaConfiguracao extends HttpServlet {
     	    		configuracao.setIdConfiguracao(configFav.getIdConfiguracao());
     	    		configuracaoServico.atualizaConfiguracao(configuracao);
     	    	}
-        	} else if (padrao.equals("S")) {
-        		Configuracao configPadrao = configuracaoServico.leConfiguracaoPadraoModalidade(userID, modalidade);
-        		if (configPadrao == null) {
-    	    		configuracaoServico.adicionaConfiguracao(configuracao);
-    	    	} else {
-    	    		configuracao.setIdConfiguracao(configPadrao.getIdConfiguracao());
-    	    		configuracaoServico.atualizaConfiguracao(configuracao);
-    	    	}
         	}
+        	
         	mensagem = "Ranking favorito salvo com sucesso";
         	
     	} else {

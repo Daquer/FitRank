@@ -34,7 +34,7 @@ public class ImagemRankingDAO {
 
 			int i = 0;
 			
-			preparedStatement.setInt(++i, imagemRanking.getId_ranking());
+			preparedStatement.setInt(++i, imagemRanking.getIdRanking());
 			preparedStatement.setBlob(++i, imagemRanking.getImagem()); 
 
 			// execute insert SQL statement
@@ -79,7 +79,7 @@ public class ImagemRankingDAO {
 			
 			if (rs.next()) {
 				imagemRanking = new ImagemRanking();
-				imagemRanking.setId_ranking(rs.getInt("id_ranking"));
+				imagemRanking.setIdRanking(rs.getInt("id_ranking"));
 				imagemRanking.setImagem(rs.getBlob("imagem"));
 				
 			}

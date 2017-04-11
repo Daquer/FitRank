@@ -125,7 +125,6 @@ public class CarregaRanking extends HttpServlet {
 	    	configuracaoRanking.setModalidade(modalidade);
 			configuracaoRanking.setIntervaloData(periodo);
 			configuracaoRanking.setFavorito(false);
-			configuracaoRanking.setPadraoModalidade(false);
 			configuracaoRanking.setModo(modo);
 			
 			listRankingPessoas = rankingPessoaServico.geraRanking(configuracaoRanking);
@@ -242,9 +241,9 @@ public class CarregaRanking extends HttpServlet {
     private Date handleUltimaAtividade(String modalidade, FacebookClient facebookClient, User facebookUser, String atualizarTudo) {
 		Pessoa pessoa = pessoaServico.lePessoaServico(facebookUser);
 		
-		Date ultimoWalk = pessoa.getData_ultima_atualizacao_walks();
-		Date ultimoRuns = pessoa.getData_ultima_atualizacao_runs();
-		Date ultimoBikes = pessoa.getData_ultima_atualizacao_bikes();
+		Date ultimoWalk = pessoa.getDataUltimaAtualizacaoWalks();
+		Date ultimoRuns = pessoa.getDataUltimaAtualizacaoRuns();
+		Date ultimoBikes = pessoa.getDataUltimaAtualizacaoBikes();
 		Date xMinutosAtras = DateConversor.getPreviousMinutesDate(ConstantesFitRank.LIMITE_MINUTOS_ATUALIZACAO_USUARIOS);
 		
 		if(myId.equals(facebookUser.getId()) && !"S".equals(atualizarTudo)) {
@@ -267,20 +266,20 @@ public class CarregaRanking extends HttpServlet {
 				if("S".equals(atualizarTudo) || ultimoWalk == null || ultimoWalk.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, ultimoWalk, atualizarTudo);
 				
-				ultimoWalk = pessoa.getData_ultima_atualizacao_walks();
+				ultimoWalk = pessoa.getDataUltimaAtualizacaoWalks();
 				return ultimoWalk;
 				
 			case ConstantesFitRank.MODALIDADE_CORRIDA:
 				if("S".equals(atualizarTudo) || ultimoRuns == null || ultimoRuns.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CORRIDA, facebookClient, facebookUser, ultimoRuns, atualizarTudo);
 				
-				ultimoRuns = pessoa.getData_ultima_atualizacao_runs();
+				ultimoRuns = pessoa.getDataUltimaAtualizacaoRuns();
 				return ultimoRuns;
 				
 			case ConstantesFitRank.MODALIDADE_BICICLETA:
 				if("S".equals(atualizarTudo) || ultimoBikes == null || ultimoBikes.compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
 					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, ultimoBikes, atualizarTudo);
-				ultimoBikes = pessoa.getData_ultima_atualizacao_bikes();
+				ultimoBikes = pessoa.getDataUltimaAtualizacaoBikes();
 				
 				return ultimoBikes;
 				
@@ -289,23 +288,23 @@ public class CarregaRanking extends HttpServlet {
 				
 				Logger.insertLog("  INICIO Walks ");
 				
-				if("S".equals(atualizarTudo) || pessoa.getData_ultima_atualizacao_walks() == null || pessoa.getData_ultima_atualizacao_walks().compareTo(xMinutosAtras) < 0) {// Se faz mais de 30 minutos que a ultima atualizacao ocorreu
-					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_walks(), atualizarTudo);
+				if("S".equals(atualizarTudo) || pessoa.getDataUltimaAtualizacaoWalks() == null || pessoa.getDataUltimaAtualizacaoWalks().compareTo(xMinutosAtras) < 0) {// Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CAMINHADA, facebookClient, facebookUser, pessoa.getDataUltimaAtualizacaoWalks(), atualizarTudo);
 				}
 				
 				Logger.insertLog("  FIM Walks ");
 				
 				Logger.insertLog("  INICIO Runs ");
 				
-				if("S".equals(atualizarTudo) || pessoa.getData_ultima_atualizacao_runs() == null || pessoa.getData_ultima_atualizacao_runs().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
-					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CORRIDA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_runs(), atualizarTudo);
+				if("S".equals(atualizarTudo) || pessoa.getDataUltimaAtualizacaoRuns() == null || pessoa.getDataUltimaAtualizacaoRuns().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu
+					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_CORRIDA, facebookClient, facebookUser, pessoa.getDataUltimaAtualizacaoRuns(), atualizarTudo);
 				
 				Logger.insertLog("  FIM Runs ");
 				
 				Logger.insertLog("  INICIO Bikes ");
 				
-				if("S".equals(atualizarTudo) || pessoa.getData_ultima_atualizacao_bikes() == null || pessoa.getData_ultima_atualizacao_bikes().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu				
-					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, pessoa.getData_ultima_atualizacao_bikes(), atualizarTudo);
+				if("S".equals(atualizarTudo) || pessoa.getDataUltimaAtualizacaoBikes() == null || pessoa.getDataUltimaAtualizacaoBikes().compareTo(xMinutosAtras) < 0) // Se faz mais de 30 minutos que a ultima atualizacao ocorreu				
+					pessoa = executaAtualizacao(ConstantesFitRank.MODALIDADE_BICICLETA, facebookClient, facebookUser, pessoa.getDataUltimaAtualizacaoBikes(), atualizarTudo);
 				
 				Logger.insertLog("  FIM Bikes ");
 				
@@ -327,17 +326,17 @@ public class CarregaRanking extends HttpServlet {
 		
 		for(Amizade amizade : amigos){
 			try {
-				User facebookUser = facebookClient.fetchObject(amizade.getId_amigo(), User.class);
+				User facebookUser = facebookClient.fetchObject(amizade.getIdAmigo(), User.class);
 				handleUltimaAtividade(modalidade, facebookClient, facebookUser, ConstantesFitRank.CHAR_NAO);
 			} catch ( FacebookGraphException e) {
-				Logger.insertLog(e.getMessage() + " | id_amigo = " + amizade.getId_amigo());
+				Logger.insertLog(e.getMessage() + " | id_amigo = " + amizade.getIdAmigo());
 				if(e.getMessage().contains("GraphMethodException: Unsupported get request. Object with ID")) {
 					//chamar atualiza amizades com ativo = N
-					amizadeServico.desativaAmizade(idUsuario, amizade.getId_amigo());
+					amizadeServico.desativaAmizade(idUsuario, amizade.getIdAmigo());
 				}
 			}
 			
-			Logger.insertLog(i++ +" id_amigo = " + amizade.getId_amigo() + " | tamanho lista => " + amigos.size() );
+			Logger.insertLog(i++ +" id_amigo = " + amizade.getIdAmigo() + " | tamanho lista => " + amigos.size() );
 		}
 	}
     
@@ -372,9 +371,9 @@ public class CarregaRanking extends HttpServlet {
 			PostFitness postFitness = new PostFitness();
 			Course course = new Course();
 			
-			course.setId_course(postFit.getDataCourse().getCourse().getId());
-			course.setId_pessoa(facebookUser.getId());
-			course.setId_post(postFit.getId());
+			course.setIdCourse(postFit.getDataCourse().getCourse().getId());
+			course.setIdPessoa(facebookUser.getId());
+			course.setIdPost(postFit.getId());
 			
 			postFitness.setId_publicacao(postFit.getId());
 			postFitness.setId_pessoa(facebookUser.getId());
@@ -454,7 +453,7 @@ public class CarregaRanking extends HttpServlet {
 		
 		for (Course course : listCourses) {
 			for (Course courseSalvoNoBanco : coursesSalvosNoBanco) {
-				if(course.getId_course().equals(courseSalvoNoBanco.getId_course())){
+				if(course.getIdCourse().equals(courseSalvoNoBanco.getIdCourse())){
 					coursesNaoInserir.add(course);
 				}
 			}
@@ -477,7 +476,7 @@ public class CarregaRanking extends HttpServlet {
 //				CourseFB courseStrava = facebookClient.fetchObject(postsFit.get(i).getCourse().getId_course(),
 //						CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
 				
-				CourseFB courseStrava = facebookClientApp.fetchObject(postsFit.get(i).getCourse().getId_course(), CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
+				CourseFB courseStrava = facebookClientApp.fetchObject(postsFit.get(i).getCourse().getIdCourse(), CourseFB.class,Parameter.with("fields", "data{distance{value},duration{value}}"));
 				
 				postsFit.get(i).setDistancia_percorrida(PostFitnessUtil.getStravaCourseDistance(courseStrava.getData().getDistance().getValue()));
 				postsFit.get(i).setDuracao(PostFitnessUtil.getStravaCourseDuration(courseStrava.getData().getDuration().getValue()));
@@ -496,13 +495,13 @@ public class CarregaRanking extends HttpServlet {
 		Logger.insertLog(" INICIO getJavaSqlTimestamp");
 		switch (modalidade) {
 			case ConstantesFitRank.MODALIDADE_CAMINHADA:
-				pessoa.setData_ultima_atualizacao_walks(DateConversor.getJavaSqlTimestamp(new Date()));
+				pessoa.setDataUltimaAtualizacaoWalks(DateConversor.getJavaSqlTimestamp(new Date()));
 				break;
 			case ConstantesFitRank.MODALIDADE_CORRIDA:
-				pessoa.setData_ultima_atualizacao_runs(DateConversor.getJavaSqlTimestamp(new Date()));
+				pessoa.setDataUltimaAtualizacaoRuns(DateConversor.getJavaSqlTimestamp(new Date()));
 				break;
 			case ConstantesFitRank.MODALIDADE_BICICLETA:
-				pessoa.setData_ultima_atualizacao_bikes(DateConversor.getJavaSqlTimestamp(new Date()));
+				pessoa.setDataUltimaAtualizacaoBikes(DateConversor.getJavaSqlTimestamp(new Date()));
 				break;
 			default:
 				break;
@@ -537,7 +536,7 @@ public class CarregaRanking extends HttpServlet {
 			// Adiciona aplicativo à Lista
 			Aplicativo aplicativo = new Aplicativo();
 
-			aplicativo.setId_aplicativo(postFit.getApplication().getId());
+			aplicativo.setIdAplicativo(postFit.getApplication().getId());
 			aplicativo.setNome(postFit.getApplication().getName());
 
 			if (!aplicativos.contains(aplicativo)) {
@@ -559,7 +558,7 @@ public class CarregaRanking extends HttpServlet {
 				
 				for(Aplicativo app :aplicativos) {
 					for (Aplicativo appNaoInserir: aplicativosNaoInserir) {
-						if( app.getId_aplicativo().equals(appNaoInserir.getId_aplicativo()) ){
+						if( app.getIdAplicativo().equals(appNaoInserir.getIdAplicativo()) ){
 							aplicativosAux.remove(app);
 						}
 					}	
@@ -574,7 +573,7 @@ public class CarregaRanking extends HttpServlet {
 
 		if (aplicativos.size() == 1) {
 			if (aplicativoServico.leAplicativoServico(aplicativos.get(0)
-					.getId_aplicativo()) == null) {
+					.getIdAplicativo()) == null) {
 				aplicativoServico.adicionaAplicativoServico(aplicativos.get(0));
 			}
 		}

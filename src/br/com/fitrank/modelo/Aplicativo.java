@@ -5,17 +5,17 @@ package br.com.fitrank.modelo;
  */
 public class Aplicativo implements Comparable<Object> {
 //	Column(name="id_aplicativo", Primary Key)
-	private String id_aplicativo;
+	private String idAplicativo;
 //	Column(name="nome")
 	private String nome;
 //	Column(name="url_site")
-	private String url_site;
+	private String urlSite;
 	
-	public String getId_aplicativo() {
-		return id_aplicativo;
+	public String getIdAplicativo() {
+		return idAplicativo;
 	}
-	public void setId_aplicativo(String id_aplicativo) {
-		this.id_aplicativo = id_aplicativo;
+	public void setIdAplicativo(String idAplicativo) {
+		this.idAplicativo = idAplicativo;
 	}
 	public String getNome() {
 		return nome;
@@ -23,18 +23,18 @@ public class Aplicativo implements Comparable<Object> {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public String getUrl_site() {
-		return url_site;
+	public String getUrlSite() {
+		return urlSite;
 	}
-	public void setUrl_site(String url_site) {
-		this.url_site = url_site;
+	public void setUrlSite(String urlSite) {
+		this.urlSite = urlSite;
 	}
 	@Override
 	public int compareTo(Object o) {
 		if(o != null && o instanceof Aplicativo){
 			Aplicativo app = (Aplicativo) o;
 			
-			if(app.id_aplicativo.equals(this.id_aplicativo)){
+			if(app.idAplicativo.equals(this.idAplicativo)){
 				return 0;
 			}
 		}
@@ -47,7 +47,7 @@ public class Aplicativo implements Comparable<Object> {
 		if(o != null && o instanceof Aplicativo){
 			Aplicativo app = (Aplicativo) o;
 			
-			if(app.id_aplicativo.equals(this.id_aplicativo)){
+			if(app.idAplicativo.equals(this.idAplicativo)){
 				return true;
 			}
 		}

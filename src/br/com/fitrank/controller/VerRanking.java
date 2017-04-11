@@ -75,7 +75,7 @@ public class VerRanking extends HttpServlet {
 		    		
 		    		rankingPessoa.setPessoa( pessoaServico.lePessoaPorIdServico( rankingPessoa.getId_pessoa() ) );
 		    		
-		    		if (rankingPessoa.getPessoa().getId_usuario().equals(configuracao.getIdPessoa()) ) {
+		    		if (rankingPessoa.getPessoa().getIdUsuario().equals(configuracao.getIdPessoa()) ) {
 		    			nomeGeradorRank = rankingPessoa.getPessoa().getNome();
 		    		}
 				}

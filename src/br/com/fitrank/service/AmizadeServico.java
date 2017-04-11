@@ -21,19 +21,19 @@ public class AmizadeServico {
 		
 		amizade = new Amizade();
 		
-		amizade.setData_amizade(DateConversor.getJavaSqlTimestamp(new Date()));
+		amizade.setDataAmizade(DateConversor.getJavaSqlTimestamp(new Date()));
 		
 	    try {
 	    	this.amizadeDAO = new AmizadeDAO();
 	    	//cada amizade e registrada duas vezes no banco, uma para cada usuario
 	    	//primeiro registro
-	    	amizade.setId_pessoa(idAmigo);
+	    	amizade.setIdPessoa(idAmigo);
 			amizade.setId_amigo(idPessoa);
 			amizadeDAO.adicionaAmizade(amizade);
 	    	
 			this.amizadeDAO = new AmizadeDAO();
 			//segundo registro
-	    	amizade.setId_pessoa(idPessoa);
+	    	amizade.setIdPessoa(idPessoa);
 			amizade.setId_amigo(idAmigo);
 	    	
 			return amizadeDAO.adicionaAmizade(amizade);
@@ -65,7 +65,7 @@ public class AmizadeServico {
 	    try {
 	    	
 			//segundo registro
-	    	amizade.setId_pessoa(idPessoa);
+	    	amizade.setIdPessoa(idPessoa);
 			amizade.setId_amigo(idAmigo);
 	    	
 			return amizadeDAO.leAmizade(amizade);

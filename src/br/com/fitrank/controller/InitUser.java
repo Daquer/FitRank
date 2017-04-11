@@ -76,7 +76,7 @@ public class InitUser extends HttpServlet {
 		   Pessoa pessoa = new Pessoa();
 		   
 		   if(facebookUser.getId()!=null && !facebookUser.getId().equals("")){
-			   pessoa.setId_usuario(facebookUser.getId());
+			   pessoa.setIdUsuario(facebookUser.getId());
 		   }
 			
 		   if(facebookUser.getName()!=null){
@@ -92,11 +92,11 @@ public class InitUser extends HttpServlet {
 		   }
 		   
 		   if(facebookUser.getBirthdayAsDate()!=null){
-			   pessoa.setData_nascimento(DateConversor.getJavaSqlTimestamp(facebookUser.getBirthdayAsDate()));
+			   pessoa.setDataNascimento(DateConversor.getJavaSqlTimestamp(facebookUser.getBirthdayAsDate()));
 		   }
 		   
 		   if( picture.getJsonObject("data").getString("url") != null){
-			   pessoa.setUrl_foto( picture. getJsonObject("data").getString("url") );
+			   pessoa.setUrlFoto( picture. getJsonObject("data").getString("url") );
 		   }
 		   
 		   Pessoa usuarioExistente = pessoaServico.lePessoaServico(facebookUser);
@@ -105,10 +105,9 @@ public class InitUser extends HttpServlet {
 			   pessoa = pessoaServico.adicionaPessoaServico(pessoa);
 		   } else {
 			   
-			   pessoa.setData_ultima_atualizacao_runs(usuarioExistente.getData_ultima_atualizacao_runs());
-			   pessoa.setData_ultima_atualizacao_walks(usuarioExistente.getData_ultima_atualizacao_walks());
-			   pessoa.setData_ultima_atualizacao_bikes(usuarioExistente.getData_ultima_atualizacao_bikes());
-			   pessoa.setRank_anual(usuarioExistente.getRank_anual());
+			   pessoa.setDataUltimaAtualizacaoRuns(usuarioExistente.getDataUltimaAtualizacaoRuns());
+			   pessoa.setDataUltimaAtualizacaoWalks(usuarioExistente.getDataUltimaAtualizacaoWalks());
+			   pessoa.setDataUltimaAtualizacaoBikes(usuarioExistente.getDataUltimaAtualizacaoBikes());
 			   pessoa = pessoaServico.atualizaPessoaServico(pessoa, true);
 		   }
 		   	

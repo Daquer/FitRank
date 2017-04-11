@@ -80,11 +80,11 @@ public class PessoaServico {
 		this.pessoaDAO = new PessoaDAO();
 		
 		if(!StringUtil.isEmptyOrNull(usuarioFacebook.getId())){
-			pessoa.setId_usuario(usuarioFacebook.getId());
+			pessoa.setIdUsuario(usuarioFacebook.getId());
 		}
 		
 	    try {
-			pessoa =  pessoaDAO.lePessoa(pessoa.getId_usuario());
+			pessoa =  pessoaDAO.lePessoa(pessoa.getIdUsuario());
 			preenchePessoa(pessoa);
 			
 			return pessoa;
@@ -99,11 +99,11 @@ public class PessoaServico {
 		this.pessoaDAO = new PessoaDAO();
 		
 		if(!StringUtil.isEmptyOrNull(id_pessoa)){
-			pessoa.setId_usuario(id_pessoa);
+			pessoa.setIdUsuario(id_pessoa);
 		}
 		
 	    try {
-			pessoa =  pessoaDAO.lePessoa(pessoa.getId_usuario());
+			pessoa =  pessoaDAO.lePessoa(pessoa.getIdUsuario());
 			
 			return pessoa;
 		} catch (SQLException e) {
@@ -121,12 +121,12 @@ public class PessoaServico {
 	
 	private void preencheListaAmigosPessoa(Pessoa pessoa) throws SQLException{
 		this.amizadeServico = new AmizadeServico();
-		List<Amizade> listaAmizades = amizadeServico.listaAmizades(pessoa.getId_usuario());
+		List<Amizade> listaAmizades = amizadeServico.listaAmizades(pessoa.getIdUsuario());
 		
 		ArrayList<Pessoa> amigosPessoa = new ArrayList<Pessoa>();
 		
 		for (Amizade amizade : listaAmizades) {
-			Pessoa amigo = pessoaDAO.lePessoa(amizade.getId_amigo());
+			Pessoa amigo = pessoaDAO.lePessoa(amizade.getIdAmigo());
 			amigosPessoa.add(amigo);
 		}
 		
@@ -135,7 +135,7 @@ public class PessoaServico {
 	
 	private void recuperaConfiguracaoFavoritaPessoa(Pessoa pessoa) throws SQLException{
 		this.configuracaoServico = new ConfiguracaoServico();
-		Configuracao configuracao = configuracaoServico.leConfiguracaoFavorita(pessoa.getId_usuario());
+		Configuracao configuracao = configuracaoServico.leConfiguracaoFavorita(pessoa.getIdUsuario());
 		pessoa.setConfiguracaoFavorita(configuracao);
 	}
 	

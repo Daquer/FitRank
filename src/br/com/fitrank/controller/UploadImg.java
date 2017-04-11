@@ -44,7 +44,7 @@ public class UploadImg extends HttpServlet {
 					}
 					
 					ImagemRanking imagemRanking = new ImagemRanking();
-					imagemRanking.setId_ranking(Integer.parseInt(idRanking)); 
+					imagemRanking.setIdRanking(Integer.parseInt(idRanking)); 
 					imagemRanking.setImagem(blob);
 					imagemRankingServico.adicionaRanking(imagemRanking);
 				}

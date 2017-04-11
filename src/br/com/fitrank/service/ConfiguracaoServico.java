@@ -20,27 +20,7 @@ public class ConfiguracaoServico {
 			configuracao.setIdPessoa(idPessoa);
 			
 			try {
-				configuracao = configuracaoDAO.leConfiguracaoPorPessoa(configuracao, true, false);
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-		
-		return configuracao;
-	}
-	
-	public Configuracao leConfiguracaoPadraoModalidade(String idPessoa, String modalidade){
-		
-		this.configuracaoDAO = new ConfiguracaoDAO();
-		
-		if(!StringUtil.isEmptyOrNull(idPessoa)){
-			configuracao = new Configuracao();
-			configuracao.setIdPessoa(idPessoa);
-			configuracao.setModalidade(modalidade);
-			
-			try {
-				configuracao = configuracaoDAO.leConfiguracaoPorPessoa(configuracao, false, true);
+				configuracao = configuracaoDAO.leConfiguracaoPorPessoa(configuracao, true);
 			} catch (SQLException e) {
 				e.printStackTrace();
 				return null;

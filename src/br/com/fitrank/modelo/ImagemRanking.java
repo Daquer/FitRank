@@ -4,16 +4,16 @@ import java.sql.Blob;
 
 public class ImagemRanking {
 	
-	private int id_ranking;
+	private int idRanking;
 	
 	private Blob imagem;
 
-	public int getId_ranking() {
-		return id_ranking;
+	public int getIdRanking() {
+		return idRanking;
 	}
 
-	public void setId_ranking(int id_ranking) {
-		this.id_ranking = id_ranking;
+	public void setIdRanking(int idRanking) {
+		this.idRanking = idRanking;
 	}
 
 	public Blob getImagem() {

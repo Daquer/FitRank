@@ -7,31 +7,31 @@ import java.sql.Timestamp;
  */
 public class Amizade {
 //	Column(name="id_pessoa", FK="FK_ID_PESSOA_AMIZADE")
-	private String id_pessoa;
+	private String idPessoa;
 //	Column(name="id_amigo", FK="FK_ID_AMIGO_AMIZADE)
-	private String id_amigo;
+	private String idAmigo;
 //	Column(name="data_amizade")
-	private Timestamp data_amizade;
+	private Timestamp dataAmizade;
 	
 	private String ativo;
 	
-	public String getId_pessoa() {
-		return id_pessoa;
+	public String getIdPessoa() {
+		return idPessoa;
 	}
-	public void setId_pessoa(String id_pessoa) {
-		this.id_pessoa = id_pessoa;
+	public void setIdPessoa(String idPessoa) {
+		this.idPessoa = idPessoa;
 	}
-	public String getId_amigo() {
-		return id_amigo;
+	public String getIdAmigo() {
+		return idAmigo;
 	}
-	public void setId_amigo(String id_amigo) {
-		this.id_amigo = id_amigo;
+	public void setId_amigo(String idAmigo) {
+		this.idAmigo = idAmigo;
 	}
-	public Timestamp getData_amizade() {
-		return data_amizade;
+	public Timestamp getDataAmizade() {
+		return dataAmizade;
 	}
-	public void setData_amizade(Timestamp data_amizade) {
-		this.data_amizade = data_amizade;
+	public void setDataAmizade(Timestamp dataAmizade) {
+		this.dataAmizade = dataAmizade;
 	}
 	
 	public String getAtivo() {

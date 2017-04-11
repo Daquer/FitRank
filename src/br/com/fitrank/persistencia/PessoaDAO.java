@@ -38,35 +38,33 @@ public class PessoaDAO {
 				+ "data_ultima_atualizacao_runs, "
 				+ "data_ultima_atualizacao_walks, "
 				+ "data_ultima_atualizacao_bikes, "
-				+ "rank_anual, "
 				+ "genero, "
 				+ "data_nascimento, "
 				+ "url_foto "
-				+ ") VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+				+ ") VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 		try {
 			preparedStatement = conexao.prepareStatement(insertTableSQL);
 			
 			int i = 0;
 			
-			preparedStatement.setString(++i, pessoa.getId_usuario());
-			preparedStatement.setTimestamp(++i, pessoa.getData_cadastro());
+			preparedStatement.setString(++i, pessoa.getIdUsuario());
+			preparedStatement.setTimestamp(++i, pessoa.getDataCadastro());
 			preparedStatement.setString(++i, pessoa.getNome());
-			preparedStatement.setTimestamp(++i, pessoa.getData_ultimo_login());
-			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_runs());
-			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_walks());
-			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_bikes());
-			preparedStatement.setString(++i, pessoa.getRank_anual());
+			preparedStatement.setTimestamp(++i, pessoa.getDataUltimoLogin());
+			preparedStatement.setTimestamp(++i, pessoa.getDataUltimaAtualizacaoRuns());
+			preparedStatement.setTimestamp(++i, pessoa.getDataUltimaAtualizacaoWalks());
+			preparedStatement.setTimestamp(++i, pessoa.getDataUltimaAtualizacaoBikes());
 			preparedStatement.setString(++i, pessoa.getGenero());
-			preparedStatement.setTimestamp(++i, pessoa.getData_nascimento());
-			preparedStatement.setString(++i, pessoa.getUrl_foto());
+			preparedStatement.setTimestamp(++i, pessoa.getDataNascimento());
+			preparedStatement.setString(++i, pessoa.getUrlFoto());
 
 			// execute insert SQL statement
 			preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
 
-			Logger.insertLog("adicionaPessoa | " + e.getMessage() + "Id pessoa: " + pessoa.getId_usuario());
+			Logger.insertLog("adicionaPessoa | " + e.getMessage() + "Id pessoa: " + pessoa.getIdUsuario());
 
 		} finally {
 
@@ -96,7 +94,6 @@ public class PessoaDAO {
 		updateTableSQL 		   += "data_ultima_atualizacao_runs = ?, "
 								+ "data_ultima_atualizacao_walks = ?, "
 								+ "data_ultima_atualizacao_bikes = ?, "
-								+ "rank_anual = ?, "
 								+ "genero = ?, "
 								+ "data_nascimento = ?, "
 								+ "url_foto = ? "
@@ -109,24 +106,23 @@ public class PessoaDAO {
 			
 			preparedStatement.setString(++i, pessoa.getNome());
 			if(proprioUsuario){
-				preparedStatement.setTimestamp(++i, pessoa.getData_ultimo_login());
+				preparedStatement.setTimestamp(++i, pessoa.getDataUltimoLogin());
 			}
-			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_runs());
-			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_walks());
-			preparedStatement.setTimestamp(++i, pessoa.getData_ultima_atualizacao_bikes());
-			preparedStatement.setString(++i, pessoa.getRank_anual());
+			preparedStatement.setTimestamp(++i, pessoa.getDataUltimaAtualizacaoRuns());
+			preparedStatement.setTimestamp(++i, pessoa.getDataUltimaAtualizacaoWalks());
+			preparedStatement.setTimestamp(++i, pessoa.getDataUltimaAtualizacaoBikes());
 			preparedStatement.setString(++i, pessoa.getGenero());
-			preparedStatement.setTimestamp(++i, pessoa.getData_nascimento());
-			preparedStatement.setString(++i, pessoa.getUrl_foto());
+			preparedStatement.setTimestamp(++i, pessoa.getDataNascimento());
+			preparedStatement.setString(++i, pessoa.getUrlFoto());
 			
-			preparedStatement.setString(++i, pessoa.getId_usuario());
+			preparedStatement.setString(++i, pessoa.getIdUsuario());
 	
 			// execute insert SQL statement
 			preparedStatement.executeUpdate();
 	
 		} catch (SQLException e) {
 	
-			Logger.insertLog("atualizaPessoa | " + e.getMessage() + " ID PESSOA: " + pessoa.getId_usuario() + " Nome:" + pessoa.getNome());
+			Logger.insertLog("atualizaPessoa | " + e.getMessage() + " ID PESSOA: " + pessoa.getIdUsuario() + " Nome:" + pessoa.getNome());
 	
 		} finally {
 	
@@ -157,7 +153,6 @@ public class PessoaDAO {
 				+ "data_ultima_atualizacao_runs, "
 				+ "data_ultima_atualizacao_walks, "
 				+ "data_ultima_atualizacao_bikes, "
-				+ "rank_anual, "
 				+ "genero, "
 				+ "data_nascimento, "
 				+ "url_foto "
@@ -172,20 +167,19 @@ public class PessoaDAO {
 			
 			if ( rs.next() ) {
 				pessoa = new Pessoa();
-				pessoa.setId_usuario(rs.getString("id_usuario"));
+				pessoa.setIdUsuario(rs.getString("id_usuario"));
 				pessoa.setData_cadastro(rs.getTimestamp("data_cadastro"));
 				pessoa.setNome(rs.getString("nome"));
 				pessoa.setData_ultimo_login(rs.getTimestamp("data_ultimo_login"));
 //				pessoa.setData_ultima_atualizacao_runs(rs.getDate("data_ultima_atualizacao_runs") ) );
 //				pessoa.setData_ultima_atualizacao_walks(rs.getDate("data_ultima_atualizacao_walks") ) );
 //				pessoa.setData_ultima_atualizacao_bikes(rs.getDate("data_ultima_atualizacao_bikes") ) );
-				pessoa.setData_ultima_atualizacao_runs(rs.getTimestamp("data_ultima_atualizacao_runs") );
-				pessoa.setData_ultima_atualizacao_walks(rs.getTimestamp("data_ultima_atualizacao_walks") );
-				pessoa.setData_ultima_atualizacao_bikes(rs.getTimestamp("data_ultima_atualizacao_bikes") );
-				pessoa.setRank_anual(rs.getString("rank_anual"));
+				pessoa.setDataUltimaAtualizacaoRuns(rs.getTimestamp("data_ultima_atualizacao_runs") );
+				pessoa.setDataUltimaAtualizacaoWalks(rs.getTimestamp("data_ultima_atualizacao_walks") );
+				pessoa.setDataUltimaAtualizacaoBikes(rs.getTimestamp("data_ultima_atualizacao_bikes") );
 				pessoa.setGenero(rs.getString("genero"));
-				pessoa.setData_nascimento( rs.getTimestamp("data_nascimento") );
-				pessoa.setUrl_foto(rs.getString("url_foto"));
+				pessoa.setDataNascimento( rs.getTimestamp("data_nascimento") );
+				pessoa.setUrlFoto(rs.getString("url_foto"));
 			}
 			
 		} catch (SQLException e) {
@@ -256,7 +250,6 @@ public class PessoaDAO {
 				+ "data_ultima_atualizacao_runs, "
 				+ "data_ultima_atualizacao_walks, "
 				+ "data_ultima_atualizacao_bikes, "
-				+ "rank_anual, "
 				+ "genero, "
 				+ "data_nascimento, "
 				+ "url_foto "
@@ -269,17 +262,16 @@ public class PessoaDAO {
 			
 			while ( rs.next() ) {
 				Pessoa pessoa = new Pessoa();
-				pessoa.setId_usuario(rs.getString("id_usuario"));
+				pessoa.setIdUsuario(rs.getString("id_usuario"));
 				pessoa.setData_cadastro(rs.getTimestamp("data_cadastro"));
 				pessoa.setNome(rs.getString("nome"));
 				pessoa.setData_ultimo_login(rs.getTimestamp("data_ultimo_login"));
-				pessoa.setData_ultima_atualizacao_runs(rs.getTimestamp("data_ultima_atualizacao_runs") );
-				pessoa.setData_ultima_atualizacao_walks(rs.getTimestamp("data_ultima_atualizacao_walks") );
-				pessoa.setData_ultima_atualizacao_bikes(rs.getTimestamp("data_ultima_atualizacao_bikes") );
-				pessoa.setRank_anual(rs.getString("rank_anual"));
+				pessoa.setDataUltimaAtualizacaoRuns(rs.getTimestamp("data_ultima_atualizacao_runs") );
+				pessoa.setDataUltimaAtualizacaoWalks(rs.getTimestamp("data_ultima_atualizacao_walks") );
+				pessoa.setDataUltimaAtualizacaoBikes(rs.getTimestamp("data_ultima_atualizacao_bikes") );
 				pessoa.setGenero(rs.getString("genero"));
-				pessoa.setData_nascimento(rs.getTimestamp("data_nascimento") );
-				pessoa.setUrl_foto(rs.getString("url_foto"));
+				pessoa.setDataNascimento(rs.getTimestamp("data_nascimento") );
+				pessoa.setUrlFoto(rs.getString("url_foto"));
 				
 				pessoas.add(pessoa);
 			}
@@ -318,9 +310,9 @@ public class PessoaDAO {
 		
 		for( int i = 0; i <= (listaAmigos.size() - 1); i++) {
 			if( i == (listaAmigos.size() - 1)) {//Não usar vírgula no último elemento do IN
-				amigos += "'" + listaAmigos.get(i).getId_amigo() + "'";
+				amigos += "'" + listaAmigos.get(i).getIdAmigo() + "'";
 			} else {
-				amigos += "'" + listaAmigos.get(i).getId_amigo() + "',";
+				amigos += "'" + listaAmigos.get(i).getIdAmigo() + "',";
 			}
 		}
 		//Os amigos que tiverem um limite maior que o valor da constante (inicialmente meia hora) da ultima atualizacao serão atualizados

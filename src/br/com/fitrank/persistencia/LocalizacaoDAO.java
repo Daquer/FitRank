@@ -42,7 +42,7 @@ public class LocalizacaoDAO {
 			preparedStatement.setDouble(++i, localizacao.getLatitude());
 			preparedStatement.setDouble(++i, localizacao.getLongitude());
 			preparedStatement.setDouble(++i, localizacao.getAltitude());
-			preparedStatement.setString(++i, localizacao.getId_course()); 
+			preparedStatement.setString(++i, localizacao.getIdCourse()); 
 
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -86,8 +86,8 @@ public class LocalizacaoDAO {
 			preparedStatement.setDouble(++i, localizacao.getLatitude());
 			preparedStatement.setDouble(++i, localizacao.getLongitude());
 			preparedStatement.setDouble(++i, localizacao.getAltitude());
-			preparedStatement.setString(++i, localizacao.getId_course());
-			preparedStatement.setInt(++i, localizacao.getId_localizacao());
+			preparedStatement.setString(++i, localizacao.getIdCourse());
+			preparedStatement.setInt(++i, localizacao.getIdLocalizacao());
 
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -131,14 +131,14 @@ public class LocalizacaoDAO {
 			
 			ResultSet rs = preparedStatement.executeQuery(selectTableSQL);
 			
-			preparedStatement.setInt(1, localizacao.getId_localizacao());
+			preparedStatement.setInt(1, localizacao.getIdLocalizacao());
 			
 			while (rs.next()) {
-				localizacao.setId_localizacao(rs.getInt("id_localizacao"));
+				localizacao.setIdLocalizacao(rs.getInt("id_localizacao"));
 				localizacao.setLatitude(rs.getDouble("latitude"));
 				localizacao.setLongitude(rs.getDouble("longitude"));
 				localizacao.setAltitude(rs.getDouble("altitude"));
-				localizacao.setId_course(rs.getString("id_course"));
+				localizacao.setIdCourse(rs.getString("id_course"));
 			}
 			
 			// execute insert SQL stetement
@@ -191,7 +191,7 @@ public class LocalizacaoDAO {
 			int j = 0;
 			
 			for (Course course : courses) {
-				preparedStatement.setString(++j, course.getId_course());
+				preparedStatement.setString(++j, course.getIdCourse());
 			}
 			
 			ResultSet rs = preparedStatement.executeQuery();
@@ -203,7 +203,7 @@ public class LocalizacaoDAO {
 				localizacao.setLongitude(rs.getDouble("longitude"));
 				localizacao.setAltitude(rs.getDouble("altitude"));
 				localizacao.setRitmo(rs.getDouble("ritmo"));
-				localizacao.setId_course(rs.getString("id_course"));
+				localizacao.setIdCourse(rs.getString("id_course"));
 //				localizacao.setId_localizacao(rs.getInt("id_localizacao"));
 				
 				localizacoes.add(localizacao);
@@ -256,7 +256,7 @@ public class LocalizacaoDAO {
 				preparedStatement.setDouble(++i, localizacao.getLongitude());
 				preparedStatement.setDouble(++i, localizacao.getAltitude());
 				preparedStatement.setDouble(++i, localizacao.getRitmo());
-				preparedStatement.setString(++i, localizacao.getId_course()); 
+				preparedStatement.setString(++i, localizacao.getIdCourse()); 
 			}
 
 			// execute insert SQL stetement

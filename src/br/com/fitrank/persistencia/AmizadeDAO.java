@@ -37,9 +37,9 @@ public class AmizadeDAO {
 
 			int i = 0;
 
-			preparedStatement.setString(++i, amizade.getId_pessoa());
-			preparedStatement.setString(++i, amizade.getId_amigo());
-			preparedStatement.setTimestamp(++i, amizade.getData_amizade());
+			preparedStatement.setString(++i, amizade.getIdPessoa());
+			preparedStatement.setString(++i, amizade.getIdAmigo());
+			preparedStatement.setTimestamp(++i, amizade.getDataAmizade());
 
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -47,8 +47,8 @@ public class AmizadeDAO {
 		} catch (SQLException e) {
 
 			Logger.insertLog( "adicionaAmizade | " + e.getMessage() +
-							  " id pessoa : " + amizade.getId_pessoa() + 
-							  " id_amigo : " + amizade.getId_amigo()
+							  " id pessoa : " + amizade.getIdPessoa() + 
+							  " id_amigo : " + amizade.getIdAmigo()
 							  );
 
 		} finally {
@@ -81,9 +81,9 @@ public class AmizadeDAO {
 
 			int i = 0;
 
-			preparedStatement.setString(++i, amizade.getId_amigo());
-			preparedStatement.setString(++i, DateConversor.DateToString(amizade.getData_amizade()));
-			preparedStatement.setString(++i, amizade.getId_pessoa());
+			preparedStatement.setString(++i, amizade.getIdAmigo());
+			preparedStatement.setString(++i, DateConversor.DateToString(amizade.getDataAmizade()));
+			preparedStatement.setString(++i, amizade.getIdPessoa());
 
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -134,9 +134,9 @@ public class AmizadeDAO {
 
 			while (rs.next()) {
 				amizade = new Amizade();
-				amizade.setId_pessoa(rs.getString("id_pessoa"));
+				amizade.setIdPessoa(rs.getString("id_pessoa"));
 				amizade.setId_amigo(rs.getString("id_amigo"));
-				amizade.setData_amizade(rs.getTimestamp("data_amizade"));
+				amizade.setDataAmizade(rs.getTimestamp("data_amizade"));
 				listaAmizades.add(amizade);
 			}
 
@@ -180,17 +180,17 @@ public class AmizadeDAO {
 			dbConnection = conexao;
 			preparedStatement = dbConnection.prepareStatement(selectTableSQL);
 
-			preparedStatement.setString(1, amizade.getId_pessoa());
-			preparedStatement.setString(2, amizade.getId_amigo());
+			preparedStatement.setString(1, amizade.getIdPessoa());
+			preparedStatement.setString(2, amizade.getIdAmigo());
 			
 			// execute select SQL statement
 			ResultSet rs = preparedStatement.executeQuery();
 			
 			while (rs.next()) {
 				amizadeResult = new Amizade();
-				amizadeResult.setId_pessoa(rs.getString("id_pessoa"));
+				amizadeResult.setIdPessoa(rs.getString("id_pessoa"));
 				amizadeResult.setId_amigo(rs.getString("id_amigo"));
-				amizadeResult.setData_amizade(rs.getTimestamp("data_amizade"));
+				amizadeResult.setDataAmizade(rs.getTimestamp("data_amizade"));
 				amizadeResult.setAtivo(rs.getString("ativo"));
 			}
 

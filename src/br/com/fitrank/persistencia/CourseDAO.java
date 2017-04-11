@@ -38,10 +38,10 @@ public class CourseDAO {
 			
 			int i = 0;
 			
-			preparedStatement.setString(++i, course.getId_course());
+			preparedStatement.setString(++i, course.getIdCourse());
 			preparedStatement.setFloat(++i, course.getDistancia());
 			preparedStatement.setFloat(++i, course.getCalorias());
-			preparedStatement.setString(++i, course.getId_post());
+			preparedStatement.setString(++i, course.getIdPost());
 
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -84,8 +84,8 @@ public class CourseDAO {
 			
 			preparedStatement.setFloat(++i, course.getDistancia());
 			preparedStatement.setFloat(++i, course.getCalorias());
-			preparedStatement.setString(++i, course.getId_post());
-			preparedStatement.setString(++i, course.getId_course());
+			preparedStatement.setString(++i, course.getIdPost());
+			preparedStatement.setString(++i, course.getIdCourse());
 
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -130,15 +130,15 @@ public class CourseDAO {
 			ResultSet rs = preparedStatement.executeQuery(selectTableSQL);
 			
 			
-			preparedStatement.setString(1, course.getId_course());
+			preparedStatement.setString(1, course.getIdCourse());
 			
 			
 			while (rs.next()) {
 				
-				course.setId_course(rs.getString("id_course"));
+				course.setIdCourse(rs.getString("id_course"));
 				course.setDistancia(rs.getFloat("distancia"));
 				course.setCalorias(rs.getFloat("calorias"));
-				course.setId_post(rs.getString("id_post"));
+				course.setIdPost(rs.getString("id_post"));
 
 			}
 		} catch (SQLException e) {
@@ -185,9 +185,9 @@ public class CourseDAO {
 			
 			for (Course course : listaCourses) {
 			
-				preparedStatement.setString(++i, course.getId_course());
-				preparedStatement.setString(++i, course.getId_pessoa());
-				preparedStatement.setString(++i, course.getId_post());
+				preparedStatement.setString(++i, course.getIdCourse());
+				preparedStatement.setString(++i, course.getIdPessoa());
+				preparedStatement.setString(++i, course.getIdPost());
 				
 			}
 			// execute insert SQL statement
@@ -246,7 +246,7 @@ public class CourseDAO {
 				preparedStatement.setFloat(++i, course.getDistancia());
 				preparedStatement.setFloat(++i, course.getCalorias());
 				preparedStatement.setString(++i, course.getJson());
-				preparedStatement.setString(++i, course.getId_course());
+				preparedStatement.setString(++i, course.getIdCourse());
 			}
 			// execute insert SQL stetement
 			preparedStatement.executeUpdate();
@@ -293,9 +293,9 @@ public class CourseDAO {
 			
 			while ( rs.next() ) {
 				Course course = new Course();
-				course.setId_course(rs.getString("id_course"));
-				course.setId_post(rs.getString("id_post"));
-				course.setId_pessoa(rs.getString("id_pessoa"));
+				course.setIdCourse(rs.getString("id_course"));
+				course.setIdPost(rs.getString("id_post"));
+				course.setIdPessoa(rs.getString("id_pessoa"));
 				
 				listaPostFitness.add(course);
 			}

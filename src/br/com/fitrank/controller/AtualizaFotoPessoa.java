@@ -29,7 +29,7 @@ public class AtualizaFotoPessoa extends HttpServlet {
 		Pessoa pessoa = pessoaServico.lePessoaPorIdServico(idPessoa);
 		
 		if (pessoa != null) {
-			pessoa.setUrl_foto(urlFoto);
+			pessoa.setUrlFoto(urlFoto);
 			pessoaServico.atualizaPessoaServico(pessoa, false);
 		}
 	}

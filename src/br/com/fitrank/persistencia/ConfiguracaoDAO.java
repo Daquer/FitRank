@@ -29,36 +29,27 @@ public class ConfiguracaoDAO {
 		String insertTableSQL = "INSERT INTO configuracao ("
 				+ "modalidade, "
 				+ "modo, "
-				+ "dia_noite, "
 				+ "intervalo_data, "
 				+ "favorito, "
-				+ "padrao_modalidade, "
 				+ "id_pessoa"
-				+ ") VALUES (?, ?, ?, ?, ?, ?, ?)";
+				+ ") VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
 			dbConnection = conexao;
 			preparedStatement = dbConnection.prepareStatement(insertTableSQL, Statement.RETURN_GENERATED_KEYS);
 			
 			String favorito = ConstantesFitRank.CHAR_NAO;
-			String padraoModalidade = ConstantesFitRank.CHAR_NAO;
 			
 			if(configuracao.isFavorito()){
 				favorito = ConstantesFitRank.CHAR_SIM;
 			} 
 			
-			if(configuracao.isPadraoModalidade()){
-				padraoModalidade = ConstantesFitRank.CHAR_SIM;
-			}			
-			
 			int i = 0;
 			
 			preparedStatement.setString(++i, configuracao.getModalidade());
 			preparedStatement.setString(++i, configuracao.getModo());
-			preparedStatement.setString(++i, configuracao.getDiaNoite());
 			preparedStatement.setString(++i, configuracao.getIntervaloData());
 			preparedStatement.setString(++i, favorito);
-			preparedStatement.setString(++i, padraoModalidade);
 			preparedStatement.setString(++i, configuracao.getIdPessoa());
 
 			int idConfiguracao = ConstantesFitRank.INT_RESULTADO_INVALIDO;
@@ -97,10 +88,8 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 		String updateTableSQL  = "update configuracao set "
 				+ "modalidade = ?, "
 				+ "modo = ?, "
-				+ "dia_noite = ?, "
 				+ "intervalo_data = ?, "
 				+ "favorito = ?, "
-				+ "padrao_modalidade = ?, "
 				+ "id_pessoa = ? "
 				+ "where id_configuracao = ?";
 
@@ -109,24 +98,17 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 			preparedStatement = dbConnection.prepareStatement(updateTableSQL);
 			
 			String favorito = "N";
-			String padraoModalidade = "N";
 			
 			if(configuracao.isFavorito()){
 				favorito = "S";
 			} 
 			
-			if(configuracao.isPadraoModalidade()){
-				padraoModalidade = "S";
-			}			
-			
 			int i = 0;
 			
 			preparedStatement.setString(++i, configuracao.getModalidade());
 			preparedStatement.setString(++i, configuracao.getModo());
-			preparedStatement.setString(++i, configuracao.getDiaNoite());
 			preparedStatement.setString(++i, configuracao.getIntervaloData());
 			preparedStatement.setString(++i, favorito);
-			preparedStatement.setString(++i, padraoModalidade);
 			preparedStatement.setString(++i, configuracao.getIdPessoa());
 			preparedStatement.setInt(++i, configuracao.getIdConfiguracao());
 			
@@ -163,10 +145,8 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 				+ "id_configuracao, "
 				+ "modo, "
 				+ "modalidade, "
-				+ "dia_noite, "
 				+ "intervalo_data, "
 				+ "favorito, "
-				+ "padrao_modalidade, "
 				+ "id_pessoa "
 				+ "FROM configuracao "
 				+ "WHERE id_configuracao = ?";
@@ -185,10 +165,8 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 				configRetorno.setIdConfiguracao(rs.getInt("id_configuracao"));
 				configRetorno.setModo(rs.getString("modo"));
 				configRetorno.setModalidade(rs.getString("modalidade"));
-				configRetorno.setDiaNoite(rs.getString("dia_noite"));
 				configRetorno.setIntervaloData(rs.getString("intervalo_data"));
 				configRetorno.setFavorito(rs.getString("favorito").equals("S") ? true : false);
-				configRetorno.setPadraoModalidade(rs.getString("padrao_modalidade").equals("S") ? true : false);
 				configRetorno.setIdPessoa(rs.getString("id_pessoa"));
 
 			}
@@ -211,7 +189,7 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 		return configRetorno;
 	}
 	
-	public Configuracao leConfiguracaoPorPessoa(Configuracao configuracao, Boolean isFavorito, Boolean isPadraoModalidade) throws SQLException {
+	public Configuracao leConfiguracaoPorPessoa(Configuracao configuracao, Boolean isFavorito) throws SQLException {
 		
 		Connection dbConnection = null;
 		PreparedStatement preparedStatement = null;
@@ -221,20 +199,15 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 				+ "id_configuracao, "
 				+ "modo, "
 				+ "modalidade, "
-				+ "dia_noite, "
 				+ "intervalo_data, "
 				+ "favorito, "
-				+ "padrao_modalidade, "
 				+ "id_pessoa "
 				+ "FROM configuracao "
 				+ "WHERE id_pessoa = ? ";
 		
 		if(isFavorito){
 			selectTableSQL += " AND favorito = ? ";
-		} else if(isPadraoModalidade) {
-			selectTableSQL += " AND padrao_modalidade = ? ";
-			selectTableSQL += " AND modalidade = ? ";
-		}
+		} 
 		
 		try {
 			
@@ -243,12 +216,10 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 			
 			int i = 1;
 			preparedStatement.setString(i++, configuracao.getIdPessoa());
+			
 			if(isFavorito){
 				preparedStatement.setString(i++, ConstantesFitRank.CHAR_SIM);
-			} else if(isPadraoModalidade) {
-				preparedStatement.setString(i++, ConstantesFitRank.CHAR_SIM);
-				preparedStatement.setString(i++, configuracao.getModalidade());
-			}
+			} 
 			
 			ResultSet rs = preparedStatement.executeQuery();
 			
@@ -258,10 +229,8 @@ public Configuracao atualizaConfiguracao(Configuracao configuracao) throws SQLEx
 				configRetorno.setIdConfiguracao(rs.getInt("id_configuracao"));
 				configRetorno.setModo(rs.getString("modo"));
 				configRetorno.setModalidade(rs.getString("modalidade"));
-				configRetorno.setDiaNoite(rs.getString("dia_noite"));
 				configRetorno.setIntervaloData(rs.getString("intervalo_data"));
 				configRetorno.setFavorito(rs.getString("favorito").equals("S") ? true : false);
-				configRetorno.setPadraoModalidade(rs.getString("padrao_modalidade").equals("S") ? true : false);
 				configRetorno.setIdPessoa(rs.getString("id_pessoa"));
 
 			}
