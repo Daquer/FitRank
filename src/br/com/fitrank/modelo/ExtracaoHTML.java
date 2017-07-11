@@ -1,7 +1,7 @@
 package br.com.fitrank.modelo;
 
-//Entidade Jsoup do banco 
-public class JSoup {
+//Entidade EXTRACAO_HTML do banco 
+public class ExtracaoHTML {
 
 	private int id_jsoup;
 	
