@@ -190,18 +190,20 @@ public class CarregaRanking extends HttpServlet {
 	    	Logger.insertLog("[ERRO] CarregaRanking | " + e.getMessage());
 	    	Date horaFim = new Date();
 	    	Logger.insertLog("ID= " + myId + "\n\nTempo de processamento CarregaRanking: " + (horainicio.getTime() - horaFim.getTime())/1000 + " segundos.\n\n");
-	    	if(isAjax.equals("S")){
-	    		if(!e.getMessage().contains("(#17) User request limit reached")) {
-	    			response.addHeader("msg", e.getMessage());
-	    		}
-				response.setContentType("text/html;charset=UTF-8");
-				response.setStatus(500);
-	    	} else {
-	    		if(!e.getMessage().contains("(#17) User request limit reached")) {
-	    			request.setAttribute("errorDescription", e.getMessage());
-	    		}
-	    		rd = request.getRequestDispatcher("/index.jsp");  
-	    		rd.forward(request,response);
+	    	if (null != e.getMessage()) {
+		    	if(isAjax.equals("S")){
+		    		if(!e.getMessage().contains("(#17) User request limit reached")) {
+		    			response.addHeader("msg", e.getMessage());
+		    		}
+					response.setContentType("text/html;charset=UTF-8");
+					response.setStatus(500);
+		    	} else {
+		    		if(!e.getMessage().contains("(#17) User request limit reached")) {
+		    			request.setAttribute("errorDescription", e.getMessage());
+		    		}
+		    		rd = request.getRequestDispatcher("/index.jsp");  
+		    		rd.forward(request,response);
+		    	}
 	    	}
 	    	
 		}

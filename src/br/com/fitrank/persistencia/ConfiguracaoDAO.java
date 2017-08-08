@@ -4,13 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import br.com.fitrank.modelo.Configuracao;
 import br.com.fitrank.util.ConstantesFitRank;
 import br.com.fitrank.util.JDBCFactory;
 import br.com.fitrank.util.Logger;
-
-import com.mysql.jdbc.Statement;
 
 
 public class ConfiguracaoDAO {
@@ -32,7 +31,7 @@ public class ConfiguracaoDAO {
 				+ "intervalo_data, "
 				+ "favorito, "
 				+ "id_pessoa"
-				+ ") VALUES (?, ?, ?, ?, ?, ?)";
+				+ ") VALUES (?, ?, ?, ?, ?)";
 
 		try {
 			dbConnection = conexao;
