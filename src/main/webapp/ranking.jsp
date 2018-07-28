@@ -628,9 +628,10 @@
    					
    					//Atribuição de valores aos elementos criados acima.
    					rankingLine.children(".colocacao").text(competidor.colocacao);
-   					var profileImgTd = rankingLine.children(".profileImg").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa);
+   					
+   					var profileImgTd = rankingLine.children(".profileImg").children("a").attr("href", atualizaLinkPerfil(competidor.id_pessoa) ).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa);
    					profileImgTd.attr("src", competidor.pessoa.url_foto === null ? 'imagem/default_photo.png' : testImage(competidor.pessoa.url_foto, competidor.id_pessoa));
-   					rankingLine.children(".profileName").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
+   					rankingLine.children(".profileName").children("a").attr("href", atualizaLinkPerfil(competidor.id_pessoa) ).attr("target", "_blank").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
    					
    					//Resultado			   					
    					var resultadoLine = rankingLine.children(".measure").children("span");
@@ -715,8 +716,6 @@
 	   						}
 						}
 						
-   						
-   						
    						leftPos += 65;
    						countApp += 1;
    					}
@@ -764,7 +763,7 @@
    					//Atribuição de valores aos elementos criados acima.
    					rankingLine.children(".colocacao").text(competidor.colocacao);
 //    					rankingLine.children(".profileImg").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa).attr("src", competidor.pessoa.url_foto === null ? 'imagem/default_photo.png' : competidor.pessoa.url_foto );
-   					rankingLine.children(".profileName").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
+   					rankingLine.children(".profileName").children("a").attr("href", atualizaLinkPerfil(competidor.id_pessoa) ).attr("target", "_blank").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
    					
    					//Resultado			   					
    					var resultadoLine = rankingLine.children(".measure").children("span");
@@ -1006,6 +1005,21 @@
 				
 // 			}
 
+			function atualizaLinkPerfil(idPessoa) {
+				FB.api(idPessoa, 'GET',
+					{ 
+						"fields" : "link", 
+						"access_token" : token
+					},
+					function(response) {
+						if (response.link) {
+							$("[data-id_pessoa = " + idPessoa + "]").parent("a").attr("href", response.link);
+							//parent de img e span
+						}
+					}
+				);
+			}
+			
 			function testImage(url, idPessoa, timeout) {
 			    timeout = timeout || 5000;
 			    var timedOut = false, timer;
@@ -1024,7 +1038,8 @@
 	 					  'GET',
 	 					  { 
 	 						"type" : "normal", 
-	 					  	"access_token" : token
+	 					  	"access_token" : token,
+	 					  	"redirect" : "false"
 						  },
 	 					  function(response) {
 							  $("[data-id_pessoa = " + idPessoa + "]").attr("src",response.data.url);

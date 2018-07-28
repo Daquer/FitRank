@@ -117,7 +117,8 @@
 
 								},
 								{
-									scope : 'email,user_friends,user_actions.fitness'
+									scope : 'email,user_friends,user_link,user_posts'
+										//,user_actions.fitness'
 								});//user_birthday
 							// 					        	if(!popup) { 
 							// 									   //an alert in this example
@@ -145,6 +146,7 @@
 						<p class="text" style="text-align: center;">é necessário se logar com a conta do Facebook.</p>
 						<img src="imagem/FB_Login.png" id="entra" style="cursor: pointer; margin: 0 auto; margin-top: 35px; display: block; border: none; width: 288px; height: 62px;" />
 						<div class="fb-like" data-href="https://www.facebook.com/fitrank.go" style="margin: 0 auto; margin-top: 35px; display: block; width: 275px;" data-width="275" data-layout="standard" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+						<!-- deploy 24-07-2018 -->
 					</div>
 				</div>
 			</div>
