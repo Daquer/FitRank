@@ -37,7 +37,7 @@
 				status : true, // verifica status do login
 				cookie : true, // habilita cookies para permitir acesso via servidor
 				xfbml : true, // habilita parser XFBML
-				version : 'v2.8'
+				version : 'v2.7'
 			});
 
 			$('#entra').on("click",

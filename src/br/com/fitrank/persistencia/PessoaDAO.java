@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.restfb.types.User;
+
 import br.com.fitrank.modelo.Amizade;
 import br.com.fitrank.modelo.Pessoa;
 import br.com.fitrank.util.ConstantesFitRank;
@@ -40,8 +42,9 @@ public class PessoaDAO {
 				+ "data_ultima_atualizacao_bikes, "
 				+ "genero, "
 				+ "data_nascimento, "
-				+ "url_foto "
-				+ ") VALUES (?,?,?,?,?,?,?,?,?,?)";
+				+ "url_foto, "
+				+ "url_perfil "
+				+ ") VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
 		try {
 			preparedStatement = conexao.prepareStatement(insertTableSQL);
@@ -58,6 +61,7 @@ public class PessoaDAO {
 			preparedStatement.setString(++i, pessoa.getGenero());
 			preparedStatement.setTimestamp(++i, pessoa.getDataNascimento());
 			preparedStatement.setString(++i, pessoa.getUrlFoto());
+			preparedStatement.setString(++i, pessoa.getUrlPerfil());
 
 			// execute insert SQL statement
 			preparedStatement.executeUpdate();
@@ -80,8 +84,68 @@ public class PessoaDAO {
 		return pessoa;
 	}
 	
-	public Pessoa atualizaPessoa(Pessoa pessoa, boolean proprioUsuario) throws SQLException {
+	public void atualizaUrlPerfilPessoas(List<User> listaUsuarios) throws SQLException {
+		
+		String pessoasIn = "";
+		String pessoasCase = "";
+		
+		conexao = new JDBCFactory().getConnection();
+		PreparedStatement preparedStatement = null;
+		
+		for( int i = 0; i <= (listaUsuarios.size() - 1); i++) {
+			if( i == (listaUsuarios.size() - 1)) {//Não usar vírgula no último elemento do IN
+				pessoasCase = "WHEN id_usuario = ? THEN ? ";
+				pessoasIn += "?";
+			} else {
+				pessoasCase = "WHEN id_usuario = ? THEN ? ";
+				pessoasIn += "?,";
+			}
+		}
+		
+		String updateTableSQL  	= "UPDATE pessoa set "
+								+ "url_perfil = (CASE " + pessoasCase + " END) "
+								+ "WHERE id_usuario IN ( " + pessoasIn + " )" ;
 	
+		try {
+			preparedStatement = conexao.prepareStatement(updateTableSQL);
+			
+			int i = 0;
+			
+			for(User usuarioFb : listaUsuarios){ 
+				preparedStatement.setString(++i, usuarioFb.getId());
+				
+				if(usuarioFb.getLink() != null) {
+					preparedStatement.setString(++i, usuarioFb.getLink());
+				}
+			}
+			
+			for(User usuarioFb : listaUsuarios) {
+				preparedStatement.setString(++i, usuarioFb.getId());
+			}
+			
+			// execute insert SQL statement
+			preparedStatement.executeUpdate();
+			
+		} catch (SQLException e) {
+	
+			Logger.insertLog("atualizaPessoas | " + e.getMessage());
+	
+		} finally {
+	
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+	
+			if (conexao != null) {
+				conexao.close();
+			}
+	
+		}
+		
+//		return pessoa;
+	}
+	
+	public Pessoa atualizaPessoa(Pessoa pessoa, boolean proprioUsuario) throws SQLException {
 		
 		conexao = new JDBCFactory().getConnection();
 		PreparedStatement preparedStatement = null;
@@ -96,7 +160,8 @@ public class PessoaDAO {
 								+ "data_ultima_atualizacao_bikes = ?, "
 								+ "genero = ?, "
 								+ "data_nascimento = ?, "
-								+ "url_foto = ? "
+								+ "url_foto = ?, "
+								+ "url_perfil = ? "
 								+ "WHERE id_usuario = ? ";
 	
 		try {
@@ -114,6 +179,7 @@ public class PessoaDAO {
 			preparedStatement.setString(++i, pessoa.getGenero());
 			preparedStatement.setTimestamp(++i, pessoa.getDataNascimento());
 			preparedStatement.setString(++i, pessoa.getUrlFoto());
+			preparedStatement.setString(++i, pessoa.getUrlPerfil());
 			
 			preparedStatement.setString(++i, pessoa.getIdUsuario());
 	
@@ -155,7 +221,8 @@ public class PessoaDAO {
 				+ "data_ultima_atualizacao_bikes, "
 				+ "genero, "
 				+ "data_nascimento, "
-				+ "url_foto "
+				+ "url_foto, "
+				+ "url_perfil "
 				+ "from pessoa "
 				+ "where id_usuario = ?";
 		
@@ -180,6 +247,7 @@ public class PessoaDAO {
 				pessoa.setGenero(rs.getString("genero"));
 				pessoa.setDataNascimento( rs.getTimestamp("data_nascimento") );
 				pessoa.setUrlFoto(rs.getString("url_foto"));
+				pessoa.setUrlPerfil(rs.getString("url_perfil"));
 			}
 			
 		} catch (SQLException e) {
@@ -252,7 +320,8 @@ public class PessoaDAO {
 				+ "data_ultima_atualizacao_bikes, "
 				+ "genero, "
 				+ "data_nascimento, "
-				+ "url_foto "
+				+ "url_foto, "
+				+ "url_perfil "
 				+ "from pessoa";
 		
 		try {
@@ -272,6 +341,7 @@ public class PessoaDAO {
 				pessoa.setGenero(rs.getString("genero"));
 				pessoa.setDataNascimento(rs.getTimestamp("data_nascimento") );
 				pessoa.setUrlFoto(rs.getString("url_foto"));
+				pessoa.setUrlPerfil(rs.getString("url_perfil"));
 				
 				pessoas.add(pessoa);
 			}

@@ -194,7 +194,6 @@
 		   			var mainDescriptionButtons = $(".menu").children(":not(.opcao)").children("[class*='chosen']");
 			    	
 		   			var spanDescChosen = $(this).children(":not(.opcao)").children("[class*='chosen']");
-
 		   			//Esconde as descricoes que estão aparecendo
 		   			$(mainDescriptionButtons).each(function(index, el){
 		   				var isElEqualChosen =  $(spanDescChosen).attr('class') === $(el).attr('class'); 
@@ -203,7 +202,6 @@
 		   				if ( !isElEqualChosen && $(el).css("display") !== "none" && !isPeriod) {
 		   					
 		   					$(this).toggle('slide', {direction : 'down', duration: 120});
-
 		   				} else if( isElEqualChosen && $(spanDescChosen).css("display") !== "none" && !isPeriod) {
 		   				
 		   					$(spanDescChosen).toggle('slide', {direction : 'down', duration: 120});
@@ -224,7 +222,6 @@
 		   				}
 		   				
 		   				if (isElEqualChosen) {
-
 							var marginTop =  $(".headerContent").css("margin-top");
 							
 							if ($(".periodo.opcao").first().css("display") == "none"  && isPeriod){
@@ -329,7 +326,6 @@
 				   			method: 'get',
 				   			success: function( data, textStatus, jqXHR){
 // 				   				$(".tableRank>tbody>.rankingLine").remove();
-
 //					   				json = JSON.parse(data.responseText);
 //									alert(data);
 //					   				json = JSON.parse(jqXHR.getResponseHeader('json'));
@@ -529,7 +525,6 @@
 		   				
 		   		});
 		   	}
-
 			
 			$(document).ready(function(){
 // 				startTutorial();
@@ -570,7 +565,6 @@
 					dadosAjax['ajax'] = 'S';
 					dadosAjax['idRanking'] = idRanking;
 					dadosAjax['modo'] = modoRequest; 
-
 					$.ajax({
 			   			url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "VerRanking",
 			   			data: dadosAjax,
@@ -597,7 +591,6 @@
 			function preparaRanking() {		
 				
 				competidores = json["@items"];
-
 				var modo = $(".modoWrapper").children(":not(.opcao)").children(".bgSmall").attr('data-ref').substring(0,1);
 				
 				geraRanking(competidores, modo);
@@ -609,7 +602,6 @@
    					var competidor = competidores[index];
    					
    					$(".tableRank>tbody").append("<tr class='rankingLine'></tr>");
-
    					var rankingLine = $( $(".rankingLine")[index] );
 					
    					//Posição no Ranking, imagem de perfil e nome de perfil
@@ -629,9 +621,9 @@
    					//Atribuição de valores aos elementos criados acima.
    					rankingLine.children(".colocacao").text(competidor.colocacao);
    					
-   					var profileImgTd = rankingLine.children(".profileImg").children("a").attr("href", atualizaLinkPerfil(competidor.id_pessoa) ).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa);
-   					profileImgTd.attr("src", competidor.pessoa.url_foto === null ? 'imagem/default_photo.png' : testImage(competidor.pessoa.url_foto, competidor.id_pessoa));
-   					rankingLine.children(".profileName").children("a").attr("href", atualizaLinkPerfil(competidor.id_pessoa) ).attr("target", "_blank").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
+   					var profileImgTd = rankingLine.children(".profileImg").children("a").attr("href", competidor.pessoa.urlPerfil !== null ? competidor.pessoa.urlPerfil : atualizaLinkPerfil(competidor.id_pessoa) ).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa);
+   					profileImgTd.attr("src", testImage(competidor.pessoa.urlFoto, competidor.id_pessoa, 5000) );
+   					rankingLine.children(".profileName").children("a").attr("href", competidor.pessoa.urlPerfil !== null ? competidor.pessoa.urlPerfil : atualizaLinkPerfil(competidor.id_pessoa) ).attr("target", "_blank").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
    					
    					//Resultado			   					
    					var resultadoLine = rankingLine.children(".measure").children("span");
@@ -687,7 +679,6 @@
 							if(countApp < maxAppsWithoutOverflow ) {
 	   							rankingLine.children(".measure").append("<span class='not_emphasized appSpan' style='left:" + leftPos + "px'>" +
 	   								"<div class='fitApp bgTiny' style='background-image: url(imagem/" + appTelaNomeEscaped +".png)' title='"+ appTela.nome +"'></div><span style='padding-left:40px;'>" + appTela.quantidadeAtividades + "</span></span>");
-
 	   						
 	   						} else if ( countApp >= maxAppsWithoutOverflow ){//Aplicativos no badge para evitar overflow
 	   							if (countApp == maxAppsWithoutOverflow){ 
@@ -726,7 +717,6 @@
 			
 			function genRankShare() {
 				competidores = json["@items"];
-
 				var modoParam = $(".modoWrapper").children(":not(.opcao)").children(".bgSmall").attr('data-ref').substring(0,1);
 				
 				$("body").append("<div class='rankShare'>");
@@ -743,14 +733,13 @@
    					var competidor = competidores[index];
    					
    					$(".tableRankShare>tbody").append("<tr class='rankingLine share'></tr>");
-
    					var rankingLine = $( $(".rankingLine")[competidores.length + parseInt(index)] );
 					
    					//Posição no Ranking, imagem de perfil e nome de perfil
    					rankingLine.append("<td class='colocacao'></td>");
 //    					rankingLine.append("<td class='profileImg'><a><img align='middle' ></a></td>");
    					
-   					rankingLine.append("<td class='profileName'><a><span></span></a></td>");
+   					rankingLine.append("<td class='profileName'><span></span></td>");
    					
    					//Coluna de medidas do Ranking, definidos em configuração
    					rankingLine.append("<td class='measure share'></td>");
@@ -762,8 +751,9 @@
    					
    					//Atribuição de valores aos elementos criados acima.
    					rankingLine.children(".colocacao").text(competidor.colocacao);
-//    					rankingLine.children(".profileImg").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa).attr("src", competidor.pessoa.url_foto === null ? 'imagem/default_photo.png' : competidor.pessoa.url_foto );
-   					rankingLine.children(".profileName").children("a").attr("href", atualizaLinkPerfil(competidor.id_pessoa) ).attr("target", "_blank").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
+//    					rankingLine.children(".profileImg").children("a").attr("href", "http://www.facebook.com/" + competidor.id_pessoa).attr("target", "_blank").children("img").attr("data-id_pessoa", competidor.id_pessoa).attr("src", competidor.pessoa.urlFoto === null ? 'imagem/default_photo.png' : competidor.pessoa.urlFoto );
+   					rankingLine.children(".profileName").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
+//    					.children("a").attr("href", competidor.pessoa.urlPerfil : atualizaLinkPerfil(competidor.id_pessoa) ).attr("target", "_blank").children("span").attr("data-id_pessoa", competidor.id_pessoa).text(competidor.pessoa.nome);
    					
    					//Resultado			   					
    					var resultadoLine = rankingLine.children(".measure").children("span");
@@ -798,7 +788,6 @@
 			}
 			
 			function prepareProperties(obj) {
-
 				for (prop in obj) {
 					
 					switch(prop) {
@@ -896,7 +885,6 @@
 				var alturaPeriodo = $(".periodo").height() * 2 - 10;
 				
 				$(".chosenPeriod").text(periodo['<%=(String) request.getAttribute("periodo")%>']);
-
 <%-- 				if (periodo['<%=(String) request.getAttribute("periodo")%>'] == 'Semana') { --%>
 // 					$(".chosenPeriod").css("right", "-56px");
 // 		   		} else {
@@ -1004,7 +992,6 @@
 // 				for(index in competidores)
 				
 // 			}
-
 			function atualizaLinkPerfil(idPessoa) {
 				FB.api(idPessoa, 'GET',
 					{ 
@@ -1015,6 +1002,20 @@
 						if (response.link) {
 							$("[data-id_pessoa = " + idPessoa + "]").parent("a").attr("href", response.link);
 							//parent de img e span
+
+							var data = {};
+							data["id"] = idPessoa;
+							data["url"] = response.data.url;
+							  
+							jQuery.ajax({
+								url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "AtualizaUrlPerfilPessoa",
+								data: data,
+								async: false,
+								type: 'POST',
+								success: function(data){
+								    	//Foto Atualizada
+								}
+							});
 						}
 					}
 				);
@@ -1022,46 +1023,51 @@
 			
 			function testImage(url, idPessoa, timeout) {
 			    timeout = timeout || 5000;
-			    var timedOut = false, timer;
+			    var timedOut = false; 
+			    var timer;
 			    var img = new Image();
 			    
-			    img.onerror = img.onabort = function() {
+			    img.onerror = img.onabort = function() {//url mal-formatada, expirada ou inacessível
 			        if (!timedOut) {
 			            clearTimeout(timer);
 			            
-			        }
-			        
-			        
-			        if( token != "null") {
-				        FB.api(
-	 					  '/' + idPessoa + '/picture',
-	 					  'GET',
-	 					  { 
-	 						"type" : "normal", 
-	 					  	"access_token" : token,
-	 					  	"redirect" : "false"
-						  },
-	 					  function(response) {
-							  $("[data-id_pessoa = " + idPessoa + "]").attr("src",response.data.url);
-							  
-							  var data = {};
-							  data["id"] = idPessoa;
-							  data["url"] = response.data.url;
-							  
-							  jQuery.ajax({
-								    url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "AtualizaFotoPessoa",
-								    data: data,
-									async: false,
-								    type: 'POST',
-								    success: function(data){
-								    	//Foto Atualizada
-								    }
-								});
-	 					  }
-	 					);
+				        if( token != "null") {
+					        FB.api(
+		 					  '/' + idPessoa + '/picture',
+		 					  'GET',
+		 					  { 
+		 						"type" : "normal", 
+		 					  	"access_token" : token,
+		 					  	"redirect" : "false"
+							  },
+		 					  function(response) {
+			 					  if(response.data) {
+									  $("[data-id_pessoa = " + idPessoa + "]").attr("src",response.data.url);
+									  
+									  var data = {};
+									  data["id"] = idPessoa;
+									  data["url"] = response.data.url;
+									  
+									  jQuery.ajax({
+										    url: location.origin + location.pathname.substring(0, location.pathname.lastIndexOf("/") + 1) + "AtualizaFotoPessoa",
+										    data: data,
+											async: false,
+										    type: 'POST',
+										    success: function(data){
+										    	//Foto Atualizada
+										    }
+										});
+			 					  } else {//Caso url não seja acessível pelo app
+			 						 $("[data-id_pessoa = " + idPessoa + "]").attr("src", "imagem/default_photo.png");
+				 				  }
+		 					  }
+		 					);
+				        } else {//verRanking
+				        	$("[data-id_pessoa = " + idPessoa + "]").attr("src", "imagem/default_photo.png");
+				        }
 			        } else {
 			        	$("[data-id_pessoa = " + idPessoa + "]").attr("src", "imagem/default_photo.png");
-			        }
+				    }
 			    };
 			    
 			    img.onload = function() {
@@ -1077,9 +1083,12 @@
 			        timedOut = true;
 			        // reset .src to invalid URL so it stops previous
 			        // loading, but doesn't trigger new load
-			        img.src = "//!!!!/test.jpg";
+// 			        img.src = "//!!!!/test.jpg";
+
+			        $("[data-id_pessoa = " + idPessoa + "]").attr("src", "imagem/default_photo.png");
 			    }, timeout); 
 			}// Code at http://stackoverflow.com/questions/9714525/javascript-image-url-verify/9714891#9714891
+			
 // 			function buscaInformacoesPerfil(element) {
 // 				var idUsuario = $(element).attr("data-id_pessoa");
 				

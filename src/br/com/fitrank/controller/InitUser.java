@@ -65,11 +65,11 @@ public class InitUser extends HttpServlet {
 		   Logger.insertLog("pos obtencao UserToken");
 		   
 		   Logger.insertLog("pre fetchObject/me");
-		   User facebookUser = facebookClient.fetchObject("me", User.class);
+		   User facebookUser = facebookClient.fetchObject("me", User.class, Parameter.with("fields", "name, id, link"));
 		   Logger.insertLog("pos fetchObject/me");
 		   
 		   Logger.insertLog("pre fetchObject/me/friends");
-		   Connection<User> friendsFB = facebookClient.fetchConnection("me/friends", User.class, Parameter.with("fields", "name, id"));
+		   Connection<User> friendsFB = facebookClient.fetchConnection("me/friends", User.class, Parameter.with("fields", "name, id, link"));
 		   Logger.insertLog("pos fetchObject/me/friends");
 		   JsonObject picture = facebookClient.fetchObject("me/picture", JsonObject.class, Parameter.with("type", "normal"), Parameter.with("redirect", "false"));
 		   
@@ -83,6 +83,7 @@ public class InitUser extends HttpServlet {
 			   pessoa.setNome(facebookUser.getName());
 		   }
 		   
+		   //Sem permissão
 		   if(facebookUser.getGender()!=null){
 			   if(facebookUser.getGender().equalsIgnoreCase(ConstantesFitRank.FACEBOOK_FEMALE_GENDER)){
 				   pessoa.setGenero(ConstantesFitRank.SEXO_FEMININO);
@@ -91,12 +92,17 @@ public class InitUser extends HttpServlet {
 			   }
 		   }
 		   
+		   //Sem permissão
 		   if(facebookUser.getBirthdayAsDate()!=null){
 			   pessoa.setDataNascimento(DateConversor.getJavaSqlTimestamp(facebookUser.getBirthdayAsDate()));
 		   }
 		   
 		   if( picture.getJsonObject("data").getString("url") != null){
-			   pessoa.setUrlFoto( picture. getJsonObject("data").getString("url") );
+			   pessoa.setUrlFoto( picture.getJsonObject("data").getString("url") );
+		   }
+		   
+		   if( facebookUser.getLink() != null){
+			   pessoa.setUrlPerfil(facebookUser.getLink());
 		   }
 		   
 		   Pessoa usuarioExistente = pessoaServico.lePessoaServico(facebookUser);
@@ -110,11 +116,9 @@ public class InitUser extends HttpServlet {
 			   pessoa.setDataUltimaAtualizacaoBikes(usuarioExistente.getDataUltimaAtualizacaoBikes());
 			   pessoa = pessoaServico.atualizaPessoaServico(pessoa, true);
 		   }
-		   	
+		   
 		   for ( User friendFB : friendsFB.getData()) {
-			   
 			  atualizaAmizadeUsuario(facebookUser, friendFB);
-			 
 		   }
 		   
 		   Configuracao configuracao = null;

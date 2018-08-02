@@ -27,6 +27,8 @@ public class Pessoa {
 	private Timestamp dataNascimento;
 //	Column(name="url_foto")
 	private String urlFoto;
+//	Column(name="url_perfil")
+	private String urlPerfil;
 	
 	private Configuracao configuracaoFavorita;
 
@@ -126,6 +128,14 @@ public class Pessoa {
 
 	public void setUrlFoto(String urlFoto) {
 		this.urlFoto = urlFoto;
+	}
+
+	public String getUrlPerfil() {
+		return urlPerfil;
+	}
+
+	public void setUrlPerfil(String urlPerfil) {
+		this.urlPerfil = urlPerfil;
 	}
 	
 }

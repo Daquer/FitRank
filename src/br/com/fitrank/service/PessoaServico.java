@@ -37,6 +37,21 @@ public class PessoaServico {
 	    
 	}
 	
+	public void atualizaUrlPerfilPessoasServico(List<User> listaUsuarios){
+		
+		this.pessoaDAO = new PessoaDAO();
+				
+	    try {
+			pessoaDAO.atualizaUrlPerfilPessoas(listaUsuarios);
+//			preenchePessoa(pessoa);
+			
+//			return pessoa;
+		} catch (SQLException e) {
+			e.printStackTrace();
+//			return null;
+		}
+	    
+	}
 	
 	public Pessoa atualizaPessoaServico(Pessoa pessoa, boolean proprioUsuario){
 		
